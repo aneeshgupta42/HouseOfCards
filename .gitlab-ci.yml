@@ -1,0 +1,15 @@
+image: maven
+
+sonar_analysis:
+  script:
+    - java -version
+    - mvn -version
+    - |
+      mvn -X sonar:sonar \
+      -Dsonar.host.url=http://coursework.cs.duke.edu:9000 \
+      -Dsonar.sources=. -Dsonar.java.binaries=. \
+      -Dsonar.exclusions=**/*.xml
+  tags:
+    - sonarqube
+  only:
+    - master
