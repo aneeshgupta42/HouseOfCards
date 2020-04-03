@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<blackjack>
+    <general>
+        <type>simple</type>
+        <title>blackjack</title>
+        <inFolder>gameFiles</inFolder>
+    </general>
+
+    <cardpack>
+        <cardpackFile>pokerPack.properties</cardpackFile>
+    </cardpack>
+
+    <savefiles>
+        <location>savedGames</location>
+    </savefiles>
+</blackjack>
