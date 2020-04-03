@@ -1,6 +1,6 @@
 package ooga.api;
 
-public interface GameInterface {
+public interface Game {
     void makeUser();
 
     User getUser();
