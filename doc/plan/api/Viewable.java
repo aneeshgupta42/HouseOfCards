@@ -3,6 +3,7 @@ package ooga.api;
 import javafx.scene.image.Image;
 
 public interface Viewable {
+
     void moveCard (int id, int x, int y);
 
     void updateScore(int score);
@@ -11,6 +12,8 @@ public interface Viewable {
 
     void makeDeck (Deck deck);
 
+    void downloadGame(Game game);
+
     void gameMessage (String message);
 
     void getNewCard (Deck deck);
@@ -18,4 +21,8 @@ public interface Viewable {
     void shuffleDeck (int deckId);
 
     void generateGame (int gameChoice);
+
+    void endGame();
+
+    Deck getDeck(int x, int y);
 }

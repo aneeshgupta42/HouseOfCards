@@ -12,4 +12,11 @@ public interface Game {
     void changeLevel(int level);
 
     void makePlayer(User user);
+
+    void pauseGame();
+
+    void resumeGame();
+
+    void startGame();
+//    This is where the animation would begin
 }

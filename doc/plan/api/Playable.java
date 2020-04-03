@@ -16,5 +16,7 @@ public interface Playable {
     Image getImage();
 
     String getValue();
+
+    int getID();
 }
 
