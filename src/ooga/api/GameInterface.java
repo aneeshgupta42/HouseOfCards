@@ -1,3 +1,4 @@
+package ooga.api;
 
 public interface GameInterface {
     void makeUser();

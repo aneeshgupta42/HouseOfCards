@@ -1,3 +1,6 @@
+package ooga.api;
+
+import javafx.scene.image.Image;
 
 public interface Playable {
     void makeCard(String cardType);
@@ -10,7 +13,7 @@ public interface Playable {
 
     int getNumber();
 
-    CardView getImage();
+    Image getImage();
 
     String getValue();
 }

@@ -1,10 +1,13 @@
+package ooga.api;
+
+import javafx.scene.image.Image;
 
 public interface Viewable {
     void moveCard (int id, int x, int y);
 
     void updateScore(int score);
 
-    void displayCard (CardView cardView);
+    void displayCard (Image cardView);
 
     void makeDeck (Deck deck);
 
