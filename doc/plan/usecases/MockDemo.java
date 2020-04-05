@@ -12,7 +12,6 @@ public class MockDemo{
     Deck deck;
     Game game;
 
-    public
 //    Use Case 1: Moving a card to a pile of cards
 //    The user will have clicked on a card in the frontend
 //    All this will be happening as a consequence of the onclick()
