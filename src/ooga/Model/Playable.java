@@ -1,9 +1,10 @@
 package ooga.Model;
 
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 
 public interface Playable {
-    void makeCard(String cardType);
+    void setID(int num);
 
     void setNumber(int num);
 
@@ -18,5 +19,7 @@ public interface Playable {
     String getValue();
 
     int getID();
+
+    Group getGroup();
 
 }
