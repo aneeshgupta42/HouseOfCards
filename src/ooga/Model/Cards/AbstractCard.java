@@ -1,19 +1,18 @@
-package ooga.Model;
+package ooga.Model.Cards;
 
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Card implements Playable{
-    private int CardNumber;
+public abstract class AbstractCard implements Playable {
+    private int CardNumber; //number set to 0 if numbers are not relevant
     private Image CardImage;
-    private String CardValue;
+    private String CardValue; //uses shape value
     private Label number = new Label();
     private Label value = new Label();
     private Label IDLabel= new Label();
     private int ID;
-
     @Override
     public void setID(int num) {
         ID= num;
@@ -52,6 +51,18 @@ public class Card implements Playable{
     @Override
     public int getID() {
         return ID;
+    }
+
+    public Label getIDLabel() {
+        return IDLabel;
+    }
+
+    public Label getValueLabel(){
+        return value;
+    }
+
+    public Label getNumberLabel(){
+        return number;
     }
 
     @Override

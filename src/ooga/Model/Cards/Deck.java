@@ -1,8 +1,8 @@
-package ooga.Model;
+package ooga.Model.Cards;
 
 public interface Deck {
 
-    void addCard(int ID);
+    void addCard(AbstractCard card);
     void makeCard(String cardType);
     void shuffleDeck();
 
