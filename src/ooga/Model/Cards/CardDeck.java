@@ -1,5 +1,8 @@
 package ooga.Model.Cards;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import ooga.Controller.CardColors;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameTypes;
 
@@ -10,8 +13,9 @@ public class CardDeck implements Deck {
     DeckType deckType;
     List<AbstractCard> gameCards;
 
-    public CardDeck (GameTypes type){
+    public CardDeck (GameTypes type, CardColors color){
         switch (type){
+            // need to split this to 2 different decks for the questions and answers
             case HUMANITY:
                 deckType = DeckType.HUMANITY;
                 break;
@@ -21,7 +25,8 @@ public class CardDeck implements Deck {
             default:
                 deckType = DeckType.POKER;
         }
-        CardFactory.initializeDeck(this, deckType);
+        CardFactory.initializeDeck(this, deckType, color);
+
     }
 
     @Override

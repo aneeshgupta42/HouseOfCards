@@ -1,7 +1,5 @@
 package ooga.Model.Cards;
 
-import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public interface Playable {
@@ -9,18 +7,20 @@ public interface Playable {
 
     void setNumber(int num);
 
-    void setImage(Image image);
+    void setFrontImageView(ImageView image);
+
+    void setBackImageView(ImageView image);
 
     void setValue(String value);
 
     int getNumber();
 
-    Image getImage();
+    ImageView getFrontImageView();
+
+    ImageView getBackImageView();
 
     String getValue();
 
     int getID();
-
-    abstract ImageView getImageView();
 
 }

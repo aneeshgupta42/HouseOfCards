@@ -1,12 +1,12 @@
 package ooga.Model.Cards;
 
-import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public abstract class AbstractCard implements Playable {
-    private int CardNumber; //number set to 0 if numbers are not relevant
-    private Image CardImageFront;
-    private Image getCardImageBack;
-    private String CardValue; //uses shape value
+    private int cardNumber; //number set to 0 if numbers are not relevant
+    private ImageView cardFrontImage;
+    private ImageView cardBackImage;
+    private String cardValue; //uses shape value
     private int ID;
     @Override
     public void setID(int num) {
@@ -15,32 +15,42 @@ public abstract class AbstractCard implements Playable {
 
     @Override
     public void setNumber(int num) {
-        CardNumber = num;
+        cardNumber = num;
     }
 
     @Override
-    public void setImage(Image image) {
-        CardImageFront = image;
+    public void setFrontImageView(ImageView image) {
+        cardFrontImage = image;
+    }
+
+    @Override
+    public void setBackImageView(ImageView image) {
+        cardBackImage = image;
+    }
+
+    @Override
+    public ImageView getBackImageView() {
+        return cardBackImage;
     }
 
     @Override
     public void setValue(String value) {
-        CardValue = value;
+        cardValue = value;
     }
 
     @Override
     public int getNumber() {
-        return CardNumber;
+        return cardNumber;
     }
 
     @Override
-    public Image getImage() {
-        return CardImageFront;
+    public ImageView getFrontImageView() {
+        return cardFrontImage;
     }
 
     @Override
     public String getValue() {
-        return CardValue;
+        return cardValue;
     }
 
     @Override

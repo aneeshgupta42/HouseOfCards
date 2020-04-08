@@ -1,6 +1,8 @@
 package ooga.Model.Cards;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import ooga.Controller.CardColors;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameTypes;
 
@@ -14,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class CardFactory {
 
-   public static void initializeDeck(CardDeck deck, DeckType deckType){
+   public static void initializeDeck(CardDeck deck, DeckType deckType, CardColors color){
       String path = deckType.toString().toLowerCase();
       ResourceBundle resource = getResourceBundleFromPath(path);
       int size = resource.keySet().size();
@@ -22,12 +24,12 @@ public class CardFactory {
          String imageName = Collections.list(resource.getKeys()).get(i);
          String [] attributes = imageName.split("_");
          Image image = new Image("data/cardDecks/" + path + "/" + imageName);
-         AbstractCard card = makeCard(deckType, image, attributes, i);
+         AbstractCard card = makeCard(deckType, color, image, attributes, i);
          deck.addCard(card);
       }
       }
 
-   private static AbstractCard makeCard(DeckType deckType, Image image, String[] attributes, int id) {
+   private static AbstractCard makeCard(DeckType deckType, CardColors color, Image image, String[] attributes, int id) {
       AbstractCard card;
       switch (deckType){
          case HUMANITY:
@@ -37,7 +39,9 @@ public class CardFactory {
             card = null;
             break;
          default: //for poker cards
-            card = new PokerCard(image, Integer.parseInt(attributes[0]), attributes[1], id);
+            ImageView backImage = new ImageView("data/cardDecks/poker" + color.toString().toLowerCase() + "_back.png");
+            card = new PokerCard(new ImageView(image), backImage, Integer.parseInt(attributes[0]), attributes[1], id);
+
       }
       return card;
    }
