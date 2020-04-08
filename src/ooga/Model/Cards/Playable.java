@@ -2,13 +2,15 @@ package ooga.Model.Cards;
 
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public interface Playable {
     void setID(int num);
 
     void setNumber(int num);
 
-    void SetImage(Image image);
+    void setImage(Image image);
+
     void setValue(String value);
 
     int getNumber();
@@ -19,6 +21,6 @@ public interface Playable {
 
     int getID();
 
-    abstract Group getGroup();
+    abstract ImageView getImageView();
 
 }

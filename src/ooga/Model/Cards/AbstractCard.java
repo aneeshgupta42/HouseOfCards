@@ -1,17 +1,12 @@
 package ooga.Model.Cards;
 
-import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public abstract class AbstractCard implements Playable {
     private int CardNumber; //number set to 0 if numbers are not relevant
-    private Image CardImage;
+    private Image CardImageFront;
+    private Image getCardImageBack;
     private String CardValue; //uses shape value
-    private Label number = new Label();
-    private Label value = new Label();
-    private Label IDLabel= new Label();
     private int ID;
     @Override
     public void setID(int num) {
@@ -24,8 +19,8 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
-    public void SetImage(Image image) {
-        CardImage = image;
+    public void setImage(Image image) {
+        CardImageFront = image;
     }
 
     @Override
@@ -40,7 +35,7 @@ public abstract class AbstractCard implements Playable {
 
     @Override
     public Image getImage() {
-        return CardImage;
+        return CardImageFront;
     }
 
     @Override
@@ -53,27 +48,4 @@ public abstract class AbstractCard implements Playable {
         return ID;
     }
 
-    public Label getIDLabel() {
-        return IDLabel;
-    }
-
-    public Label getValueLabel(){
-        return value;
-    }
-
-    public Label getNumberLabel(){
-        return number;
-    }
-
-    @Override
-    public Group getGroup() {
-        Group singleCard = new Group();
-        number.setText(String.valueOf(CardNumber));
-        IDLabel.setText(String.valueOf(ID));
-        ImageView cardImageView = new ImageView();
-        cardImageView.setImage(CardImage);
-        value.setText(CardValue);
-        singleCard.getChildren().addAll(number,cardImageView,value,IDLabel);
-        return singleCard;
-    }
 }

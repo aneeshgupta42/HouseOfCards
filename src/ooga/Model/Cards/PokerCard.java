@@ -6,19 +6,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class PokerCard extends AbstractCard {
-    public PokerCard(){
-        super();
+    public PokerCard(Image image, int cardNum, String cardValue, int id){
+        setNumber(cardNum);
+        setValue(cardValue);
+        setID(id);
     }
 
-    @Override
-    public Group getGroup() {
-        Group singleCard = new Group();
-//        getNumberLabel().setText(String.valueOf(getNumber()));
-//        getNumberLabel().setText(String.valueOf(getID()));
+
+    public ImageView getImageView() {
         ImageView cardImageView = new ImageView();
         cardImageView.setImage(getImage());
-//        getValueLabel().setText(getValue());
-        singleCard.getChildren().addAll(cardImageView);
-        return singleCard;
+        return cardImageView;
     }
 }
