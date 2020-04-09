@@ -34,10 +34,14 @@ public class UserInput {
     private TextArea name;
     private Scene userScene;
     private Label namePrompt;
+    private UserInterface mainView;
+    private String game;
     private ComboBox<Integer> numOfPlayers;
     private List<Integer> numbers= Arrays.asList(1,2,3,4,5,6,7);
 
-    public UserInput(){
+    public UserInput( String gameName, UserInterface ui){
+        mainView = ui;
+        game = gameName;
         Group user= new Group();
         backButton = new ButtonFactory("Back", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT, 0,0);
         nextButton = new ButtonFactory("Next", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT, 880, 0);
@@ -95,6 +99,7 @@ public class UserInput {
                 showMessage(Alert.AlertType.ERROR, "Please enter the player names");
                 return;
             } else {
+                mainView.initializeGame(game);
         // go to the game scene
     }}});
     // gameController.makePlayer(textEntered);s

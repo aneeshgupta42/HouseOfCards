@@ -5,10 +5,12 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ooga.View.GameScreens.SolitaireScreen;
 
 public class UserInterface extends Application implements Viewable {
     private double VIEW_WIDTH = 1000;
     private double VIEW_HEIGHT = 650;
+    private Stage myStage;
     private static final int BUTTON_HEIGHT = 45;
     private static final int BUTTON_WIDTH = 120;
     private static final int BUTTON_FONT = 20;
@@ -16,6 +18,7 @@ public class UserInterface extends Application implements Viewable {
 
     @Override
     public void start(Stage primaryStage) {
+        myStage = primaryStage;
         Group gameScreen = new Group();
         ButtonFactory resetButton = new ButtonFactory("Restart", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT,0,0);
         ButtonFactory exitButton = new ButtonFactory("Exit", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT,0,40);
@@ -23,9 +26,8 @@ public class UserInterface extends Application implements Viewable {
         Scene gameScene = new Scene(gameScreen,VIEW_WIDTH,VIEW_HEIGHT);
         SplashScreen splashScreen = new SplashScreen(this);
         Scene disp = splashScreen.getStartScene();
-        UserInput c= new UserInput();
-        primaryStage.setScene(c.getUserScene());
-        primaryStage.show();
+        myStage.setScene(disp);
+        myStage.show();
     }
 
     @Override
@@ -81,6 +83,22 @@ public class UserInterface extends Application implements Viewable {
     @Override
     public Deck getDeck(int x, int y) {
         return null;
+    }
+
+    public void userScreen(String gameName){
+        UserInput c= new UserInput(gameName, this);
+        myStage.setScene(c.getUserScene());
+        myStage.show();
+    }
+
+    public void initializeGame(String gameName){
+
+        if(gameName=="Solitaire"){
+            SolitaireScreen screen = new SolitaireScreen();
+            Scene gameScene = screen.getScene(this);
+            myStage.setScene(gameScene);
+            myStage.show();
+        }
     }
 
     public double getWidth(){
