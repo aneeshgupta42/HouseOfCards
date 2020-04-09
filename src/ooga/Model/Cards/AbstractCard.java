@@ -8,6 +8,17 @@ public abstract class AbstractCard implements Playable {
     private ImageView cardBackImage;
     private String cardValue; //uses shape value
     private int ID;
+    private boolean faceUp;
+
+    @Override
+    public boolean isFaceUp() {
+        return faceUp;
+    }
+
+    @Override
+    public void setFaceUp(boolean faceUp) {
+        this.faceUp = faceUp;
+    }
     @Override
     public void setID(int num) {
         ID= num;
