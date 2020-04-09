@@ -1,11 +1,11 @@
-package ooga.Model;
+package ooga.Model.Games;
 
-import ooga.Model.Players.User;
+import ooga.Model.Players.Player;
 
 public interface Game {
-    void makeUser();
+    void makePlayer(String userName);
 
-    User getUser();
+    Player getPlayer();
 
     boolean checkWin();
 
@@ -18,7 +18,6 @@ public interface Game {
 
     void changeLevel(int level);
 
-    void makePlayer(User user);
 
     void pauseGame();
 
