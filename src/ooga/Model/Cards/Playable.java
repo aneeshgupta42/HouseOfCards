@@ -3,6 +3,10 @@ package ooga.Model.Cards;
 import javafx.scene.image.ImageView;
 
 public interface Playable {
+    boolean isFaceUp();
+
+    void setFaceUp(boolean faceUp);
+
     void setID(int num);
 
     void setNumber(int num);
