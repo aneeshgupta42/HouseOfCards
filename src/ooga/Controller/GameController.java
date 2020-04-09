@@ -15,6 +15,10 @@ public class GameController {
 
     GameDriver currentGame;
 
+    public GameController(){
+
+    }
+
     public void initializeGame(GameTypes type){
         int index;
         switch (type){
