@@ -23,7 +23,8 @@ public class UserInterface extends Application implements Viewable {
         Scene gameScene = new Scene(gameScreen,VIEW_WIDTH,VIEW_HEIGHT);
         SplashScreen splashScreen = new SplashScreen(this);
         Scene disp = splashScreen.getStartScene();
-        primaryStage.setScene(disp);
+        UserInput c= new UserInput();
+        primaryStage.setScene(c.getUserScene());
         primaryStage.show();
     }
 
