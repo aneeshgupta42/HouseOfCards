@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CardDeck implements Deck {
     DeckType deckType;
-    List<AbstractCard> gameCards;
+    List<Playable> gameCards;
 
     public CardDeck (GameTypes type, CardColors color){
         switch (type){
@@ -30,7 +30,7 @@ public class CardDeck implements Deck {
     }
 
     @Override
-    public void addCard(AbstractCard card) {
+    public void addCard(Playable card) {
         gameCards.add(card);
     }
 
@@ -42,5 +42,14 @@ public class CardDeck implements Deck {
     @Override
     public void shuffleDeck() {
         Collections.shuffle(gameCards);
+    }
+
+    @Override
+    public String toString(){
+        String ret = "";
+        for (Playable card : gameCards){
+            ret = ret + card.getNumber() + card.getValue() + "\n";
+        }
+        return ret;
     }
 }

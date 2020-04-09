@@ -1,12 +1,16 @@
 package ooga.Model.Games;
 
+import ooga.Controller.CardColors;
+import ooga.Controller.DeckType;
+import ooga.Controller.GameTypes;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.Deck;
 import ooga.Model.Players.Player;
 
 public class SolitaireDriver extends GameDriver{
-    Player player;
-    CardDeck [] piles;
+    private CardColors DEFAULT_COLOR = CardColors.BLUE;
+    private Player player;
+    private CardDeck [] gameDecks;
     int score;
     //many decks since solitaire contains decks everywhere
     public SolitaireDriver (){
@@ -14,7 +18,10 @@ public class SolitaireDriver extends GameDriver{
     }
 
     private void makeDecks(){
-        //make multiple decks for gamePlay
+       gameDecks = new CardDeck[8];
+       for (int i = 0; i < gameDecks.length; i++){
+           gameDecks[i] = new CardDeck(GameTypes.SOLITAIRE, DEFAULT_COLOR);
+       }
     }
 
     @Override
@@ -63,5 +70,12 @@ public class SolitaireDriver extends GameDriver{
     @Override
     public void startGame() {
 
+    }
+
+    public static void main (String[]args){
+        SolitaireDriver test = new SolitaireDriver();
+        for (CardDeck deck : test.gameDecks){
+            System.out.println(deck);
+        }
     }
 }
