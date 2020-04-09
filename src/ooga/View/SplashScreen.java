@@ -44,8 +44,9 @@ public class SplashScreen {
         cont.setOnAction(e ->
         {
             System.out.println("Start Solitaire");
-            mainView.initializeGame("Solitaire");
+            mainView.userScreen("Solitaire");
         });
+        
         startRoot.getChildren().addAll(cont);
 
         Label Header = new Label("?House of Cards¿");

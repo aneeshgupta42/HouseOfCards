@@ -22,12 +22,12 @@ public class SolitaireScreen extends GameScreen{
         dummyCard.setX(100); dummyCard.setY(100);
         dummyCard.setFitWidth(65);
         dummyCard.setFitHeight(105);
-        dummyCard.setOn
+//        dummyCard.setOn
     }
 
-    private void generateCards(){
-        for
-    }
+//    private void generateCards(){
+//        for
+//    }
 
     public Scene getScene(UserInterface ui){
         Group startRoot = new Group();

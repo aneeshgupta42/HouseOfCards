@@ -85,7 +85,14 @@ public class UserInterface extends Application implements Viewable {
         return null;
     }
 
+    public void userScreen(String gameName){
+        UserInput c= new UserInput(gameName, this);
+        myStage.setScene(c.getUserScene());
+        myStage.show();
+    }
+
     public void initializeGame(String gameName){
+
         if(gameName=="Solitaire"){
             SolitaireScreen screen = new SolitaireScreen();
             Scene gameScene = screen.getScene(this);
