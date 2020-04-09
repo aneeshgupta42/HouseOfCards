@@ -16,41 +16,13 @@ import javafx.scene.text.Font;
 public class SplashScreen {
     private Paint background = Color.WHITESMOKE;
     private Scene startScene;
+    private String logo = "cardDecks/poker/aces.png";
 
-    /***
-     * For the start screen
-     * @return VBox with Bricks-qualities key
-     */
-    private VBox GetBricksKey(){
-        Image regular = new Image(this.getClass().getClassLoader().getResourceAsStream("brick3.gif"));
-        Label reg = new Label("Regular Brick - 1 Hit");
-        reg.setGraphic(new ImageView(regular));
 
-        Image hard = new Image(this.getClass().getClassLoader().getResourceAsStream("brick5.gif"));
-        Label h = new Label("Hard Brick - 2+ Hits");
-        h.setGraphic(new ImageView(hard));
-
-        Image permanent = new Image(this.getClass().getClassLoader().getResourceAsStream("brick7.gif"));
-        Label perm = new Label("Permanent Brick - Infinite hits");
-        perm.setGraphic(new ImageView(permanent));
-
-        Image power = new Image(this.getClass().getClassLoader().getResourceAsStream("brick10.gif"));
-        Label pow = new Label("PowerUp Brick - 1 Hit, and gives power");
-        pow.setGraphic(new ImageView(power));
-
-        Image hydra = new Image(this.getClass().getClassLoader().getResourceAsStream("brick2.gif"));
-        Label hyd = new Label("Hydra Brick - Splits into 2 Children (1 Hit each)");
-        hyd.setGraphic(new ImageView(hydra));
-        VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.getChildren().addAll(reg, h, perm, pow, hyd);
-        vbox.setLayoutX(90); vbox.setLayoutY(270);
-        return vbox;
-    }
 
     public Rectangle generateLogo(){
-        Rectangle hypno = new Rectangle(50, 50);
-        Image hypnoImage = new Image(this.getClass().getClassLoader().getResourceAsStream("hypno.gif"));
+        Rectangle hypno = new Rectangle(200, 120);
+        Image hypnoImage = new Image(this.getClass().getClassLoader().getResourceAsStream(logo));
         ImagePattern hypnoImagePattern = new ImagePattern(hypnoImage);
         hypno.setFill(hypnoImagePattern);
         return hypno;
@@ -62,33 +34,37 @@ public class SplashScreen {
      * @param mainView
      */
     public SplashScreen(UserInterface mainView){
+        Group startRoot = new Group();
+        startScene = new Scene(startRoot, mainView.getWidth(), mainView.getHeight(), background);
+        double width = mainView.getWidth();
+        double height = mainView.getHeight();
         Button cont = new Button("Solitaire");
-        cont.setLayoutX(210); cont.setLayoutY(450);
+        cont.setLayoutX(width/2-70); cont.setLayoutY(height/2+100);
 //        cont.setOnAction(e -> mainView.advanceScene(mainView.getGameScene()));
         cont.setOnAction(e -> System.out.println("Start Solitaire"));
+        startRoot.getChildren().addAll(cont);
 
         Label Header = new Label("?House of Cards¿");
         Header.setFont(new Font("Garamond", 30));
         Header.setTextFill(Color.DARKCYAN);
-        Header.setLayoutX(140); Header.setLayoutY(10);
+        startRoot.getChildren().addAll(Header);
+        Header.setLayoutX(width/2-100); Header.setLayoutY(10);
 
         Rectangle logo = generateLogo();
-        logo.setLayoutX(230); logo.setLayoutY(50);
+        logo.setLayoutX(width/2-logo.getWidth()/2); logo.setLayoutY(100);
+        startRoot.getChildren().addAll(logo);
+
 
         Label rules = new Label("GAME RULES\n" +
-                "\t 1. Use arrow keys to move paddle to guide ball to pop bricks\n" +
-                "\t 2. You get three lives per level\n" +
-                "\t 3. There are different types of bricks in this game\n" +
-                "\t 4. Use powerups such as Stretch, Swift, or Life+ \n"+
-                "\t 4. In the middle of the level controls change (such as arrow keys)\n"+
-                "\t\t Adapt to this change and finish the level!");
+                "\t 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit\n" +
+                "\t 2. , sed do eiusmod tempor incididunt utl\n" +
+                "\t 3. labore et dolore magna aliqua. Ut enim ad minim veniam,\n" +
+                "\t 4.  quis nostrud exercitation ullamco laboris nisi ut al \n"+
+                "\t");
 
-        rules.setLayoutX(40); rules.setLayoutY(120);
+        rules.setLayoutX(width/2-100); rules.setLayoutY(300);
         rules.setFont(new Font("Garamond", 15));
-        VBox vbox = GetBricksKey();
-        Group startRoot = new Group();
-        startRoot.getChildren().addAll(Header,logo, rules, cont, vbox);
-        startScene = new Scene(startRoot, mainView.getWidth(), mainView.getHeight(), background);
+        startRoot.getChildren().addAll(rules);
     }
 
     public Scene getStartScene() {

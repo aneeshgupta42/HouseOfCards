@@ -21,7 +21,9 @@ public class UserInterface extends Application implements Viewable {
         ButtonFactory exitButton = new ButtonFactory("Exit", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT,0,40);
         gameScreen.getChildren().addAll(resetButton,exitButton);
         Scene gameScene = new Scene(gameScreen,VIEW_WIDTH,VIEW_HEIGHT);
-        primaryStage.setScene(gameScene);
+        SplashScreen splashScreen = new SplashScreen(this);
+        Scene disp = splashScreen.getStartScene();
+        primaryStage.setScene(disp);
         primaryStage.show();
     }
 
