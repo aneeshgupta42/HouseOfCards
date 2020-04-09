@@ -6,6 +6,7 @@ import ooga.Controller.CardColors;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameTypes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,8 +26,20 @@ public class CardDeck implements Deck {
             default:
                 deckType = DeckType.POKER;
         }
+        gameCards = new ArrayList<>();
         CardFactory.initializeDeck(this, deckType, color);
 
+    }
+
+    // TODO: Might not need this
+    public CardDeck (CardDeck cardDeck){
+        this.deckType = cardDeck.getDeckType();
+        this.gameCards = cardDeck.getCards();
+    }
+
+    public CardDeck(DeckType deckType){
+        this.deckType = deckType;
+        gameCards = new ArrayList<>();
     }
 
     @Override
@@ -37,6 +50,14 @@ public class CardDeck implements Deck {
     @Override
     public void makeCard(String cardType) {
 
+    }
+
+    public List<Playable> getCards(){
+        return gameCards;
+    }
+
+    public DeckType getDeckType (){
+        return deckType;
     }
 
     @Override

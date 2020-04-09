@@ -1,5 +1,6 @@
 package ooga.Model.Cards;
 
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import ooga.Controller.CardColors;
@@ -20,23 +21,17 @@ public class CardFactory {
 
    public static void initializeDeck(CardDeck deck, DeckType deckType, CardColors color){
       String path = deckType.toString().toLowerCase().strip();
-      System.out.println(path);
       ResourceBundle resource = getResourceBundleFromPath(path);
       int size = resource.keySet().size();
       for (int i = 0; i < size; i++){
          String propFileKey = Collections.list(resource.getKeys()).get(i);
          String imageName = resource.getString(propFileKey);
-         System.out.println(imageName);
 
          String [] removeFileExtension = imageName.split("\\.");
          String [] attributes = removeFileExtension[0].split("_");
          //System.out.println("data/cardDecks/" + path + "/" + imageName);
-         ImageView image = null;
-         try {
-            image = new ImageView(new Image(new FileInputStream("data/cardDecks/poker/2_C.png")));
-         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-         }
+         JFXPanel jfxPanel = new JFXPanel(); //for testing
+         ImageView image = new ImageView("cardDecks/" + path + "/" + imageName);
          Playable card = makeCard(deckType, color, image, attributes, i);
          deck.addCard(card);
       }
@@ -52,7 +47,7 @@ public class CardFactory {
             card = null;
             break;
          default: //for poker cards
-            ImageView backImage = new ImageView("data/cardDecks/poker" + color.toString().toLowerCase() + "_back.png");
+            ImageView backImage = new ImageView("cardDecks/poker/" + color.toString().toLowerCase() + "_back.png");
             card = new PokerCard(image, backImage, Integer.parseInt(attributes[0]), attributes[1], id);
 
       }
