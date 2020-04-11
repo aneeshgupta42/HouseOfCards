@@ -41,7 +41,8 @@ public class SolitaireDriver extends GameDriver{
 
     @Override
     public Object sendCards (){
-        return allGameCards.getCards();
+        return allGameCards;
+        //changed it from getCards to just this^
     }
 
     @Override

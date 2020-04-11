@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ooga.Controller.GameController;
 import ooga.View.GameScreens.SolitaireScreen;
 
 public class UserInterface extends Application implements Viewable {
@@ -14,6 +15,11 @@ public class UserInterface extends Application implements Viewable {
     private static final int BUTTON_HEIGHT = 45;
     private static final int BUTTON_WIDTH = 120;
     private static final int BUTTON_FONT = 20;
+    private static GameController passingController;
+
+    public UserInterface(GameController mainGameController) {
+        passingController = mainGameController;
+    }
 
 
     @Override
@@ -94,7 +100,7 @@ public class UserInterface extends Application implements Viewable {
     public void initializeGame(String gameName){
 
         if(gameName=="Solitaire"){
-            SolitaireScreen screen = new SolitaireScreen();
+            SolitaireScreen screen = new SolitaireScreen(passingController);
             Scene gameScene = screen.getScene(this);
             myStage.setScene(gameScene);
             myStage.show();
