@@ -41,7 +41,12 @@ public class SplashScreen {
         Button cont = new Button("Solitaire");
         cont.setLayoutX(width/2-70); cont.setLayoutY(height/2+100);
 //        cont.setOnAction(e -> mainView.advanceScene(mainView.getGameScene()));
-        cont.setOnAction(e -> System.out.println("Start Solitaire"));
+        cont.setOnAction(e ->
+        {
+            System.out.println("Start Solitaire");
+            mainView.userScreen("Solitaire");
+        });
+        
         startRoot.getChildren().addAll(cont);
 
         Label Header = new Label("?House of Cards¿");

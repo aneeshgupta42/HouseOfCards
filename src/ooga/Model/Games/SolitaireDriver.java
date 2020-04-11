@@ -1,20 +1,47 @@
 package ooga.Model.Games;
 
+import ooga.Controller.CardColors;
+import ooga.Controller.DeckType;
+import ooga.Controller.GameController;
+import ooga.Controller.GameTypes;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.Deck;
+import ooga.Model.Cards.Playable;
 import ooga.Model.Players.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class SolitaireDriver extends GameDriver{
-    Player player;
-    CardDeck [] piles;
+    private CardColors DEFAULT_COLOR = CardColors.BLUE;
+    private Player player;
+    private CardDeck allGameCards;
+    private CardDeck [] piles;
+    private GameController controller;
     int score;
     //many decks since solitaire contains decks everywhere
+    // TODO: add a method to get the number of suits.
     public SolitaireDriver (){
         makeDecks();
     }
 
     private void makeDecks(){
-        //make multiple decks for gamePlay
+       CardDeck [] gameDecks = new CardDeck[8];
+       allGameCards = new CardDeck(DeckType.POKER);
+       for (int i = 0; i < gameDecks.length; i++){
+           gameDecks[i] = new CardDeck(GameTypes.SOLITAIRE, DEFAULT_COLOR);
+           for (Playable card : gameDecks[i].getCards()){
+               if (card.getValue().equals("S")){
+                    allGameCards.addCard(card);
+               }
+           }
+       }
+    }
+
+    @Override
+    public Object sendCards (){
+        return allGameCards.getCards();
     }
 
     @Override
@@ -62,6 +89,12 @@ public class SolitaireDriver extends GameDriver{
 
     @Override
     public void startGame() {
+
+    }
+
+    public static void main (String[]args){
+        SolitaireDriver test = new SolitaireDriver();
+        System.out.println(test.allGameCards);
 
     }
 }
