@@ -9,10 +9,7 @@ import ooga.View.GameScreens.GameScreen;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class GameController {
     private static final List<String> DEFAULT_GAMES = List.of(
@@ -47,7 +44,11 @@ public class GameController {
         //use reflections to make an instance of the appropriate game class and assign to currentGame
     }
 
-    public void updateProtocol(){} //return a boolean when win condition is met. Score is updated
+    public List<Object> updateProtocol(List<Object> args){
+        List<Object> ret = currentGame.updateProtocol(args);
+        return ret;
+    } //return a list when win condition is met. Score is updated
+
     public Object requestCards (){
         return currentGame.sendCards();
     }
