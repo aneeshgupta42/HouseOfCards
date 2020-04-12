@@ -20,7 +20,7 @@ import javax.sound.midi.SysexMessage;
 import java.util.List;
 
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
-//TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has
+//TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
 public class SolitaireScreen extends GameScreen{
     private List<ImageView> cards;
     private ImageView dummyCard;
@@ -42,6 +42,7 @@ public class SolitaireScreen extends GameScreen{
 
     private void addCards(GameController setUpController) {
        gameScene = new Group();
+       //TODO: change this to receive a map instead
         Deck cards = (Deck) setUpController.requestCards();
         cards.shuffleDeck();
         List<Playable> playingCards = cards.getCards();
@@ -50,12 +51,12 @@ public class SolitaireScreen extends GameScreen{
         int j=10;
         for(int i=0;i<playingCards.size();i++){
             playingCards.get(i).setFaceUp(false);
-            playingCards.get(i).getFrontImageView().setFitWidth(60);
+          /*  playingCards.get(i).getFrontImageView().setFitWidth(60);
             playingCards.get(i).getFrontImageView().setFitHeight(20);
             playingCards.get(i).getFrontImageView().setX(0);
             playingCards.get(i).getFrontImageView().setY(0+j);
             j=j+10;
-            gameScene.getChildren().add(playingCards.get(i).getFrontImageView());
+            gameScene.getChildren().add(playingCards.get(i).getFrontImageView());*/
 
         }
 
@@ -73,9 +74,9 @@ public class SolitaireScreen extends GameScreen{
 
     private void setUpPot(Playable playable) {
         playable.setFaceUp(false);
-        playable.getBackImageView().setX(0);
+      /*  playable.getBackImageView().setX(0);
         playable.getBackImageView().setY(0);
-        gameScene.getChildren().add(playable.getBackImageView());
+        gameScene.getChildren().add(playable.getBackImageView());*/
     }
 
     private void setUpCards(List<Playable> playingCards) {
@@ -85,7 +86,7 @@ public class SolitaireScreen extends GameScreen{
         for (int i=1;i<differentDecks.length;i++){
             for(int j=0;j<(playingCards.size()/differentDecks.length)-1;j++){
                 differentDecks[i].addCard(playingCards.get(j));
-                if(j==7){
+               /* if(j==7){
                     playingCards.get(j).setFaceUp(true);
                     playingCards.get(j).getFrontImageView().setX(0+shiftX);
                     playingCards.get(j).getFrontImageView().setY(0+shiftY);
@@ -97,7 +98,7 @@ public class SolitaireScreen extends GameScreen{
                     playingCards.get(j).getFrontImageView().setY(0+shiftY);
                     shiftY = shiftY+10;
                     gameScene.getChildren().add(playingCards.get(j).getBackImageView());
-                }
+                }*/
                 playingCards.remove(playingCards.get(j));
             }
             shiftX = shiftX+30;
