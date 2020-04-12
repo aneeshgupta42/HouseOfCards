@@ -4,9 +4,14 @@ import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
 import ooga.Model.Games.UnoDriver;
+import ooga.View.Game;
+import ooga.View.GameScreens.GameScreen;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameController {
@@ -14,6 +19,7 @@ public class GameController {
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
 
     GameDriver currentGame;
+    GameScreen currentScreen;
 
     public GameController(){
 
@@ -41,11 +47,20 @@ public class GameController {
         //use reflections to make an instance of the appropriate game class and assign to currentGame
     }
 
-    public void updateProtocol(){} //return a boolean when win condition is met. Score
+    public void updateProtocol(){} //return a boolean when win condition is met. Score is updated
+    public Object requestCards (){
+        return currentGame.sendCards();
+    }
     public void makePlayer(String playerName){
         currentGame.makePlayer(playerName);
     }
     public void pauseGame(){}
     public void resumeGame(){}
+
+    public static void main(String[] args) {
+        GameController test = new GameController();
+        test.initializeGame(GameTypes.SOLITAIRE);
+        System.out.println(test.requestCards());
+    }
 
 }

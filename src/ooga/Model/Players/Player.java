@@ -6,4 +6,14 @@ public class Player {
     private String name;
     private int score;
     private CardDeck playerHand;
+
+    public Player(String name){
+        this.name = name;
+        score = 0;
+    }
+
+    public Player(String name, CardDeck deck){
+        this.name = name;
+        playerHand = deck;
+    }
 }

@@ -18,6 +18,8 @@ public interface Game {
 
     void changeLevel(int level);
 
+    Object sendCards();
+
 
     void pauseGame();
 

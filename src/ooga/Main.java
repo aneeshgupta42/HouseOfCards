@@ -4,6 +4,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import ooga.Controller.GameController;
 import ooga.View.UserInterface;
 
 import javafx.application.Application;
@@ -25,8 +26,9 @@ public class Main  {
 
 //        Application.launch(UserInterface.class, args);
 //        launch(args);
+        GameController mainGameController = new GameController();
         Platform.startup(() -> {
-            UserInterface myInterface = new UserInterface();
+            UserInterface myInterface = new UserInterface(mainGameController);
             myInterface.start(new Stage());
         });
     }
