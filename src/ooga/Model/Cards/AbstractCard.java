@@ -30,6 +30,16 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
+    public ImageView getFrontImageView() {
+        return cardFrontImage;
+    }
+
+    @Override
+    public ImageView getBackImageView() {
+        return cardBackImage;
+    }
+
+    @Override
     public void setFrontImageView(ImageView image) {
         cardFrontImage = image;
     }
