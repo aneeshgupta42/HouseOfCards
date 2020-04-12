@@ -17,6 +17,7 @@ import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
 
 import javax.sound.midi.SysexMessage;
+import java.beans.EventHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,13 +80,15 @@ public class SolitaireScreen extends GameScreen{
 
     private void setUponScreen(List<Playable> playingCards, double v, double v1,double i, double j,double XPos, double YPos) {
         for(Playable card:playingCards){
-            card.getImageView().setFitWidth(60);
-            card.getImageView().setFitHeight(90);
-            card.getImageView().setX(XPos+i);
-            card.getImageView().setY(YPos+j);
+            ImageView cardImage = card.getImageView();
+            cardImage.setFitWidth(60);
+            cardImage.setFitHeight(90);
+            cardImage.setX(XPos+i);
+            cardImage.setY(YPos+j);
+//            cardImage.setOnDragDetected();
             j=j+v;
             i=i+v1;
-            gameScene.getChildren().add(card.getImageView());
+            gameScene.getChildren().add(cardImage);
         }
 
     }
@@ -144,5 +147,9 @@ public class SolitaireScreen extends GameScreen{
         ImagePattern backgroundPattern = new ImagePattern(background);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
+    }
+
+    private void moveCard(Playable card){
+
     }
 }
