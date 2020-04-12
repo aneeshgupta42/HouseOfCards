@@ -69,10 +69,21 @@ public class CardDeck implements Deck {
         return gameCards.size();
     }
 
-    public List<Playable> popCards (int numOfCards){
+    @Override
+    public List<Playable> popCards(int numOfCards){
         List <Playable> ret = new ArrayList<>();
         for (int i = 0; i < numOfCards; i++){
-            ret.add(gameCards.remove(i));
+            ret.add(gameCards.remove(0));
+        }
+        return ret;
+    }
+
+    @Override
+    public CardDeck returnADeepCopy() {
+        CardDeck ret = new CardDeck(this.deckType);
+        for (Playable card : gameCards){
+            Playable temp = CardFactory.makeACopy(card, this.deckType);
+            ret.addCard(temp);
         }
         return ret;
     }

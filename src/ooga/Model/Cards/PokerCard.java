@@ -11,4 +11,5 @@ public class PokerCard extends AbstractCard {
         setValue(cardValue);
         setID(id);
     }
+    public void test(){}
 }
