@@ -1,6 +1,7 @@
 package ooga.View.GameScreens;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -151,6 +152,9 @@ public class SolitaireScreen extends GameScreen{
         for(Integer index:differentDecks.keySet()){
             List<Playable> playingCards = differentDecks.get(index).getCards();
                 // checks for intersection
+            if(card.getImageView().intersects(playingCards.get(playingCards.size()-1).getImageView().getBoundsInLocal())){
+                System.out.println("Hello");
+            }
         }
     }
 
