@@ -49,6 +49,7 @@ public class SolitaireDriver extends GameDriver {
     }
 
     private void makePiles() {
+        allGameCards.shuffleDeck();
         piles = new HashMap<>();
         for (int i = 0; i < 11; i++) {
             if (i == 0) {
