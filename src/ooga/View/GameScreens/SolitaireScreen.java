@@ -140,7 +140,6 @@ public class SolitaireScreen extends GameScreen{
 //    }
 
     public Scene getScene(UserInterface ui){
-
         Group startRoot = new Group();
 //        startRoot.getChildren().add(dummyCard);
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
