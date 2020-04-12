@@ -40,11 +40,6 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
-    public ImageView getBackImageView() {
-        return cardBackImage;
-    }
-
-    @Override
     public void setValue(String value) {
         cardValue = value;
     }
@@ -55,8 +50,11 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
-    public ImageView getFrontImageView() {
-        return cardFrontImage;
+    public ImageView getImageView() {
+        if (isFaceUp()){
+            return cardFrontImage;
+        }
+        return cardBackImage;
     }
 
     @Override

@@ -19,9 +19,7 @@ public interface Playable {
 
     int getNumber();
 
-    ImageView getFrontImageView();
-
-    ImageView getBackImageView();
+    ImageView getImageView();
 
     String getValue();
 

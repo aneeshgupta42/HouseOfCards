@@ -31,15 +31,14 @@ public class CardDeck implements Deck {
 
     }
 
-    // TODO: Might not need this
-    public CardDeck (CardDeck cardDeck){
-        this.deckType = cardDeck.getDeckType();
-        this.gameCards = cardDeck.getCards();
+    public CardDeck (DeckType deckType){
+        this.deckType = deckType;
+        this.gameCards = new ArrayList<>();
     }
 
-    public CardDeck(DeckType deckType){
+    public CardDeck(DeckType deckType, List<Playable>gameCards){
         this.deckType = deckType;
-        gameCards = new ArrayList<>();
+        this.gameCards = gameCards;
     }
 
     @Override
@@ -63,6 +62,19 @@ public class CardDeck implements Deck {
     @Override
     public void shuffleDeck() {
         Collections.shuffle(gameCards);
+    }
+
+    @Override
+    public int getDeckSize() {
+        return gameCards.size();
+    }
+
+    public List<Playable> popCards (int numOfCards){
+        List <Playable> ret = new ArrayList<>();
+        for (int i = 0; i < numOfCards; i++){
+            ret.add(gameCards.remove(i));
+        }
+        return ret;
     }
 
     @Override

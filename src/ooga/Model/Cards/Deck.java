@@ -7,6 +7,7 @@ public interface Deck {
     void addCard(Playable card);
     void makeCard(String cardType);
     void shuffleDeck();
+    int getDeckSize();
     List<Playable> getCards();
 
 }

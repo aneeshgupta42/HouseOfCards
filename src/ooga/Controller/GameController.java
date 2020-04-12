@@ -4,6 +4,7 @@ import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
 import ooga.Model.Games.UnoDriver;
+import ooga.View.Game;
 import ooga.View.GameScreens.GameScreen;
 
 import java.lang.reflect.Constructor;
@@ -39,7 +40,7 @@ public class GameController {
 
         try {
             Constructor<?> constructor = Class.forName(DEFAULT_GAMES.get(index)).getDeclaredConstructors()[0];
-            currentGame =(GameDriver) constructor.newInstance();
+            currentGame =(GameDriver) constructor.newInstance(this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -55,5 +56,11 @@ public class GameController {
     }
     public void pauseGame(){}
     public void resumeGame(){}
+
+    public static void main(String[] args) {
+        GameController test = new GameController();
+        test.initializeGame(GameTypes.SOLITAIRE);
+        System.out.println(test.requestCards());
+    }
 
 }
