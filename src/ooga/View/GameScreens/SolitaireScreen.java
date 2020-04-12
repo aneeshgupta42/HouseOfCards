@@ -19,6 +19,8 @@ import ooga.View.UserInterface;
 import javax.sound.midi.SysexMessage;
 import java.util.List;
 
+//TODO: changed to getImageView, front or back card depending on faceUp boolean
+//TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has
 public class SolitaireScreen extends GameScreen{
     private List<ImageView> cards;
     private ImageView dummyCard;
