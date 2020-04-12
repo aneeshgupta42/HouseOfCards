@@ -40,7 +40,7 @@ public class GameController {
 
         try {
             Constructor<?> constructor = Class.forName(DEFAULT_GAMES.get(index)).getDeclaredConstructors()[0];
-            currentGame =(GameDriver) constructor.newInstance();
+            currentGame =(GameDriver) constructor.newInstance(this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

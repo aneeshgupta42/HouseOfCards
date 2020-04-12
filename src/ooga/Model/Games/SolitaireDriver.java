@@ -25,6 +25,7 @@ public class SolitaireDriver extends GameDriver {
     //many decks since solitaire contains decks everywhere
     // TODO: add a method to get the number of suits.
     public SolitaireDriver(GameController controller) {
+        this.controller = controller;
         makeDecks();
     }
 
@@ -44,7 +45,7 @@ public class SolitaireDriver extends GameDriver {
 
     private void makePiles() {
         piles = new HashMap<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             if (i == 0) {
                 piles.putIfAbsent(0, new CardDeck(DeckType.POKER, allGameCards.popCards(48)));
             } else if (i == 1 || i == 2 || i == 3 || i == 4) {
@@ -59,7 +60,7 @@ public class SolitaireDriver extends GameDriver {
 
     @Override
     public Object sendCards() {
-        return allGameCards;
+        return piles;
     }
 
     @Override
@@ -111,8 +112,14 @@ public class SolitaireDriver extends GameDriver {
     }
 
     public static void main(String[] args) {
-        SolitaireDriver test = new SolitaireDriver();
-        System.out.println(test.allGameCards);
+        SolitaireDriver test = new SolitaireDriver(new GameController());
+        for (int i = 0; i < test.piles.size(); i++){
+            System.out.println("Pile" + i + ":");
+            System.out.println(test.piles.get(i));
+//            for (Playable card : test.piles.get(i).getCards()){
+//                System.out.println(card.isFaceUp());
+//            }
+        }
 
     }
 }
