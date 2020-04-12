@@ -44,7 +44,7 @@ public class UserInput {
         game = gameName;
         Group user= new Group();
         backButton = new ButtonFactory("Back", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT, 0,0);
-        nextButton = new ButtonFactory("Next", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT, 880, 0);
+        nextButton = new ButtonFactory("Next", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT, 1080, 0);
         setUpNumberBox();
         VBox players = makeNewLabel(1);
         players.setLayoutX(200);
@@ -54,7 +54,7 @@ public class UserInput {
         Header.setTextFill(Color.DARKCYAN);
         Header.setLayoutX(1000/2-100); Header.setLayoutY(10);
         user.getChildren().addAll(numOfPlayers,backButton,nextButton, players, Header);
-        userScene = new Scene(user, 1000, 650);
+        userScene = new Scene(user, 1200, 650);
         setUpNextButton(playerNames);
         returnButton();
 

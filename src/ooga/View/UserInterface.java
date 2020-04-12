@@ -9,7 +9,7 @@ import ooga.Controller.GameController;
 import ooga.View.GameScreens.SolitaireScreen;
 
 public class UserInterface extends Application implements Viewable {
-    private double VIEW_WIDTH = 1000;
+    private double VIEW_WIDTH = 1200;
     private double VIEW_HEIGHT = 650;
     private Stage myStage;
     private static final int BUTTON_HEIGHT = 45;
