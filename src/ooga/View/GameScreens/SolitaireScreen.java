@@ -1,14 +1,19 @@
 package ooga.View.GameScreens;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.ImagePattern;
+import javafx.stage.Window;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.Model.Cards.CardDeck;
@@ -18,6 +23,7 @@ import ooga.View.UserInterface;
 
 import javax.sound.midi.SysexMessage;
 import java.beans.EventHandler;
+import java.sql.SQLSyntaxErrorException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +34,7 @@ public class SolitaireScreen extends GameScreen{
     private List<ImageView> cards;
     private ImageView dummyCard;
     private Group gameScene;
+    private  Delta dragDelta = new Delta();
     private Map<Integer, CardDeck> differentDecks = new HashMap<>();
     public SolitaireScreen(GameController setUpController){
         setUpController.initializeGame(GameTypes.SOLITAIRE);
@@ -78,6 +85,16 @@ public class SolitaireScreen extends GameScreen{
 
     }
 
+
+
+
+
+
+
+
+    // records relative x and y co-ordinates.
+    class Delta { double x, y; }
+
     private void setUponScreen(List<Playable> playingCards, double v, double v1,double i, double j,double XPos, double YPos) {
         for(Playable card:playingCards){
             ImageView cardImage = card.getImageView();
@@ -92,7 +109,63 @@ public class SolitaireScreen extends GameScreen{
         }
 
     }
+    private void setUpListeners(Playable card){
+        double initial_pos= card.getImageView().getX();
+        double initial_y= card.getImageView().getY();
+        card.getImageView().setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent mouseEvent) {
+                // record a delta distance for the drag and drop operation.
+                dragDelta.x = card.getImageView().getLayoutX() - mouseEvent.getSceneX();
+                dragDelta.y = card.getImageView().getLayoutY() - mouseEvent.getSceneY();
+                card.getImageView().setCursor(Cursor.MOVE);
+            }
+        });
+        card.getImageView().setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent mouseEvent) {
+                if(checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
+                    card.getImageView().setCursor(Cursor.HAND);
+                    checkIntersection(card, differentDecks);
+                } else {
+                    card.getImageView().setX(initial_pos);
+                    card.getImageView().setY(initial_y);
+                }
+            }
+        });
+        card.getImageView().setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent mouseEvent) {
+               if( checkBounds(mouseEvent.getSceneX(),mouseEvent.getSceneY()) ){
+                    card.getImageView().setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                    card.getImageView().setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                } else {
+                   card.getImageView().setLayoutX(initial_pos);
+                   card.getImageView().setLayoutY(initial_y);
+                   mouseEvent.setDragDetect(false);
+                }
+            }
+        });
+        card.getImageView().setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent mouseEvent) {
+                card.getImageView().setCursor(Cursor.HAND);
+            }
+        });
+    }
 
+    private void checkIntersection(Playable card, Map<Integer, CardDeck> differentDecks) {
+        for(Integer index:differentDecks.keySet()){
+            List<Playable> playingCards = differentDecks.get(index).getCards();
+                // checks for intersection
+            if(card.getImageView().intersects(playingCards.get(playingCards.size()-1).getImageView().getBoundsInLocal())){
+                System.out.println("Hello");
+            }
+        }
+    }
+
+    private boolean checkBounds(double v, double v1) {
+        if(v<= 1200 && v1<=650 && v>=0 && v1>=0){
+            return true;
+        }
+        return false;
+    }
 
     private void setUpPot(Playable playable) {
         playable.setFaceUp(false);

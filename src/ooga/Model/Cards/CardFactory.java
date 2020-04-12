@@ -37,6 +37,21 @@ public class CardFactory {
       }
       }
 
+      public static Playable makeACopy(Playable card, DeckType deckType){
+         Playable ret;
+         ImageView frontImage;
+         ImageView backImage;
+         switch (deckType){
+//            case UNO:
+//            case HUMANITY:
+            default:
+               frontImage = new ImageView(card.getFrontImageView().getImage());
+               backImage = new ImageView(card.getBackImageView().getImage());
+               ret = new PokerCard(frontImage, backImage, card.getNumber(), card.getValue(), card.getID());
+         }
+         return ret;
+      }
+
    private static Playable makeCard(DeckType deckType, CardColors color, ImageView image, String[] attributes, int id) {
       Playable card;
       switch (deckType){

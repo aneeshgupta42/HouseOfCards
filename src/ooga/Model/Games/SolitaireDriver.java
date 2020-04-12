@@ -30,24 +30,30 @@ public class SolitaireDriver extends GameDriver {
     }
 
     private void makeDecks() {
-        CardDeck[] gameDecks = new CardDeck[8];
         allGameCards = new CardDeck(DeckType.POKER);
-        for (int i = 0; i < gameDecks.length; i++) {
-            gameDecks[i] = new CardDeck(GameTypes.SOLITAIRE, DEFAULT_COLOR);
-            for (Playable card : gameDecks[i].getCards()) {
-                if (card.getValue().equals("S")) {
-                    allGameCards.addCard(card);
-                }
+        CardDeck completeDeck = new CardDeck(GameTypes.SOLITAIRE, DEFAULT_COLOR);
+        CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER);
+
+        for (Playable card : completeDeck.getCards()) {
+            if (card.getValue().equals("S")) {
+                deckWithSpecifiedSuits.addCard(card);
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            CardDeck copy = deckWithSpecifiedSuits.returnADeepCopy();
+            for (Playable card : copy.getCards()){
+                allGameCards.addCard(card);
             }
         }
         makePiles();
     }
 
     private void makePiles() {
+        allGameCards.shuffleDeck();
         piles = new HashMap<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 11; i++) {
             if (i == 0) {
-                piles.putIfAbsent(0, new CardDeck(DeckType.POKER, allGameCards.popCards(48)));
+                piles.putIfAbsent(0, new CardDeck(DeckType.POKER, allGameCards.popCards(50)));
             } else if (i == 1 || i == 2 || i == 3 || i == 4) {
                 piles.putIfAbsent(i, new CardDeck(DeckType.POKER, allGameCards.popCards(6)));
                 piles.get(i).getCards().get(5).setFaceUp(true);
@@ -113,7 +119,7 @@ public class SolitaireDriver extends GameDriver {
 
     public static void main(String[] args) {
         SolitaireDriver test = new SolitaireDriver(new GameController());
-        for (int i = 0; i < test.piles.size(); i++){
+        for (int i = 0; i < test.piles.size(); i++) {
             System.out.println("Pile" + i + ":");
             System.out.println(test.piles.get(i));
 //            for (Playable card : test.piles.get(i).getCards()){
