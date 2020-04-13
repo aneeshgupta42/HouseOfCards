@@ -22,7 +22,6 @@ import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
 
 import javax.sound.midi.SysexMessage;
-import java.beans.EventHandler;
 import java.sql.SQLSyntaxErrorException;
 import java.util.HashMap;
 import java.util.List;
@@ -102,6 +101,7 @@ public class SolitaireScreen extends GameScreen{
             cardImage.setFitHeight(90);
             cardImage.setX(XPos+i);
             cardImage.setY(YPos+j);
+            setUpListeners(card);
 //            cardImage.setOnDragDetected();
             j=j+v;
             i=i+v1;
