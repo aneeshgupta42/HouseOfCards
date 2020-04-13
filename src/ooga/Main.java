@@ -28,7 +28,7 @@ public class Main  {
 //        launch(args);
         GameController mainGameController = new GameController();
         Platform.startup(() -> {
-            UserInterface myInterface = new UserInterface(mainGameController);
+            UserInterface myInterface = new UserInterface();
             myInterface.start(new Stage());
         });
     }

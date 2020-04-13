@@ -1,6 +1,7 @@
 package ooga.View;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,13 +18,9 @@ public class UserInterface extends Application implements Viewable {
     private static final int BUTTON_FONT = 20;
     private static GameController passingController;
 
-    public UserInterface(GameController mainGameController) {
-        passingController = mainGameController;
-    }
-
-
     @Override
     public void start(Stage primaryStage) {
+        passingController = new GameController();
         myStage = primaryStage;
         Group gameScreen = new Group();
         ButtonFactory resetButton = new ButtonFactory("Restart", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT,0,0);
@@ -114,4 +111,8 @@ public class UserInterface extends Application implements Viewable {
     public double getHeight(){
         return VIEW_HEIGHT;
     }
+    public static void main(String[] args) {
+        launch(args);
+    }
+
 }

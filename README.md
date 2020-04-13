@@ -3,7 +3,7 @@ final
 
 This project implements a player for multiple related games.
 
-Names:
+Names: Aneesh Gupta, Himanshu Jain, Tharun Raj
 
 
 ### Timeline

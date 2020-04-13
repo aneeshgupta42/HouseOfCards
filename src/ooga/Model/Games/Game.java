@@ -2,6 +2,8 @@ package ooga.Model.Games;
 
 import ooga.Model.Players.Player;
 
+import java.util.List;
+
 public interface Game {
     void makePlayer(String userName);
 
@@ -10,9 +12,10 @@ public interface Game {
     boolean checkWin();
 
     /**
-     * logic to update a game based on the current state when this method is invoked
+     * logic to update a game based on the current state when this method is invoked.
+     * Main game logic resides here
      */
-    void updateProtocol();
+    List<Object> updateProtocol(List<Object> args);
 
     void updateScore(int score);
 

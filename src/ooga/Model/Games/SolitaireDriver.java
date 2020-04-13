@@ -88,9 +88,54 @@ public class SolitaireDriver extends GameDriver {
     }
 
     @Override
-    public void updateProtocol() {
+    public List<Object> updateProtocol(List<Object> args) {
+        if (args == null){
+            drawPileProtocol();
+            return null;
+        }
+        List<Object> ret = new ArrayList<>();
+        int sourcePile = (Integer) args.get(0);
+        int destPile = (Integer) args.get(1);
+        int indexInSource = (Integer) args.get(2);
+
+        boolean cond1 = checkSourcePileOrder(sourcePile, indexInSource);
+        boolean cond2 = checkNumericalContinuity(sourcePile, indexInSource, destPile);
+
+        if (cond1 && cond2){
+            ret.add(1);
+        }else{
+            ret.add(0);
+        }
+        //TODO: Add functionality to check for a complete set
+        return ret;
+    }
+
+    private boolean checkSourcePileOrder(int sourcePile, int indexInSource) {
+        CardDeck temp = piles.get(sourcePile);
+        if (temp.getDeckSize() <= 1) {return true;}
+        int cardNum = temp.getCards().get(0).getNumber();
+        for (int i = indexInSource + 1; i < temp.getDeckSize(); i++){
+            if (cardNum - temp.getCards().get(i).getNumber() == 1){
+                cardNum = temp.getCards().get(i).getNumber();
+                continue;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkNumericalContinuity(int sourcePile, int indexInSource, int destPile) {
+        int sourceNum = piles.get(sourcePile).getCards().get(indexInSource).getNumber();
+        int lastIndexOfDestPile = piles.get(destPile).getDeckSize() - 1;
+        int destNum = piles.get(destPile).getCards().get(lastIndexOfDestPile).getNumber();
+        return destNum - sourceNum == 1;
+    }
+
+    private void drawPileProtocol() {
 
     }
+
 
     @Override
     public void updateScore(int score) {
