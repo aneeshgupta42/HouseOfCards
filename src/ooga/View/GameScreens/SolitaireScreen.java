@@ -42,19 +42,11 @@ public class SolitaireScreen extends GameScreen{
         setUpController.initializeGame(GameTypes.SOLITAIRE);
         gameControl= setUpController;
         addCards(setUpController);
-
-
-//        Image dummy = new Image(getClass().getClassLoader().getResourceAsStream("cardDecks/poker/1_C.png"));
-//        dummyCard = new ImageView(dummy);
-//        dummyCard.setX(100); dummyCard.setY(100);
-//        dummyCard.setFitWidth(65);
-//        dummyCard.setFitHeight(105);
-
-//        dummyCard.setOn
     }
 
     private void addCards(GameController setUpController) {
        gameScene = new Group();
+       setUpButtons(gameScene);
        //TODO: change this to receive a map instead
         double i=0;
         double j=0;

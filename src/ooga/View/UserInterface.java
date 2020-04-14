@@ -17,6 +17,7 @@ public class UserInterface extends Application implements Viewable {
     private static final int BUTTON_WIDTH = 120;
     private static final int BUTTON_FONT = 20;
     private static GameController passingController;
+    private Scene splash;
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,6 +30,7 @@ public class UserInterface extends Application implements Viewable {
         Scene gameScene = new Scene(gameScreen,VIEW_WIDTH,VIEW_HEIGHT);
         SplashScreen splashScreen = new SplashScreen(this);
         Scene disp = splashScreen.getStartScene();
+        splash = disp;
         myStage.setScene(disp);
         myStage.show();
     }
@@ -114,5 +116,7 @@ public class UserInterface extends Application implements Viewable {
     public static void main(String[] args) {
         launch(args);
     }
-
+    public void setSplash(){
+        myStage.setScene(splash);
+    }
 }

@@ -13,11 +13,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.util.List;
+
 public class SplashScreen {
     private Paint background = Color.WHITESMOKE;
     private Scene startScene;
     private String logo = "cardDecks/poker/aces.png";
-
+    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Cards Against Humanity", "Blackjack", "Uno", "Snap");
 
 
     public Rectangle generateLogo(){
@@ -38,28 +40,15 @@ public class SplashScreen {
         startScene = new Scene(startRoot, mainView.getWidth(), mainView.getHeight(), background);
         double width = mainView.getWidth();
         double height = mainView.getHeight();
-        Button cont = new Button("Solitaire");
-        cont.setId("Solitaire");
-        cont.setLayoutX(width/2-70); cont.setLayoutY(height/2+100);
-//        cont.setOnAction(e -> mainView.advanceScene(mainView.getGameScene()));
-        cont.setOnAction(e ->
-        {
-            System.out.println("Start Solitaire");
-            mainView.userScreen("Solitaire");
-        });
-
-        startRoot.getChildren().addAll(cont);
-
+        setupButtons(mainView,startRoot, width/2-70, height/2+100);
         Label Header = new Label("?House of Cards¿");
         Header.setFont(new Font("Garamond", 30));
         Header.setTextFill(Color.DARKCYAN);
         startRoot.getChildren().addAll(Header);
         Header.setLayoutX(width/2-100); Header.setLayoutY(10);
-
         Rectangle logo = generateLogo();
         logo.setLayoutX(width/2-logo.getWidth()/2); logo.setLayoutY(100);
         startRoot.getChildren().addAll(logo);
-
 
         Label rules = new Label("GAME RULES\n" +
                 "\t 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit\n" +
@@ -71,6 +60,19 @@ public class SplashScreen {
         rules.setLayoutX(width/2-100); rules.setLayoutY(300);
         rules.setFont(new Font("Garamond", 15));
         startRoot.getChildren().addAll(rules);
+    }
+    private void setupButtons(UserInterface mainView, Group sceneGroup, double XPos, double YPos){
+        int distanceBetweenButtons=40;
+        int initialDistance=0;
+        for(String name:GAME_FIELDS){
+            ButtonFactory gameButton = new ButtonFactory(name, XPos, YPos+initialDistance );
+            gameButton.setOnAction(e->mainView.userScreen(name));
+            sceneGroup.getChildren().add(gameButton);
+            initialDistance+=distanceBetweenButtons;
+
+        }
+
+
     }
 
     public Scene getStartScene() {
