@@ -168,7 +168,6 @@ public class SolitaireScreen extends GameScreen {
                     cardWorking.add(stackTo);
                     for (Playable check : differentDecks.get(stackFrom).getCards()) {
                         if (check.getImageView().equals(card.getImageView())) {
-                            System.out.println("Adding index card");
                             cardWorking.add(differentDecks.get(stackFrom).getCards().indexOf(check));
                         }
                     }
