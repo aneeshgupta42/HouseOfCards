@@ -116,6 +116,7 @@ public class SolitaireScreen extends GameScreen {
             public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
                 dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
+                updateProtocol(cardImage);
                 dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
                 cardImage.setCursor(Cursor.MOVE);
             }
@@ -125,7 +126,7 @@ public class SolitaireScreen extends GameScreen {
             public void handle(MouseEvent mouseEvent) {
                 if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
                    cardImage.setCursor(Cursor.HAND);
-                    checkIntersection(cardImage, differentDecks, initial_pos,initial_y);
+//                    checkIntersection(cardImage, differentDecks, initial_pos,initial_y);
                 } else {
                     cardImage.setX(initial_pos);
                      cardImage.setY(initial_y);
