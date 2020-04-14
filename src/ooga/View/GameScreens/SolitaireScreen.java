@@ -23,6 +23,7 @@ import ooga.View.UserInterface;
 
 import javax.sound.midi.SysexMessage;
 import java.sql.SQLSyntaxErrorException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +35,12 @@ public class SolitaireScreen extends GameScreen{
     private ImageView dummyCard;
     private Group gameScene;
     private  Delta dragDelta = new Delta();
+    private GameController gameControl = new GameController();
     private Map<Integer, CardDeck> differentDecks = new HashMap<>();
+    private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
     public SolitaireScreen(GameController setUpController){
         setUpController.initializeGame(GameTypes.SOLITAIRE);
+        gameControl= setUpController;
         addCards(setUpController);
 
 
@@ -55,16 +59,18 @@ public class SolitaireScreen extends GameScreen{
         double i=0;
         double j=0;
         double l=0;
+        int index=0;
         differentDecks = (Map<Integer, CardDeck>) setUpController.requestCards();
         for(Integer keys:differentDecks.keySet()){
             List<Playable> playingCards = differentDecks.get(keys).getCards();
             if(playingCards.size()>30){
-                setUponScreen(playingCards, 0.2, 0.1, i,j, 850,500);
+                setUponScreen(playingCards, 0.2, 0.1, i,j, 850,500,index);
             } else {
-                setUponScreen(playingCards, 20, 0, l,j,20,10);
+                setUponScreen(playingCards, 20, 0, l,j,20,10,index);
             }
             i=i+100;
             l=l+100;
+            index++;
             j=0;
         }
 //        List<Playable> playingCards = cards.getCards();
@@ -94,7 +100,7 @@ public class SolitaireScreen extends GameScreen{
     // records relative x and y co-ordinates.
     class Delta { double x, y; }
 
-    private void setUponScreen(List<Playable> playingCards, double v, double v1,double i, double j,double XPos, double YPos) {
+    private void setUponScreen(List<Playable> playingCards, double v, double v1,double i, double j,double XPos, double YPos, int index) {
         for(Playable card:playingCards){
             ImageView cardImage = card.getImageView();
             cardImage.setFitWidth(60);
@@ -102,6 +108,9 @@ public class SolitaireScreen extends GameScreen{
             cardImage.setX(XPos+i);
             cardImage.setY(YPos+j);
             setUpListeners(card);
+            List<ImageView> images = new ArrayList<>();
+            images.add(cardImage);
+            indexMapped.put(index,images);
 //            cardImage.setOnDragDetected();
             j=j+v;
             i=i+v1;
@@ -136,6 +145,7 @@ public class SolitaireScreen extends GameScreen{
                if( checkBounds(mouseEvent.getSceneX(),mouseEvent.getSceneY()) ){
                     card.getImageView().setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
                     card.getImageView().setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                    card.getImageView().toFront();
                 } else {
                    card.getImageView().setLayoutX(initial_pos);
                    card.getImageView().setLayoutY(initial_y);
@@ -151,15 +161,39 @@ public class SolitaireScreen extends GameScreen{
     }
 
     private void checkIntersection(Playable card, Map<Integer, CardDeck> differentDecks) {
-        for(Integer index:differentDecks.keySet()){
+        for(Integer index:differentDecks.keySet()) {
             List<Playable> playingCards = differentDecks.get(index).getCards();
-                // checks for intersection
-            if(card.getImageView().intersects(playingCards.get(playingCards.size()-1).getImageView().getBoundsInLocal())){
-                System.out.println("Hello");
+            // checks for intersection
+            if (!card.getImageView().equals(playingCards.get(playingCards.size() - 1).getImageView())) {
+                // Change the logic for checking intersections
+//                if ((card.getImageView().getX() >= brickw.get(i).getImage().getX() && myBall.ballImage().getX() <= brickw.get(i).getImage().getX() + brickw.get(i).getWidth() - 2) && (myBall.ballImage().getY() >= brickw.get(i).getImage().getY() && myBall.ballImage().getY() <= brickw.get(i).getImage().getY() + brickw.get(i).getHeight())) {
+                    List<Object> cardWorking = new ArrayList<>();
+                    int stackFrom = getKey(indexMapped, card.getImageView());
+                    cardWorking.add(stackFrom);
+                    int stackTo = getKey(indexMapped, playingCards.get(playingCards.size() - 1).getImageView());
+                    cardWorking.add(stackTo);
+                    for (ImageView check : indexMapped.get(stackFrom)) {
+                        if (check.equals(playingCards.get(playingCards.size() - 1).getImageView())) {
+                            cardWorking.add(playingCards.size() - 1);
+                        }
+                    }
+                    System.out.println(cardWorking);
+                    gameControl.updateProtocol(cardWorking);
+                }
+            }
+//        }
+    }
+    private Integer getKey(Map<Integer, List<ImageView>> map, ImageView v) {
+        for(Integer check: map.keySet()){
+            for(ImageView imageIterate: map.get(check)){
+                if(imageIterate.equals(v)){
+                    System.out.println(v);
+                    return check;
+                }
             }
         }
+        return 0;
     }
-
     private boolean checkBounds(double v, double v1) {
         if(v<= 1200 && v1<=650 && v>=0 && v1>=0){
             return true;
