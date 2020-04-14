@@ -160,18 +160,15 @@ public class SolitaireScreen extends GameScreen {
             // checks for intersection
             if (!card.getImageView().equals(playingCards.get(playingCards.size() - 1).getImageView())) {
                 // Change the logic for checking intersections
-//                if ((card.getImageView().getX() >= brickw.get(i).getImage().getX() && myBall.ballImage().getX() <= brickw.get(i).getImage().getX() + brickw.get(i).getWidth() - 2) && (myBall.ballImage().getY() >= brickw.get(i).getImage().getY() && myBall.ballImage().getY() <= brickw.get(i).getImage().getY() + brickw.get(i).getHeight())) {
                 if ((card.getImageView().getBoundsInParent().intersects(playingCards.get(playingCards.size() - 1).getImageView().getBoundsInParent()))) {
-                    System.out.println("Inntersect");
                     List<Object> cardWorking = new ArrayList<>();
                     int stackFrom = getKey(indexMapped, card.getImageView());
                     cardWorking.add(stackFrom);
                     int stackTo = getKey(indexMapped, playingCards.get(playingCards.size() - 1).getImageView());
                     cardWorking.add(stackTo);
-                    for (ImageView check : indexMapped.get(stackFrom)) {
-                        if (check.equals(playingCards.get(playingCards.size() - 1).getImageView())) {
-                            System.out.println("Adding index card");
-                            cardWorking.add(playingCards.size() - 1);
+                    for (Playable check : differentDecks.get(stackFrom).getCards()) {
+                        if (check.getImageView().equals(card.getImageView())) {
+                            cardWorking.add(differentDecks.get(stackFrom).getCards().indexOf(check));
                         }
                     }
                     System.out.println(cardWorking);
