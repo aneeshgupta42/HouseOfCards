@@ -13,6 +13,14 @@ import ooga.Controller.GameTypes;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
+
+import javax.sound.midi.SysexMessage;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.SQLSyntaxErrorException;
+import java.util.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,14 +33,55 @@ public class CAHScreen extends GameScreen {
     private ImageView dummyCard;
     private Group gameScene;
     private Delta dragDelta = new Delta();
-    private GameController gameControl = new GameController();
-    private Map<Integer, CardDeck> differentDecks = new HashMap<>();
+    private GameController gameControl;
     private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
+    //what we get
+    private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
+    //we'll make this (pile: List of Images)
+    private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
+    private Map<Integer, ImageView> idImage = new HashMap<>();
+
+
+    /***
+     * Get: Map of Integer (pile number) : List<IDs> in that pile
+     * Want: Map of Integer (pile number): List<ImageViews>
+     * Want: Map of ID -> ImageView
+     *
+     * Change:
+     * How we put on cards, and how we check for intersection.
+     *
+     * Basic pipeline:
+     *
+     * Front (attempts to) moves card from Pile A to Pile B.
+     * This calls updateProtocol (which takes in indA, indB, ind.within.A)
+     *
+     * ***/
+
+    private ImageView getIDImage(int id){
+        String imagePath = gameControl.getImagePath(id);
+        Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
+        return new ImageView(cardImage);
+    }
+
+
+    private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
+        for(Integer pile: deckMap.keySet()){
+            List<ImageView> imageList= new ArrayList<>();
+            for (Integer id: deckMap.get(pile)){
+                ImageView cardImage = getIDImage(id);
+                idImage.put(id, cardImage);
+                imageList.add(cardImage);
+            }
+            imageMap.put(pile, imageList);
+        }
+    }
 
     public CAHScreen(GameController setUpController) {
-        setUpController.initializeGame(GameTypes.HUMANITY);
         gameControl = setUpController;
-        addCards(setUpController);
+        differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
+        initializeImageMap(differentDecks);
+        gameControl.initializeGame(GameTypes.SOLITAIRE);
+        addCards(gameControl);
     }
 
     private void addCards(GameController setUpController) {
@@ -43,9 +92,9 @@ public class CAHScreen extends GameScreen {
         double j = 0;
         double l = 0;
         int index = 0;
-        differentDecks = (Map<Integer, CardDeck>) setUpController.requestCards();
-        for (Integer keys : differentDecks.keySet()) {
-            List<Integer> playingCards = differentDecks.get(keys).getCards();
+        for (Integer key : differentDecks.keySet()) {
+            //playingCards is a list of IDs for that the pile "key"
+            List<Integer> playingCards = differentDecks.get(key);
             if (playingCards.size() > 30) {
                 setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500, index);
             } else {
@@ -56,7 +105,24 @@ public class CAHScreen extends GameScreen {
             index++;
             j = 0;
         }
+//        List<Playable> playingCards = cards.getCards();
+//        setUpCards(playingCards);
+//        setUponScreen();
+//        int j=10;
+//        for(int i=0;i<playingCards.size();i++){
+//            playingCards.get(i).setFaceUp(false);
+//          /*  playingCards.get(i).getFrontImageView().setFitWidth(60);
+//            playingCards.get(i).getFrontImageView().setFitHeight(20);
+//            playingCards.get(i).getFrontImageView().setX(0);
+//            playingCards.get(i).getFrontImageView().setY(0+j);
+//            j=j+10;
+//            gameScene.getChildren().add(playingCards.get(i).getFrontImageView());*/
+//
+//        }
+
     }
+
+
     // records relative x and y co-ordinates.
     class Delta {
         double x, y;
@@ -64,7 +130,7 @@ public class CAHScreen extends GameScreen {
 
     private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
         for (Integer cardID : playingCards) {
-            ImageView cardImage = gameControl.getImage(cardID);
+            ImageView cardImage = idImage.get(cardID);
             cardImage.setFitWidth(60);
             cardImage.setFitHeight(90);
             cardImage.setX(XPos + i);
@@ -89,6 +155,8 @@ public class CAHScreen extends GameScreen {
             public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
                 dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
+                //TODO: I didn't know what this was, so commented out:
+//                updateProtocol(cardImage);
                 dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
                 cardImage.setCursor(Cursor.MOVE);
             }
@@ -127,21 +195,23 @@ public class CAHScreen extends GameScreen {
         });
     }
 
-    private void checkIntersection(ImageView cardImage, Map<Integer, CardDeck> differentDecks, double xpos, double ypos) {
+    private void checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
+        //Diff pile numbers
         for (Integer index : differentDecks.keySet()) {
-            List<Integer> playingCardID = differentDecks.get(index).getCards();
+            List<Integer> currentPile = differentDecks.get(index);
             // checks for intersection
-            if (!cardImage.equals(gameControl.getImage(playingCards.get(playingCards.size() - 1)))) {
+            ImageView pileLast = idImage.get(currentPile.get(currentPile.size()-1));
+            if (!currentCard.equals(pileLast)) {
                 // Change the logic for checking intersections
-                if ((cardImage.getBoundsInParent().intersects(gameControl.getImage(playingCards.get(playingCards.size() - 1))).getBoundsInParent())) {
+                if ((currentCard.getBoundsInParent().intersects(pileLast.getBoundsInParent()))) {
                     List<Object> cardWorking = new ArrayList<>();
-                    int stackFrom = getKey(indexMapped, cardImage);
+                    int stackFrom = getKey(indexMapped, currentCard);
                     cardWorking.add(stackFrom);
-                    int stackTo = getKey(indexMapped, gameControl.getImage(playingCards.get(playingCards.size() - 1)));
+                    int stackTo = getKey(indexMapped, pileLast);
                     cardWorking.add(stackTo);
-                    for (Playable check : differentDecks.get(stackFrom).getCards()) {
-                        if (check.getImageView().equals(cardImage)) {
-                            cardWorking.add(differentDecks.get(stackFrom).getCards().indexOf(check));
+                    for (Integer id : differentDecks.get(stackFrom)) {
+                        if (idImage.get(id).equals(currentCard)) {
+                            cardWorking.add(differentDecks.get(stackFrom).indexOf(id));
                         }
                     }
                     System.out.println(cardWorking);
@@ -177,7 +247,47 @@ public class CAHScreen extends GameScreen {
         gameScene.getChildren().add(playable.getBackImageView());*/
     }
 
+//    private void setUpCards(List<Playable> playingCards) {
+//        setupMainDeck(playingCards);
+//        int shiftX = 0;
+//        int shiftY = 0;
+//        for (int i=1;i<differentDecks.length;i++){
+//            for(int j=0;j<(playingCards.size()/differentDecks.length)-1;j++){
+//                differentDecks[i].addCard(playingCards.get(j));
+//               /* if(j==7){
+//                    playingCards.get(j).setFaceUp(true);
+//                    playingCards.get(j).getFrontImageView().setX(0+shiftX);
+//                    playingCards.get(j).getFrontImageView().setY(0+shiftY);
+//                    shiftY = shiftY+10;
+//                    gameScene.getChildren().add(playingCards.get(j).getFrontImageView());
+//                } else{
+//                    playingCards.get(j).setFaceUp(false);
+//                    playingCards.get(j).getFrontImageView().setX(0+shiftX);
+//                    playingCards.get(j).getFrontImageView().setY(0+shiftY);
+//                    shiftY = shiftY+10;
+//                    gameScene.getChildren().add(playingCards.get(j).getBackImageView());
+//                }*/
+//                playingCards.remove(playingCards.get(j));
+//            }
+//            shiftX = shiftX+30;
+//        }
+//
+//    }
+////
+//    private void setupMainDeck( List<Playable> playingCards) {
+//        for (int i=0;i<48;i++){
+//            differentDecks[0].addCard(playingCards.get(i));
+//            playingCards.remove(playingCards.get(i));
+//        }
+//    }
+
+//    private void generateCards(){
+//        for
+//    }
+
     public Scene getScene(UserInterface ui) {
+        Group startRoot = new Group();
+//        startRoot.getChildren().add(dummyCard);
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
         ImagePattern backgroundPattern = new ImagePattern(background);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
@@ -187,5 +297,17 @@ public class CAHScreen extends GameScreen {
     private void moveCard(Playable card) {
 
     }
-}
 
+    private static ResourceBundle getResourceBundleFromPath(String path) {
+        try {
+            //System.out.println("data/cardDecks/" + path + "/" + path);
+            File file = new File("data/cardDecks/" + path);
+            URL[] urls = {file.toURI().toURL()};
+            ClassLoader loader = new URLClassLoader(urls);
+            return ResourceBundle.getBundle(path, Locale.getDefault(), loader);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
