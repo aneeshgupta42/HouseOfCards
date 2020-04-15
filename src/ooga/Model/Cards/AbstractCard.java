@@ -4,8 +4,7 @@ import javafx.scene.image.ImageView;
 
 public abstract class AbstractCard implements Playable {
     private int cardNumber; //number set to 0 if numbers are not relevant
-    private ImageView cardFrontImage;
-    private ImageView cardBackImage;
+    private String cardFrontImagePath;
     private String cardValue; //uses shape value
     private int ID;
     private boolean faceUp;
@@ -29,25 +28,6 @@ public abstract class AbstractCard implements Playable {
         cardNumber = num;
     }
 
-    @Override
-    public ImageView getFrontImageView() {
-        return cardFrontImage;
-    }
-
-    @Override
-    public ImageView getBackImageView() {
-        return cardBackImage;
-    }
-
-    @Override
-    public void setFrontImageView(ImageView image) {
-        cardFrontImage = image;
-    }
-
-    @Override
-    public void setBackImageView(ImageView image) {
-        cardBackImage = image;
-    }
 
     @Override
     public void setValue(String value) {
@@ -60,11 +40,13 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
-    public ImageView getImageView() {
-        if (isFaceUp()){
-            return cardFrontImage;
-        }
-        return cardBackImage;
+    public String getCardFrontImagePath() {
+        return cardFrontImagePath;
+    }
+
+    @Override
+    public void setCardFrontImagePath(String cardFrontImagePath) {
+        this.cardFrontImagePath = cardFrontImagePath;
     }
 
     @Override

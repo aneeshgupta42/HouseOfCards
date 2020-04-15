@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SolitaireDriver extends GameDriver {
-    private CardColors DEFAULT_COLOR = CardColors.BLUE;
     private Player player;
     private CardDeck allGameCards;
     private Map<Integer, CardDeck> piles;
@@ -27,11 +26,12 @@ public class SolitaireDriver extends GameDriver {
     public SolitaireDriver(GameController controller) {
         this.controller = controller;
         makeDecks();
+
     }
 
     private void makeDecks() {
         allGameCards = new CardDeck(DeckType.POKER);
-        CardDeck completeDeck = new CardDeck(GameTypes.SOLITAIRE, DEFAULT_COLOR);
+        CardDeck completeDeck = new CardDeck(GameTypes.SOLITAIRE);
         CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER);
 
         for (Playable card : completeDeck.getCards()) {
@@ -66,7 +66,22 @@ public class SolitaireDriver extends GameDriver {
 
     @Override
     public Object sendCards() {
-        return piles;
+        Map<Integer, List<Integer>> ret = new HashMap<>();
+        for (Integer index : piles.keySet()){
+            ret.put(index, piles.get(index).getIDList());
+        }
+        return ret;
+    }
+
+    @Override
+    public String getCardImagePath(int cardID) {
+        Playable card = getCard(cardID);
+        return card.getCardFrontImagePath();
+    }
+
+    @Override
+    public boolean getCardFaceUp(int ID) {
+        return false;
     }
 
     @Override
@@ -162,15 +177,31 @@ public class SolitaireDriver extends GameDriver {
 
     }
 
+    @Override
+    public boolean IsCardFaceUp(int cardID) {
+        Playable card = getCard(cardID);
+        return card.isFaceUp();
+    }
+
+    @Override
+    protected Playable getCard(int cardID) {
+        for (Integer i : piles.keySet()){
+            if (piles.get(i).isCardPresent(cardID)){
+                return piles.get(i).getCardWithID(cardID);
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         SolitaireDriver test = new SolitaireDriver(new GameController());
-        for (int i = 0; i < test.piles.size(); i++) {
-            System.out.println("Pile" + i + ":");
-            System.out.println(test.piles.get(i));
+//        for (int i = 0; i < test.piles.size(); i++) {
+//            System.out.println("Pile" + i + ":");
+//            System.out.println(test.piles.get(i));
 //            for (Playable card : test.piles.get(i).getCards()){
 //                System.out.println(card.isFaceUp());
-//            }
-        }
+//           }
+//        }
 
     }
 }

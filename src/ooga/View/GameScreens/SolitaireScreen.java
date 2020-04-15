@@ -1,23 +1,16 @@
 package ooga.View.GameScreens;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.ImagePattern;
-import javafx.stage.Window;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.Model.Cards.CardDeck;
-import ooga.Model.Cards.Deck;
 import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
 
@@ -27,6 +20,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.SQLSyntaxErrorException;
 import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
@@ -83,7 +81,7 @@ public class SolitaireScreen extends GameScreen {
         int index = 0;
         differentDecks = (Map<Integer, CardDeck>) setUpController.requestCards();
         for (Integer keys : differentDecks.keySet()) {
-            List<Playable> playingCards = differentDecks.get(keys).getCards();
+            List<Integer> playingCards = differentDecks.get(keys).getCards();
             if (playingCards.size() > 30) {
                 setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500, index);
             } else {
@@ -117,14 +115,14 @@ public class SolitaireScreen extends GameScreen {
         double x, y;
     }
 
-    private void setUponScreen(List<Playable> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
-        for (Playable card : playingCards) {
-            ImageView cardImage = card.getImageView();
+    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
+        for (Integer cardID : playingCards) {
+            ImageView cardImage = gameControl.getImage(cardID);
             cardImage.setFitWidth(60);
             cardImage.setFitHeight(90);
             cardImage.setX(XPos + i);
             cardImage.setY(YPos + j);
-            setUpListeners(card);
+            setUpListeners(cardImage);
             List<ImageView> images = new ArrayList<>();
             images.add(cardImage);
             indexMapped.put(index, images);
@@ -145,59 +143,60 @@ public class SolitaireScreen extends GameScreen {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
-                dragDelta.x = card.getImageView().getLayoutX() - mouseEvent.getSceneX();
-                dragDelta.y = card.getImageView().getLayoutY() - mouseEvent.getSceneY();
-                card.getImageView().setCursor(Cursor.MOVE);
+                dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
+                updateProtocol(cardImage);
+                dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
+                cardImage.setCursor(Cursor.MOVE);
             }
         });
-        card.getImageView().setOnMouseReleased(new EventHandler<MouseEvent>() {
+        cardImage.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
-                    card.getImageView().setCursor(Cursor.HAND);
-                    checkIntersection(card, differentDecks);
+                   cardImage.setCursor(Cursor.HAND);
+//                    checkIntersection(cardImage, differentDecks, initial_pos,initial_y);
                 } else {
-                    card.getImageView().setX(initial_pos);
-                    card.getImageView().setY(initial_y);
+                    cardImage.setX(initial_pos);
+                     cardImage.setY(initial_y);
                 }
             }
         });
-        card.getImageView().setOnMouseDragged(new EventHandler<MouseEvent>() {
+        cardImage.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (checkBounds(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
-                    card.getImageView().setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                    card.getImageView().setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                    card.getImageView().toFront();
+                    cardImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                    cardImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                    cardImage.toFront();
                 } else {
-                    card.getImageView().setLayoutX(initial_pos);
-                    card.getImageView().setLayoutY(initial_y);
+                    cardImage.setLayoutX(initial_pos);
+                    cardImage.setLayoutY(initial_y);
                     mouseEvent.setDragDetect(false);
                 }
             }
         });
-        card.getImageView().setOnMouseEntered(new EventHandler<MouseEvent>() {
+        cardImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                card.getImageView().setCursor(Cursor.HAND);
+                cardImage.setCursor(Cursor.HAND);
             }
         });
     }
 
-    private void checkIntersection(Playable card, Map<Integer, CardDeck> differentDecks) {
+    /*private void checkIntersection(ImageView cardImage, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         for (Integer index : differentDecks.keySet()) {
-            List<Playable> playingCards = differentDecks.get(index).getCards();
+            List<Integer> playingCardID = differentDecks.get(index);
             // checks for intersection
-            if (!card.getImageView().equals(playingCards.get(playingCards.size() - 1).getImageView())) {
+            if (!cardImage.equals(gameControl.getImage(playingCards.get(playingCards.size() - 1)))) {
                 // Change the logic for checking intersections
-                if ((card.getImageView().getBoundsInParent().intersects(playingCards.get(playingCards.size() - 1).getImageView().getBoundsInParent()))) {
+                if ((cardImage.getBoundsInParent().intersects(gameControl.getImage(playingCards.get(playingCards.size() - 1))).getBoundsInParent())) {
                     List<Object> cardWorking = new ArrayList<>();
-                    int stackFrom = getKey(indexMapped, card.getImageView());
+                    int stackFrom = getKey(indexMapped, cardImage);
                     cardWorking.add(stackFrom);
-                    int stackTo = getKey(indexMapped, playingCards.get(playingCards.size() - 1).getImageView());
+                    int stackTo = getKey(indexMapped, gameControl.getImage(playingCards.get(playingCards.size() - 1)));
                     cardWorking.add(stackTo);
                     for (Playable check : differentDecks.get(stackFrom).getCards()) {
-                        if (check.getImageView().equals(card.getImageView())) {
+                        if (check.getImageView().equals(cardImage)) {
                             cardWorking.add(differentDecks.get(stackFrom).getCards().indexOf(check));
                         }
                     }
@@ -206,7 +205,7 @@ public class SolitaireScreen extends GameScreen {
                 }
             }
         }
-    }
+    }*/
 
     private Integer getKey(Map<Integer, List<ImageView>> map, ImageView v) {
         for (Integer check : map.keySet()) {
