@@ -195,6 +195,15 @@ public class SolitaireDriver extends GameDriver {
 
     public static void main(String[] args) {
         SolitaireDriver test = new SolitaireDriver(new GameController());
+        Map<Integer, List<Integer>> temp = new HashMap<>();
+        temp = (Map<Integer, List<Integer>>)test.sendCards();
+        for (Integer i : temp.keySet()){
+            System.out.println("INDEX = " + i);
+            for (int j : temp.get(i)) {
+                System.out.println("Value = " + j);
+            }
+            }
+        }
 //        for (int i = 0; i < test.piles.size(); i++) {
 //            System.out.println("Pile" + i + ":");
 //            System.out.println(test.piles.get(i));
@@ -204,4 +213,4 @@ public class SolitaireDriver extends GameDriver {
 //        }
 
     }
-}
+
