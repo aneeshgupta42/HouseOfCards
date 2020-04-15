@@ -19,14 +19,13 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardFactory {
-
+   static AtomicInteger atomicInteger = new AtomicInteger();
    public static void initializeDeck(CardDeck deck, DeckType deckType){
-      AtomicInteger atomicInteger = new AtomicInteger();
-      int cardID = atomicInteger.incrementAndGet();
       String path = deckType.toString().toLowerCase().strip();
       ResourceBundle resource = getResourceBundleFromPath(path);
       int size = resource.keySet().size();
       for (int i = 0; i < size; i++){
+         int cardID = atomicInteger.incrementAndGet();
          String propFileKey = Collections.list(resource.getKeys()).get(i);
          String imageName = resource.getString(propFileKey);
 
@@ -41,7 +40,6 @@ public class CardFactory {
 
       public static Playable makeACopy(Playable card, DeckType deckType){
          Playable ret;
-         AtomicInteger atomicInteger = new AtomicInteger();
          int cardID = atomicInteger.incrementAndGet();
          switch (deckType){
 //            case UNO:
