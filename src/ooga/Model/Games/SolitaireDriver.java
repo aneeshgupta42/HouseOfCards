@@ -129,6 +129,7 @@ public class SolitaireDriver extends GameDriver {
         CardDeck temp = piles.get(sourcePile);
         if (temp.getDeckSize() <= 1) {return true;}
         int cardNum = temp.getCards().get(0).getNumber();
+        if (!temp.getCards().get(0).isFaceUp()){return false;}
         for (int i = indexInSource + 1; i < temp.getDeckSize(); i++){
             if (cardNum - temp.getCards().get(i).getNumber() == 1){
                 cardNum = temp.getCards().get(i).getNumber();
