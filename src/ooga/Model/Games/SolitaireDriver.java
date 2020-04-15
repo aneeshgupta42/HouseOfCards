@@ -121,15 +121,20 @@ public class SolitaireDriver extends GameDriver {
         }else{
             ret.add(0);
         }
+        updatePiles(cond1&&cond2, sourcePile, indexInSource, destPile);
         //TODO: Add functionality to check for a complete set
         return ret;
+    }
+
+    private void updatePiles(boolean cond, int sourcePile, int indexInSource, int destPile) {
+        if (!cond){return;}
+
     }
 
     private boolean checkSourcePileOrder(int sourcePile, int indexInSource) {
         CardDeck temp = piles.get(sourcePile);
         if (temp.getDeckSize() <= 1) {return true;}
         int cardNum = temp.getCards().get(0).getNumber();
-        if (!temp.getCards().get(0).isFaceUp()){return false;}
         for (int i = indexInSource + 1; i < temp.getDeckSize(); i++){
             if (cardNum - temp.getCards().get(i).getNumber() == 1){
                 cardNum = temp.getCards().get(i).getNumber();
@@ -145,6 +150,7 @@ public class SolitaireDriver extends GameDriver {
         int sourceNum = piles.get(sourcePile).getCards().get(indexInSource).getNumber();
         int lastIndexOfDestPile = piles.get(destPile).getDeckSize() - 1;
         int destNum = piles.get(destPile).getCards().get(lastIndexOfDestPile).getNumber();
+        //TODO: check faceUp
         return destNum - sourceNum == 1;
     }
 
@@ -192,6 +198,11 @@ public class SolitaireDriver extends GameDriver {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setFaceUp(int cardID) {
+
     }
 
     public static void main(String[] args) {

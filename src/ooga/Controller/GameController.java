@@ -57,10 +57,13 @@ public class GameController {
     public String getImagePath(int cardID) {
         return currentGame.getCardImagePath(cardID);
     }
-
     public boolean isFaceUp(int cardID){
         return currentGame.IsCardFaceUp(cardID);
     }
+    public void setFaceUp(int cardID){
+        currentGame.setFaceUp(cardID);
+    }
+
     public void makePlayer(String playerName){
         currentGame.makePlayer(playerName);
     }

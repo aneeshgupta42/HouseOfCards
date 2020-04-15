@@ -19,4 +19,6 @@ public abstract class GameDriver implements Game {
     public GameDriver(){
     }
     protected abstract Playable getCard(int cardID);
+
+    public abstract void setFaceUp(int cardID);
 }
