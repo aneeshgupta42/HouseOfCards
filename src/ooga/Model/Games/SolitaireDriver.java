@@ -68,8 +68,20 @@ public class SolitaireDriver extends GameDriver {
     public Object sendCards() {
         Map<Integer, List<Integer>> ret = new HashMap<>();
         for (Integer index : piles.keySet()){
-            ret.put(index, piles.get(index).getID());
+            ret.put(index, piles.get(index).getIDList());
         }
+        return ret;
+    }
+
+    @Override
+    public String getCardImagePath(int cardID) {
+        Playable card = getCard(cardID);
+        return card.getCardFrontImagePath();
+    }
+
+    @Override
+    public boolean getCardFaceUp(int ID) {
+        return false;
     }
 
     @Override
@@ -163,6 +175,22 @@ public class SolitaireDriver extends GameDriver {
     @Override
     public void startGame() {
 
+    }
+
+    @Override
+    public boolean IsCardFaceUp(int cardID) {
+        Playable card = getCard(cardID);
+        return card.isFaceUp();
+    }
+
+    @Override
+    protected Playable getCard(int cardID) {
+        for (Integer i : piles.keySet()){
+            if (piles.get(i).isCardPresent(cardID)){
+                return piles.get(i).getCardWithID(cardID);
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) {

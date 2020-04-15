@@ -5,10 +5,16 @@ import java.util.List;
 public interface Deck {
 
     void addCard(Playable card);
+
+    /**
+     * returns a list of the card IDs in a deck
+     * @return
+     */
+    List<Integer> getIDList();
+
     void shuffleDeck();
     int getDeckSize();
     List<Playable> getCards();
-    List<Integer> getID();
 
     /**
      * Removes numOfCards Playable cards from the deck and returns it in a list.

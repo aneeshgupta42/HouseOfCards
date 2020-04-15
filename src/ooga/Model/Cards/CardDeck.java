@@ -51,8 +51,16 @@ public class CardDeck implements Deck {
         return gameCards;
     }
 
+    public Playable getCardWithID(int cardID){
+        for (Playable card : gameCards){
+            if (card.getID() == cardID){
+                return card;
+            }
+        }
+        return null;
+    }
     @Override
-    public List<Integer> getID() {
+    public List<Integer> getIDList() {
         List<Integer>ret = new ArrayList<>();
         for (Playable card : gameCards){
             ret.add(card.getID());
@@ -100,5 +108,14 @@ public class CardDeck implements Deck {
             ret = ret + card.getNumber() + card.getValue() + "\n";
         }
         return ret;
+    }
+
+    public boolean isCardPresent(int cardID) {
+        for (Playable card : gameCards){
+            if (card.getID() == cardID){
+                return true;
+            }
+        }
+        return false;
     }
 }

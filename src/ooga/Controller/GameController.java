@@ -65,7 +65,11 @@ public class GameController {
         System.out.println(test.requestCards());
     }
 
-    public ImageView getImagePath(Integer cardID) {
-        return null;
+    public String getImagePath(int cardID) {
+        return currentGame.getCardImagePath(cardID);
+    }
+
+    public boolean isFaceUp(int cardID){
+        return currentGame.IsCardFaceUp(cardID);
     }
 }
