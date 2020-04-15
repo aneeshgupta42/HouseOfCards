@@ -1,29 +1,19 @@
 package ooga.View.GameScreens;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.ImagePattern;
-import javafx.stage.Window;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.Model.Cards.CardDeck;
-import ooga.Model.Cards.Deck;
 import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
 
-import javax.sound.midi.SysexMessage;
-import java.beans.EventHandler;
-import java.sql.SQLSyntaxErrorException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
