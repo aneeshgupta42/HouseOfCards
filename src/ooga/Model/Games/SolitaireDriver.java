@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SolitaireDriver extends GameDriver {
-    private CardColors DEFAULT_COLOR = CardColors.BLUE;
     private Player player;
     private CardDeck allGameCards;
     private Map<Integer, CardDeck> piles;
@@ -27,11 +26,12 @@ public class SolitaireDriver extends GameDriver {
     public SolitaireDriver(GameController controller) {
         this.controller = controller;
         makeDecks();
+
     }
 
     private void makeDecks() {
         allGameCards = new CardDeck(DeckType.POKER);
-        CardDeck completeDeck = new CardDeck(GameTypes.SOLITAIRE, DEFAULT_COLOR);
+        CardDeck completeDeck = new CardDeck(GameTypes.SOLITAIRE);
         CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER);
 
         for (Playable card : completeDeck.getCards()) {

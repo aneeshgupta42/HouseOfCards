@@ -14,7 +14,7 @@ public class CardDeck implements Deck {
     DeckType deckType;
     List<Playable> gameCards;
 
-    public CardDeck (GameTypes type, CardColors color){
+    public CardDeck (GameTypes type){
         switch (type){
             // need to split this to 2 different decks for the questions and answers
             case HUMANITY:
@@ -27,7 +27,7 @@ public class CardDeck implements Deck {
                 deckType = DeckType.POKER;
         }
         gameCards = new ArrayList<>();
-        CardFactory.initializeDeck(this, deckType, color);
+        CardFactory.initializeDeck(this, deckType);
 
     }
 

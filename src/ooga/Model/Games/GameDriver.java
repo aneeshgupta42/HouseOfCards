@@ -16,5 +16,7 @@ public abstract class GameDriver implements Game {
      * @param cardID
      * @return
      */
+    public GameDriver(){
+    }
     protected abstract Playable getCard(int cardID);
 }
