@@ -1,11 +1,12 @@
 package ooga.Controller;
 
+import javafx.scene.image.ImageView;
 import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
 import ooga.Model.Games.UnoDriver;
-import ooga.View.Game;
-import ooga.View.GameScreens.GameScreen;
+//import ooga.View.Game;
+//import ooga.View.GameScreens.GameScreen;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +17,7 @@ public class GameController {
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
 
     GameDriver currentGame;
-    GameScreen currentScreen;
+   // GameScreen currentScreen;
 
     public GameController(){
 
@@ -49,8 +50,16 @@ public class GameController {
         return ret;
     } //return a list when win condition is met. Score is updated
 
+
     public Object requestCards (){
         return currentGame.sendCards();
+    }
+    public String getImagePath(int cardID) {
+        return currentGame.getCardImagePath(cardID);
+    }
+
+    public boolean isFaceUp(int cardID){
+        return currentGame.IsCardFaceUp(cardID);
     }
     public void makePlayer(String playerName){
         currentGame.makePlayer(playerName);
@@ -63,5 +72,4 @@ public class GameController {
         test.initializeGame(GameTypes.SOLITAIRE);
         System.out.println(test.requestCards());
     }
-
 }

@@ -1,5 +1,6 @@
 package ooga.Model.Games;
 
+import ooga.Model.Cards.Playable;
 import ooga.Model.Players.Player;
 
 import java.util.List;
@@ -23,12 +24,17 @@ public interface Game {
 
     Object sendCards();
 
+    String getCardImagePath(int ID);
+
+    boolean getCardFaceUp(int ID);
 
     void pauseGame();
 
     void resumeGame();
 
     void startGame();
+
+    boolean IsCardFaceUp(int cardID);
 //    This is where the animation would begin
 
 }
