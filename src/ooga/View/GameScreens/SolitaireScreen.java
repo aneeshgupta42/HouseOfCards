@@ -26,8 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO: changed to getImageView, front or back card depending on faceUp boolean
-//TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
+
 public class SolitaireScreen extends GameScreen {
     private List<ImageView> cards;
     private ImageView dummyCard;
