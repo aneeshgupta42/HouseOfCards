@@ -1,25 +1,14 @@
 package ooga.View;
-
-import javafx.collections.ObservableList;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import ooga.Controller.GameController;
-import ooga.View.ButtonFactory;
-
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -37,7 +26,7 @@ public class UserInput {
     private UserInterface mainView;
     private String game;
     private ComboBox<Integer> numOfPlayers;
-    private List<Integer> numbers= Arrays.asList(1,2,3,4,5,6,7);
+    private List<Integer> numbers= Arrays.asList(1,2,3,4,5);
 
     public UserInput( String gameName, UserInterface ui){
         mainView = ui;
@@ -48,7 +37,7 @@ public class UserInput {
         setUpNumberBox();
         VBox players = makeNewLabel(1);
         players.setLayoutX(200);
-        players.setLayoutY(200);
+        players.setLayoutY(100);
         Label Header = new Label("?House of Cards¿");
         Header.setFont(new Font("Garamond", 30));
         Header.setTextFill(Color.DARKCYAN);
@@ -71,7 +60,6 @@ public class UserInput {
     }
 
     private VBox makeNewLabel(Integer value) {
-
         for(int i=0;i<value;i++){
             VBox player = new VBox(10);
             namePrompt= new Label("Please enter your name");
@@ -109,7 +97,7 @@ public class UserInput {
 
     private void returnButton(){
         backButton.setOnAction(e->{
-            //go to the previous screen
+            mainView.setSplash();
         });
     }
     private void showMessage(Alert.AlertType type, String message) {

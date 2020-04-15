@@ -10,8 +10,8 @@ public class ButtonFactory extends Button {
     private static final String STYLE_COLOR = "lightgray";
     private static final int DEFAULT_FONT_SIZE = 20;
     private static final String FONT_FORMAT ="Calibri";
-    private static final int DEFAULT_BUTTON_WIDTH = 65;
-    private static final int DEFAULT_BUTTON_HEIGHT =45;
+    private static final int DEFAULT_BUTTON_WIDTH = 150;
+    private static final int DEFAULT_BUTTON_HEIGHT =35;
     private static final int DEFAULT_FONT_SIZE_SMALL =10;
     /**
      * Constructor method that lays out the basic view of a button in our parser
@@ -25,6 +25,18 @@ public class ButtonFactory extends Button {
         setText(text);
         setPrefHeight(height);//45
         setPrefWidth(width);//190
+        setPosition(XPos,YPos);
+        mouseUpdateListener();
+    }
+    /**
+     * Constructor method that lays out the basic view of a button in our parser
+     * @param text specifies text in button that corresponds with a value in the properties file
+     */
+    public ButtonFactory(String text, double XPos, double YPos) {
+        setFont(Font.font(FONT_FORMAT, DEFAULT_FONT_SIZE_SMALL));
+        setText(text);
+        setPrefHeight(DEFAULT_BUTTON_HEIGHT);//45
+        setPrefWidth(DEFAULT_BUTTON_WIDTH);//190
         setPosition(XPos,YPos);
         mouseUpdateListener();
     }
