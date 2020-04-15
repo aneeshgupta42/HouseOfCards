@@ -14,6 +14,13 @@ import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
 
+import javax.sound.midi.SysexMessage;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.SQLSyntaxErrorException;
+import java.util.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,18 +29,46 @@ import java.util.Map;
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
 public class SolitaireScreen extends GameScreen {
+    private Map<Integer, CardDeck> differentPiles = new HashMap();
+    private Map<Integer, List<Integer>> pileId = new HashMap();
     private List<ImageView> cards;
     private ImageView dummyCard;
     private Group gameScene;
     private Delta dragDelta = new Delta();
     private GameController gameControl = new GameController();
-    private Map<Integer, CardDeck> differentDecks = new HashMap<>();
+    private Map<Integer, CardDeck> differentDecks = new HashMap<>();//old
+
+    /***
+     * Get: Map of Integer (pile number) : List<IDs> in that pile
+     * Want: Map of Integer (pile number): List<ImageViews>
+     * Want: Map of ID -> ImageView
+     *
+     * Change:
+     * How we put on cards, and how we check for intersection.
+     *
+     * Basic pipeline:
+     *
+     * Front (attempts to) moves card from Pile A to Pile B.
+     * This calls updateProtocol (which takes in indA, indB, ind.within.A)
+     *
+     * ***/
     private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
 
+    private ImageView getCardImage(Playable Card){
+        int id = Card.getID();
+        String imagePath = gameControl.getCardImagePath(id);
+    }
+
+    private ImageView imageFromString(String cardname){
+        String path = "poker";
+        ResourceBundle resource = getResourceBundleFromPath(path);
+        return null;
+    }
+
     public SolitaireScreen(GameController setUpController) {
-        setUpController.initializeGame(GameTypes.SOLITAIRE);
         gameControl = setUpController;
-        addCards(setUpController);
+        gameControl.initializeGame(GameTypes.SOLITAIRE);
+        addCards(gameControl);
     }
 
     private void addCards(GameController setUpController) {
@@ -99,10 +134,12 @@ public class SolitaireScreen extends GameScreen {
 
     }
 
-    private void setUpListeners(ImageView cardImage) {
-        double initial_pos = cardImage.getX();
-        double initial_y = cardImage.getY();
-        cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
+    private void setUpListeners(Playable card) {
+        String path = card.getImagePath();
+        ImageView cardImage = imageFromString(path);
+        double initial_pos = card.getImageView().getX();
+        double initial_y = card.getImageView().getY();
+        card.getImageView().setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
@@ -245,5 +282,18 @@ public class SolitaireScreen extends GameScreen {
 
     private void moveCard(Playable card) {
 
+    }
+
+    private static ResourceBundle getResourceBundleFromPath(String path) {
+        try {
+            //System.out.println("data/cardDecks/" + path + "/" + path);
+            File file = new File("data/cardDecks/" + path);
+            URL[] urls = {file.toURI().toURL()};
+            ClassLoader loader = new URLClassLoader(urls);
+            return ResourceBundle.getBundle(path, Locale.getDefault(), loader);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
