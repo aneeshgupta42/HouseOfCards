@@ -27,7 +27,7 @@ public class SolitaireScreen extends GameScreen {
     private Group gameScene;
     private Delta dragDelta = new Delta();
     private GameController gameControl = new GameController();
-    private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
+    private Map<Integer, CardDeck> differentDecks = new HashMap<>();
     private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
 
     public SolitaireScreen(GameController setUpController) {
@@ -44,9 +44,9 @@ public class SolitaireScreen extends GameScreen {
         double j = 0;
         double l = 0;
         int index = 0;
-        differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
+        differentDecks = (Map<Integer, CardDeck>) setUpController.requestCards();
         for (Integer keys : differentDecks.keySet()) {
-            List<Integer> playingCards = differentDecks.get(keys);
+            List<Integer> playingCards = differentDecks.get(keys).getCards();
             if (playingCards.size() > 30) {
                 setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500, index);
             } else {
@@ -82,7 +82,7 @@ public class SolitaireScreen extends GameScreen {
 
     private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
         for (Integer cardID : playingCards) {
-            String cardPathString = gameControl.getImagePath(cardID);
+            ImageView cardImage = gameControl.getImage(cardID);
             cardImage.setFitWidth(60);
             cardImage.setFitHeight(90);
             cardImage.setX(XPos + i);
