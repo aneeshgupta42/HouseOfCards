@@ -28,7 +28,7 @@ import java.util.Map;
 
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
-public class SolitaireScreen extends GameScreen {
+public class CAHScreen extends GameScreen {
     private List<ImageView> cards;
     private ImageView dummyCard;
     private Group gameScene;
@@ -65,7 +65,6 @@ public class SolitaireScreen extends GameScreen {
 
 
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
-        System.out.println(deckMap.toString());
         for(Integer pile: deckMap.keySet()){
             List<ImageView> imageList= new ArrayList<>();
             for (Integer id: deckMap.get(pile)){
@@ -75,15 +74,13 @@ public class SolitaireScreen extends GameScreen {
             }
             imageMap.put(pile, imageList);
         }
-        System.out.println(imageMap.toString());
-        System.out.println(idImage.toString());
     }
 
-    public SolitaireScreen(GameController setUpController) {
+    public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
-        gameControl.initializeGame(GameTypes.SOLITAIRE);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
+        gameControl.initializeGame(GameTypes.SOLITAIRE);
         addCards(gameControl);
     }
 
@@ -168,11 +165,11 @@ public class SolitaireScreen extends GameScreen {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
-                   cardImage.setCursor(Cursor.HAND);
+                    cardImage.setCursor(Cursor.HAND);
                     checkIntersection(cardImage, differentDecks, initial_pos,initial_y);
                 } else {
                     cardImage.setX(initial_pos);
-                     cardImage.setY(initial_y);
+                    cardImage.setY(initial_y);
                 }
             }
         });
@@ -199,7 +196,7 @@ public class SolitaireScreen extends GameScreen {
     }
 
     private void checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
-       //Diff pile numbers
+        //Diff pile numbers
         for (Integer index : differentDecks.keySet()) {
             List<Integer> currentPile = differentDecks.get(index);
             // checks for intersection
