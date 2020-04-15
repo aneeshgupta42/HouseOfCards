@@ -47,12 +47,17 @@ public class CardDeck implements Deck {
     }
 
     @Override
-    public void makeCard(String cardType) {
-
-    }
-    @Override
     public List<Playable> getCards(){
         return gameCards;
+    }
+
+    @Override
+    public List<Integer> getID() {
+        List<Integer>ret = new ArrayList<>();
+        for (Playable card : gameCards){
+            ret.add(card.getID());
+        }
+        return ret;
     }
 
     public DeckType getDeckType (){

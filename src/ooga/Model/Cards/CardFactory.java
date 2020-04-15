@@ -16,10 +16,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardFactory {
 
    public static void initializeDeck(CardDeck deck, DeckType deckType, CardColors color){
+      AtomicInteger atomicInteger = new AtomicInteger();
+      int cardID = atomicInteger.incrementAndGet();
       String path = deckType.toString().toLowerCase().strip();
       ResourceBundle resource = getResourceBundleFromPath(path);
       int size = resource.keySet().size();
@@ -32,7 +35,7 @@ public class CardFactory {
          //System.out.println("data/cardDecks/" + path + "/" + imageName);
          JFXPanel jfxPanel = new JFXPanel(); //for testing
          ImageView image = new ImageView("cardDecks/" + path + "/" + imageName);
-         Playable card = makeCard(deckType, color, image, attributes, i);
+         Playable card = makeCard(deckType, color, image, attributes, cardID);
          deck.addCard(card);
       }
       }
@@ -41,13 +44,15 @@ public class CardFactory {
          Playable ret;
          ImageView frontImage;
          ImageView backImage;
+         AtomicInteger atomicInteger = new AtomicInteger();
+         int cardID = atomicInteger.incrementAndGet();
          switch (deckType){
 //            case UNO:
 //            case HUMANITY:
             default:
                frontImage = new ImageView(card.getFrontImageView().getImage());
                backImage = new ImageView(card.getBackImageView().getImage());
-               ret = new PokerCard(frontImage, backImage, card.getNumber(), card.getValue(), card.getID());
+               ret = new PokerCard(frontImage, backImage, card.getNumber(), card.getValue(), cardID);
          }
          return ret;
       }

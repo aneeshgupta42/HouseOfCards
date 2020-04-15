@@ -1,5 +1,6 @@
 package ooga.Controller;
 
+import javafx.scene.image.ImageView;
 import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
@@ -64,4 +65,7 @@ public class GameController {
         System.out.println(test.requestCards());
     }
 
+    public ImageView getImagePath(Integer cardID) {
+        return null;
+    }
 }

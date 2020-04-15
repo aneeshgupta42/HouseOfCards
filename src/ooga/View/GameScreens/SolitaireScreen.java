@@ -146,9 +146,9 @@ public class SolitaireScreen extends GameScreen {
         });
     }
 
-    private void checkIntersection(ImageView cardImage, Map<Integer, CardDeck> differentDecks, double xpos, double ypos) {
+    /*private void checkIntersection(ImageView cardImage, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         for (Integer index : differentDecks.keySet()) {
-            List<Integer> playingCardID = differentDecks.get(index).getCards();
+            List<Integer> playingCardID = differentDecks.get(index);
             // checks for intersection
             if (!cardImage.equals(gameControl.getImage(playingCards.get(playingCards.size() - 1)))) {
                 // Change the logic for checking intersections
@@ -168,7 +168,7 @@ public class SolitaireScreen extends GameScreen {
                 }
             }
         }
-    }
+    }*/
 
     private Integer getKey(Map<Integer, List<ImageView>> map, ImageView v) {
         for (Integer check : map.keySet()) {

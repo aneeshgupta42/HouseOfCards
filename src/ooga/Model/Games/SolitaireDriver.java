@@ -66,7 +66,10 @@ public class SolitaireDriver extends GameDriver {
 
     @Override
     public Object sendCards() {
-        return piles;
+        Map<Integer, List<Integer>> ret = new HashMap<>();
+        for (Integer index : piles.keySet()){
+            ret.put(index, piles.get(index).getID());
+        }
     }
 
     @Override
@@ -164,13 +167,13 @@ public class SolitaireDriver extends GameDriver {
 
     public static void main(String[] args) {
         SolitaireDriver test = new SolitaireDriver(new GameController());
-        for (int i = 0; i < test.piles.size(); i++) {
-            System.out.println("Pile" + i + ":");
-            System.out.println(test.piles.get(i));
+//        for (int i = 0; i < test.piles.size(); i++) {
+//            System.out.println("Pile" + i + ":");
+//            System.out.println(test.piles.get(i));
 //            for (Playable card : test.piles.get(i).getCards()){
 //                System.out.println(card.isFaceUp());
-//            }
-        }
+//           }
+//        }
 
     }
 }
