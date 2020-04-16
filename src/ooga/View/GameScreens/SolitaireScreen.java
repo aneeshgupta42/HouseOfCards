@@ -67,8 +67,6 @@ public class SolitaireScreen extends GameScreen {
             }
             imageMap.put(pile, imageList);
         }
-        System.out.println(imageMap.toString());
-        System.out.println(idImage.toString());
     }
 
     public SolitaireScreen(GameController setUpController) {
