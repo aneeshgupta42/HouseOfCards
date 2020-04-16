@@ -137,7 +137,8 @@ public class SolitaireScreen extends GameScreen {
             cardImage.setFitHeight(90);
             cardImage.setX(XPos + i);
             cardImage.setY(YPos + j);
-            setUpListeners(cardImage);
+            System.out.println(""+ XPos + i);
+            setUpListeners(cardImage, XPos+i, YPos+j);
             List<ImageView> images = new ArrayList<>();
             images.add(cardImage);
             indexMapped.put(index, images);
@@ -149,9 +150,7 @@ public class SolitaireScreen extends GameScreen {
 
     }
 
-    private void setUpListeners(ImageView cardImage) {
-        double initial_pos = cardImage.getX();
-        double initial_y = cardImage.getY();
+    private void setUpListeners(ImageView cardImage, double xinitial, double yinitial) {
         cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -159,6 +158,8 @@ public class SolitaireScreen extends GameScreen {
                 dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
                 //TODO: I didn't know what this was, so commented out:
 //                updateProtocol(cardImage);
+                System.out.println(cardImage.getY());
+                System.out.println(cardImage.getX());
                 dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
                 cardImage.setCursor(Cursor.MOVE);
             }
@@ -168,10 +169,13 @@ public class SolitaireScreen extends GameScreen {
             public void handle(MouseEvent mouseEvent) {
                 if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
                    cardImage.setCursor(Cursor.HAND);
-                    checkIntersection(cardImage, differentDecks, initial_pos,initial_y);
+                   if(!checkIntersection(cardImage, differentDecks, xinitial,yinitial)){
+                       cardImage.setX(xinitial);
+                       cardImage.setY(yinitial);
+                   };
                 } else {
-                    cardImage.setX(initial_pos);
-                     cardImage.setY(initial_y);
+                    cardImage.setX(xinitial);
+                     cardImage.setY(yinitial);
                 }
             }
         });
@@ -182,10 +186,13 @@ public class SolitaireScreen extends GameScreen {
                     cardImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
                     cardImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
                     cardImage.toFront();
+
                 } else {
-                    cardImage.setLayoutX(initial_pos);
-                    cardImage.setLayoutY(initial_y);
-                    mouseEvent.setDragDetect(false);
+                    System.out.println(xinitial);
+                    System.out.println(yinitial);
+                    cardImage.setLayoutX(xinitial);
+                    cardImage.setLayoutY(yinitial);
+                    //mouseEvent.setDragDetect(false);
                 }
             }
         });
@@ -197,7 +204,7 @@ public class SolitaireScreen extends GameScreen {
         });
     }
 
-    private void checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
+    private boolean checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
        //Diff pile numbers
         for (Integer index : differentDecks.keySet()) {
             List<Integer> currentPile = differentDecks.get(index);
@@ -217,10 +224,26 @@ public class SolitaireScreen extends GameScreen {
                         }
                     }
                     System.out.println(cardWorking);
-                    gameControl.updateProtocol(cardWorking);
+                    List<Object> updateSettings = gameControl.updateProtocol(cardWorking);
+                    checkSettings(updateSettings, currentCard, xpos,ypos);
+                    return true;
                 }
             }
         }
+        return  false;
+    }
+
+    private void checkSettings(List<Object> updateSettings, ImageView currentCard, double xpos, double ypos) {
+        switch(updateSettings.size()){
+            case 1:
+                switch ((Integer)updateSettings.get(0)){
+                    case 0:
+//                        System.out.println(xpos+ ypos+"");
+                        currentCard.setX(xpos);
+                        currentCard.setY(ypos);
+                }
+        }
+
     }
 
     private Integer getKey(Map<Integer, List<ImageView>> map, ImageView v) {
