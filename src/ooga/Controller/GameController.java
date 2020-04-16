@@ -52,6 +52,7 @@ public class GameController {
 
 
     public Object requestCards (){
+        //for solitaire this is a Map<Integer, List<Integer>>
         return currentGame.sendCards();
     }
     public String getImagePath(int cardID) {
