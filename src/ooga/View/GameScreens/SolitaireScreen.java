@@ -131,15 +131,10 @@ public class SolitaireScreen extends GameScreen {
             cardImage.setFitHeight(90);
             cardImage.setX(XPos + i);
             cardImage.setY(YPos + j);
-            System.out.println("Intial coords");
-            System.out.println(cardImage.toString());
-            System.out.println(cardImage.getX());
-            System.out.println(cardImage.getY());
             setUpListeners(cardImage);
             List<ImageView> images = new ArrayList<>();
             images.add(cardImage);
             indexMapped.put(index, images);
-//            cardImage.setOnDragDetected();
             j = j + v;
             i = i + v1;
             gameScene.getChildren().add(cardImage);
@@ -215,27 +210,25 @@ public class SolitaireScreen extends GameScreen {
 
     private boolean checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         //Diff pile numbers
-        Integer sourceCardIndex = getPile(differentDecks, currentCard);
+        Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
         for (Integer index : differentDecks.keySet()) {
             if(index==sourceCardIndex) continue;
             List<Integer> currentPile = differentDecks.get(index);
             // checks for intersection
-            ImageView pileLast = idImage.get(currentPile.get(currentPile.size() - 1));
-            int targetCardIndex = getPile(differentDecks, pileLast);
-            if (!currentCard.equals(pileLast) && targetCardIndex!=sourceCardIndex) {
+            ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
+            if (!currentCard.equals(targetCard)) {
                 // Change the logic for checking intersections
-                if ((currentCard.getBoundsInParent().intersects(pileLast.getBoundsInParent()))) {
+                if ((currentCard.getBoundsInParent().intersects(targetCard.getBoundsInParent()))) {
                     List<Object> cardWorking = new ArrayList<>();
-                    int stackFrom = getPile(differentDecks, currentCard);
+                    int stackFrom = getCardPile(differentDecks, currentCard);
                     cardWorking.add(stackFrom);
-                    int stackTo = getPile(differentDecks, pileLast);
+                    int stackTo = getCardPile(differentDecks, targetCard);
                     cardWorking.add(stackTo);
                     for (Integer id : differentDecks.get(stackFrom)) {
                         if (idImage.get(id).equals(currentCard)) {
                             cardWorking.add(differentDecks.get(stackFrom).indexOf(id));
                         }
                     }
-                    System.out.println(cardWorking);
                     gameControl.updateProtocol(cardWorking);
                     return true;
                 }
@@ -244,12 +237,11 @@ public class SolitaireScreen extends GameScreen {
         return false;
     }
 
-    private Integer getPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
-        Integer cardID = getID(idImage, card);
+    private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
+        Integer cardID = getCardID(idImage, card);
         for (Integer pile : diffDecks.keySet()) {
             for (Integer id : diffDecks.get(pile)) {
                 if (id.equals(cardID)) {
-                    System.out.println(cardID);
                     return pile;
                 }
             }
@@ -258,7 +250,7 @@ public class SolitaireScreen extends GameScreen {
         return -1;
     }
 
-    private Integer getID(Map<Integer, ImageView>map, ImageView card){
+    private Integer getCardID(Map<Integer, ImageView>map, ImageView card){
         for (Integer check : map.keySet()) {
             if (map.get(check).equals(card)) {
                 return check;
