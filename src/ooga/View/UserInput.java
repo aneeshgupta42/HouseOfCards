@@ -81,7 +81,6 @@ public class UserInput {
         nextButton.setOnAction(e -> {
             for (int i = 0; i < players.getChildren().size(); i++) {
             VBox checkPlayerName = (VBox)players.getChildren().get(i);
-            System.out.print(checkPlayerName);
             TextArea checkPlayerString= (TextArea) checkPlayerName.getChildren().get(1);
             if (checkPlayerString.getText().isEmpty()) {
                 showMessage(Alert.AlertType.ERROR, "Please enter the player names");
