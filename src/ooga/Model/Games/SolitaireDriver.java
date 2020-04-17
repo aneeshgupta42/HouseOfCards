@@ -197,7 +197,7 @@ public class SolitaireDriver extends GameDriver {
 
     @Override
     public void setFaceUp(int cardID) {
-
+        getCard(cardID).setFaceUp(true);
     }
 
     public static void main(String[] args) {

@@ -34,4 +34,5 @@ public interface Game {
 
     boolean IsCardFaceUp(int cardID);
 
+    void setFaceUp(int cardID);
 }

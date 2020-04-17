@@ -46,6 +46,7 @@ public class GameController {
         //use reflections to make an instance of the appropriate game class and assign to currentGame
     }
 
+    //TODO: Front end needs to implement this
     public void giveGameScreen (GameScreen game){
         currentScreen = game;
     }
@@ -65,7 +66,7 @@ public class GameController {
     public boolean isFaceUp(int cardID){
         return currentGame.IsCardFaceUp(cardID);
     }
-    public void setFaceUp(int cardID){
+    public void setToFaceUp(int cardID){
         currentGame.setFaceUp(cardID);
     }
 
