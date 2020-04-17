@@ -31,7 +31,7 @@ public class CAHScreen extends GameScreen {
     private GameController gameControl;
     private Map<Integer, List<PartyCards>> indexMapped = new HashMap<>();
     //what we get
-    private Map<Integer, List<String>> differentDecks = new HashMap<>();
+    private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
     //we'll make this (pile: List of Images)
     private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
     private List<VboxFactory> tappedCards = new ArrayList<>();
@@ -66,12 +66,13 @@ public class CAHScreen extends GameScreen {
     }
 
 
-    private void initializeImageMap(Map<Integer, List<String>> deckMap){
+    private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
         for(Integer pile: deckMap.keySet()){
             List<PartyCards> cardList= new ArrayList<>();
-            for (String prompt: deckMap.get(pile)){
+            for (Integer promptInt: deckMap.get(pile)){
                 PartyCards makingCard = new PartyCards(pile);
-                makingCard.setText(prompt);
+               // String prompt = gameControl.getString(promptInt);
+               // makingCard.setText(prompt);
                 cardList.add(makingCard);
             }
             indexMapped.put(pile, cardList);
@@ -82,7 +83,7 @@ public class CAHScreen extends GameScreen {
     //TODO: Get a Map of (Integer, List<Integer>) instead?
     public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
-        differentDecks = (Map<Integer, List<String>>) setUpController.requestCards();
+        differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
         gameControl.initializeGame(GameTypes.HUMANITY);
         addCards(gameControl);
