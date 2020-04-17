@@ -14,7 +14,7 @@ public class CardDeck implements Deck {
     DeckType deckType;
     List<Playable> gameCards;
 
-    public CardDeck (GameTypes type, CardColors color){
+    public CardDeck (GameTypes type){
         switch (type){
             // need to split this to 2 different decks for the questions and answers
             case HUMANITY:
@@ -27,7 +27,7 @@ public class CardDeck implements Deck {
                 deckType = DeckType.POKER;
         }
         gameCards = new ArrayList<>();
-        CardFactory.initializeDeck(this, deckType, color);
+        CardFactory.initializeDeck(this, deckType);
 
     }
 
@@ -47,12 +47,25 @@ public class CardDeck implements Deck {
     }
 
     @Override
-    public void makeCard(String cardType) {
-
-    }
-    @Override
     public List<Playable> getCards(){
         return gameCards;
+    }
+
+    public Playable getCardWithID(int cardID){
+        for (Playable card : gameCards){
+            if (card.getID() == cardID){
+                return card;
+            }
+        }
+        return null;
+    }
+    @Override
+    public List<Integer> getIDList() {
+        List<Integer>ret = new ArrayList<>();
+        for (Playable card : gameCards){
+            ret.add(card.getID());
+        }
+        return ret;
     }
 
     public DeckType getDeckType (){
@@ -95,5 +108,14 @@ public class CardDeck implements Deck {
             ret = ret + card.getNumber() + card.getValue() + "\n";
         }
         return ret;
+    }
+
+    public boolean isCardPresent(int cardID) {
+        for (Playable card : gameCards){
+            if (card.getID() == cardID){
+                return true;
+            }
+        }
+        return false;
     }
 }

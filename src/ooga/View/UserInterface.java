@@ -97,7 +97,6 @@ public class UserInterface extends Application implements Viewable {
     }
 
     public void initializeGame(String gameName){
-
         if(gameName=="Solitaire"){
             SolitaireScreen screen = new SolitaireScreen(passingController);
             Scene gameScene = screen.getScene(this);

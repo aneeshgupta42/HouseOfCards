@@ -5,7 +5,13 @@ import java.util.List;
 public interface Deck {
 
     void addCard(Playable card);
-    void makeCard(String cardType);
+
+    /**
+     * returns a list of the card IDs in a deck
+     * @return
+     */
+    List<Integer> getIDList();
+
     void shuffleDeck();
     int getDeckSize();
     List<Playable> getCards();
