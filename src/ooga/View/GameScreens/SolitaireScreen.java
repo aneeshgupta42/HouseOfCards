@@ -24,6 +24,7 @@ public class SolitaireScreen extends GameScreen {
     private List<ImageView> cards;
     private ImageView dummyCard;
     private Group gameScene;
+    private static final double YOFFSET = 20;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
     private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
@@ -57,7 +58,6 @@ public class SolitaireScreen extends GameScreen {
 
 
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap) {
-        System.out.println(deckMap.toString());
         for (Integer pile : deckMap.keySet()) {
             List<ImageView> imageList = new ArrayList<>();
             for (Integer id : deckMap.get(pile)) {
@@ -91,7 +91,7 @@ public class SolitaireScreen extends GameScreen {
             if (playingCards.size() > 30) {
                 setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500, index);
             } else {
-                setUponScreen(playingCards, 20, 0, l, j, 20, 10, index);
+                setUponScreen(playingCards, YOFFSET, 0, l, j, 20, 10, index);
             }
             i = i + 100;
             l = l + 100;
@@ -161,7 +161,7 @@ public class SolitaireScreen extends GameScreen {
                 CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
                 if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
                     cardImage.setCursor(Cursor.HAND);
-                    boolean success = checkIntersection(cardImage, differentDecks, initial_pos, initial_y);
+                    boolean success = checkIntersection(cardSet, differentDecks, initial_pos, initial_y);
                     if (!success) {
 //                        cardImage.setLayoutX(initial_pos - cardImage.getLayoutBounds().getMinX());
 //                        cardImage.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
@@ -205,8 +205,9 @@ public class SolitaireScreen extends GameScreen {
         });
     }
 
-    private boolean checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
+    private boolean checkIntersection(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         //Diff pile numbers
+        ImageView currentCard = currentCardSet.getHeadCard();
         Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
         for (Integer index : differentDecks.keySet()) {
             if(index==sourceCardIndex) continue;
@@ -226,6 +227,12 @@ public class SolitaireScreen extends GameScreen {
                             cardWorking.add(differentDecks.get(stackFrom).indexOf(id));
                         }
                     }
+                    currentCardSet.setLayoutX(targetCard.getX()- currentCard.getLayoutBounds().getMinX());
+                    currentCardSet.setLayoutY(targetCard.getY()+YOFFSET- currentCard.getLayoutBounds().getMinY());
+                    System.out.println(targetCard.getX());
+                    System.out.println(targetCard.getY());
+                    System.out.println(currentCard.getX());
+                    System.out.println(currentCard.getY());
                     gameControl.updateProtocol(cardWorking);
                     return true;
                 }

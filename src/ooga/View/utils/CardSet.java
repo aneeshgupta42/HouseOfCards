@@ -65,6 +65,9 @@ public class CardSet {
         return -1;
     }
 
+    public ImageView getHeadCard() {
+        return headCard;
+    }
 }
 
 
