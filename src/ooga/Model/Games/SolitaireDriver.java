@@ -80,11 +80,6 @@ public class SolitaireDriver extends GameDriver {
     }
 
     @Override
-    public boolean getCardFaceUp(int ID) {
-        return false;
-    }
-
-    @Override
     public void makePlayer(String userName) {
         player = new Player(userName);
     }
@@ -121,8 +116,26 @@ public class SolitaireDriver extends GameDriver {
         }else{
             ret.add(0);
         }
+        updatePiles(cond1&&cond2, sourcePile, indexInSource, destPile);
         //TODO: Add functionality to check for a complete set
+//        for (int i = 0; i < piles.size(); i++) {
+//            System.out.println("Pile" + i + ":");
+//            System.out.println(piles.get(i));}
         return ret;
+    }
+
+    private void updatePiles(boolean cond, int sourcePile, int indexInSource, int destPile) {
+        if (!cond){return;}
+        List <Playable> cardsToBeRemoved = new ArrayList<>();
+        for (int i = indexInSource ; i < piles.get(sourcePile).getDeckSize(); i++){
+            int cardID = piles.get(sourcePile).getCards().get(i).getID();
+            piles.get(sourcePile).copyCardToNewDeck(cardID, piles.get(destPile));
+            cardsToBeRemoved.add(piles.get(sourcePile).getCards().get(i));
+        }
+        for (Playable card : cardsToBeRemoved){
+            piles.get(sourcePile).removeCard(card.getID());
+        }
+
     }
 
     private boolean checkSourcePileOrder(int sourcePile, int indexInSource) {
@@ -144,6 +157,7 @@ public class SolitaireDriver extends GameDriver {
         int sourceNum = piles.get(sourcePile).getCards().get(indexInSource).getNumber();
         int lastIndexOfDestPile = piles.get(destPile).getDeckSize() - 1;
         int destNum = piles.get(destPile).getCards().get(lastIndexOfDestPile).getNumber();
+        //TODO: check faceUp
         return destNum - sourceNum == 1;
     }
 
@@ -191,6 +205,11 @@ public class SolitaireDriver extends GameDriver {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setFaceUp(int cardID) {
+        getCard(cardID).setFaceUp(true);
     }
 
     public static void main(String[] args) {

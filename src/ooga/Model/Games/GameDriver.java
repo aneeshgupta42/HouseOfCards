@@ -7,6 +7,11 @@ import ooga.Model.Players.Player;
 import java.util.List;
 
 //TODO: pull all constant attributes and non-API methods to this class
+
+/**
+ * Game Interface contains all the External APIs that the front-end calls.
+ * This class implements all the Internal APIs to be used within the model;
+ */
 public abstract class GameDriver implements Game {
     private CardDeck[] decks;
     private Player [] playerList;
@@ -18,5 +23,7 @@ public abstract class GameDriver implements Game {
      */
     public GameDriver(){
     }
+    //TODO: Implement this here instead
     protected abstract Playable getCard(int cardID);
+
 }

@@ -5,6 +5,7 @@ import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
 import ooga.Model.Games.UnoDriver;
+import ooga.View.GameScreens.GameScreen;
 //import ooga.View.Game;
 //import ooga.View.GameScreens.GameScreen;
 
@@ -17,7 +18,7 @@ public class GameController {
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
 
     GameDriver currentGame;
-   // GameScreen currentScreen;
+    GameScreen currentScreen;
 
     public GameController(){
 
@@ -45,6 +46,11 @@ public class GameController {
         //use reflections to make an instance of the appropriate game class and assign to currentGame
     }
 
+    //TODO: Front end needs to implement this
+    public void giveGameScreen (GameScreen game){
+        currentScreen = game;
+    }
+
     public List<Object> updateProtocol(List<Object> args){
         List<Object> ret = currentGame.updateProtocol(args);
         return ret;
@@ -58,10 +64,13 @@ public class GameController {
     public String getImagePath(int cardID) {
         return currentGame.getCardImagePath(cardID);
     }
-
     public boolean isFaceUp(int cardID){
         return currentGame.IsCardFaceUp(cardID);
     }
+    public void setToFaceUp(int cardID){
+        currentGame.setFaceUp(cardID);
+    }
+
     public void makePlayer(String playerName){
         currentGame.makePlayer(playerName);
     }
