@@ -26,8 +26,6 @@ public interface Game {
 
     String getCardImagePath(int ID);
 
-    boolean getCardFaceUp(int ID);
-
     void pauseGame();
 
     void resumeGame();
@@ -35,6 +33,6 @@ public interface Game {
     void startGame();
 
     boolean IsCardFaceUp(int cardID);
-//    This is where the animation would begin
 
+    void setFaceUp(int cardID);
 }
