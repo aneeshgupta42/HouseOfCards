@@ -80,11 +80,6 @@ public class SolitaireDriver extends GameDriver {
     }
 
     @Override
-    public boolean getCardFaceUp(int ID) {
-        return false;
-    }
-
-    @Override
     public void makePlayer(String userName) {
         player = new Player(userName);
     }

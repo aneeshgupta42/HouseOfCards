@@ -5,6 +5,7 @@ import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
 import ooga.Model.Games.UnoDriver;
+import ooga.View.GameScreens.GameScreen;
 //import ooga.View.Game;
 //import ooga.View.GameScreens.GameScreen;
 
@@ -17,7 +18,7 @@ public class GameController {
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
 
     GameDriver currentGame;
-   // GameScreen currentScreen;
+    GameScreen currentScreen;
 
     public GameController(){
 
@@ -43,6 +44,10 @@ public class GameController {
             e.printStackTrace();
         }
         //use reflections to make an instance of the appropriate game class and assign to currentGame
+    }
+
+    public void giveGameScreen (GameScreen game){
+        currentScreen = game;
     }
 
     public List<Object> updateProtocol(List<Object> args){
