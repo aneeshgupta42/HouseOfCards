@@ -244,7 +244,7 @@ public class SolitaireScreen extends GameScreen {
 //                    System.out.println(currentCard.getLayoutX());
 //                    System.out.println(currentCard.getLayoutY());
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
-                    System.out.println("Update protocol: " + (Integer) ret.get(0));
+                    //System.out.println("Update protocol: " + (Integer) ret.get(0));
                     return ((Integer) ret.get(0) == 1);
                 }
             }
