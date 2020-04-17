@@ -75,7 +75,7 @@ public class SolitaireScreen extends GameScreen {
         gameControl = setUpController;
         gameControl.initializeGame(GameTypes.SOLITAIRE);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
-        System.out.println(differentDecks.toString());
+//        System.out.println(differentDecks.toString());
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }
@@ -178,7 +178,6 @@ public class SolitaireScreen extends GameScreen {
                     }
                     else{
                         differentDecks = (Map<Integer, List<Integer>>)gameControl.requestCards();
-                        System.out.println(differentDecks.toString());
                     }
                 } else {
                     cardSet.setLayoutX(initial_pos - cardImage.getLayoutBounds().getMinX());
