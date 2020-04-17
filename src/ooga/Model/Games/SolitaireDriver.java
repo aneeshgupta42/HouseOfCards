@@ -118,11 +118,23 @@ public class SolitaireDriver extends GameDriver {
         }
         updatePiles(cond1&&cond2, sourcePile, indexInSource, destPile);
         //TODO: Add functionality to check for a complete set
+        for (int i = 0; i < piles.size(); i++) {
+            System.out.println("Pile" + i + ":");
+            System.out.println(piles.get(i));}
         return ret;
     }
 
     private void updatePiles(boolean cond, int sourcePile, int indexInSource, int destPile) {
         if (!cond){return;}
+        List <Playable> cardsToBeRemoved = new ArrayList<>();
+        for (int i = indexInSource ; i < piles.get(sourcePile).getDeckSize(); i++){
+            int cardID = piles.get(sourcePile).getCards().get(i).getID();
+            piles.get(sourcePile).copyCardToNewDeck(cardID, piles.get(destPile));
+            cardsToBeRemoved.add(piles.get(sourcePile).getCards().get(i));
+        }
+        for (Playable card : cardsToBeRemoved){
+            piles.get(sourcePile).removeCard(card.getID());
+        }
 
     }
 

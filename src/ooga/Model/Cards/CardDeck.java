@@ -91,6 +91,20 @@ public class CardDeck implements Deck {
         return ret;
     }
 
+    public void copyCardToNewDeck(int cardID, CardDeck dest){
+        try{
+            Playable card = getCardWithID(cardID);
+            dest.addCard(card);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void removeCard(int cardID){
+        gameCards.remove(getCardWithID(cardID));
+    }
+
     @Override
     public CardDeck returnADeepCopy() {
         CardDeck ret = new CardDeck(this.deckType);
