@@ -142,6 +142,7 @@ public class SolitaireScreen extends GameScreen {
 
     }
 
+
     private void setUpListeners(ImageView cardImage) {
         cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -157,6 +158,8 @@ public class SolitaireScreen extends GameScreen {
                 dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
                 //TODO: I didn't know what this was, so commented out:
 //                updateProtocol(cardImage);
+                System.out.println(cardImage.getY());
+                System.out.println(cardImage.getX());
                 dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
                 cardImage.setCursor(Cursor.MOVE);
             }
@@ -205,6 +208,7 @@ public class SolitaireScreen extends GameScreen {
             }
         });
     }
+
 
     private boolean checkIntersection(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         //Diff pile numbers

@@ -4,22 +4,17 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
-import ooga.Model.Cards.CardDeck;
-import ooga.Model.Cards.Playable;
+import ooga.View.ButtonFactory;
+import ooga.View.PartyCards;
 import ooga.View.UserInterface;
-
-import javax.sound.midi.SysexMessage;
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.sql.SQLSyntaxErrorException;
-import java.util.*;
+import ooga.View.VboxFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +29,19 @@ public class CAHScreen extends GameScreen {
     private Group gameScene;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
-    private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
+    private Map<Integer, List<PartyCards>> indexMapped = new HashMap<>();
     //what we get
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
     //we'll make this (pile: List of Images)
     private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
+    private List<VboxFactory> tappedCards = new ArrayList<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
+    private String styling= "-fx-padding: 10;\" +\n" +
+            "                \"-fx-border-style: solid inside;\" +\n" +
+            "                \"-fx-border-width: 2;\" +\n" +
+            "                \"-fx-border-insets: 5;\" +\n" +
+            "                \"-fx-border-radius: 5;\" +\n" +
+            "                \"-fx-border-color: red;";
 
 
     /***
@@ -66,21 +68,24 @@ public class CAHScreen extends GameScreen {
 
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
         for(Integer pile: deckMap.keySet()){
-            List<ImageView> imageList= new ArrayList<>();
-            for (Integer id: deckMap.get(pile)){
-                ImageView cardImage = getIDImage(id);
-                idImage.put(id, cardImage);
-                imageList.add(cardImage);
+            List<PartyCards> cardList= new ArrayList<>();
+            for (Integer promptInt: deckMap.get(pile)){
+                PartyCards makingCard = new PartyCards(pile);
+               // String prompt = gameControl.getString(promptInt);
+               // makingCard.setText(prompt);
+                cardList.add(makingCard);
             }
-            imageMap.put(pile, imageList);
+            indexMapped.put(pile, cardList);
         }
     }
 
+    //TODO: initializeGame before requestCards
+    //TODO: Get a Map of (Integer, List<Integer>) instead?
     public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
-        gameControl.initializeGame(GameTypes.SOLITAIRE);
+        gameControl.initializeGame(GameTypes.HUMANITY);
         addCards(gameControl);
     }
 
@@ -91,35 +96,17 @@ public class CAHScreen extends GameScreen {
         double i = 0;
         double j = 0;
         double l = 0;
-        int index = 0;
-        for (Integer key : differentDecks.keySet()) {
-            //playingCards is a list of IDs for that the pile "key"
-            List<Integer> playingCards = differentDecks.get(key);
+        for (Integer key : indexMapped.keySet()) {
+            List<PartyCards> playingCards = indexMapped.get(key);
             if (playingCards.size() > 30) {
-                setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500, index);
+                setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500);
             } else {
-                setUponScreen(playingCards, 20, 0, l, j, 20, 10, index);
+                setUponScreen(playingCards, 70, 0, l, j, 20, 10);
             }
             i = i + 100;
             l = l + 100;
-            index++;
             j = 0;
         }
-//        List<Playable> playingCards = cards.getCards();
-//        setUpCards(playingCards);
-//        setUponScreen();
-//        int j=10;
-//        for(int i=0;i<playingCards.size();i++){
-//            playingCards.get(i).setFaceUp(false);
-//          /*  playingCards.get(i).getFrontImageView().setFitWidth(60);
-//            playingCards.get(i).getFrontImageView().setFitHeight(20);
-//            playingCards.get(i).getFrontImageView().setX(0);
-//            playingCards.get(i).getFrontImageView().setY(0+j);
-//            j=j+10;
-//            gameScene.getChildren().add(playingCards.get(i).getFrontImageView());*/
-//
-//        }
-
     }
 
 
@@ -128,110 +115,104 @@ public class CAHScreen extends GameScreen {
         double x, y;
     }
 
-    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
-        for (Integer cardID : playingCards) {
-            ImageView cardImage = idImage.get(cardID);
-            cardImage.setFitWidth(60);
-            cardImage.setFitHeight(90);
-            cardImage.setX(XPos + i);
-            cardImage.setY(YPos + j);
-            setUpListeners(cardImage);
-            List<ImageView> images = new ArrayList<>();
-            images.add(cardImage);
-            indexMapped.put(index, images);
-//            cardImage.setOnDragDetected();
+    private void setUponScreen(List<PartyCards> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
+        for (PartyCards card : playingCards) {
+            VboxFactory cardSet = card.getScene();
+            cardSet.setPrefWidth(60);
+            cardSet.setPrefHeight(90);
+            cardSet.setLayoutX(XPos+i);
+            cardSet.setLayoutY(YPos + j);
+            setUpListeners(cardSet);
             j = j + v;
             i = i + v1;
-            gameScene.getChildren().add(cardImage);
+            gameScene.getChildren().add(cardSet);
         }
 
     }
 
-    private void setUpListeners(ImageView cardImage) {
-        double initial_pos = cardImage.getX();
-        double initial_y = cardImage.getY();
-        cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
+    private void setUpListeners(VboxFactory card) {
+        final VboxFactory[] cardChosen = {new VboxFactory(card.getIndex())};
+        card.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                // record a delta distance for the drag and drop operation.
-                dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
-                //TODO: I didn't know what this was, so commented out:
-//                updateProtocol(cardImage);
-                dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
-                cardImage.setCursor(Cursor.MOVE);
-            }
-        });
-        cardImage.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
-                    cardImage.setCursor(Cursor.HAND);
-                    checkIntersection(cardImage, differentDecks, initial_pos,initial_y);
-                } else {
-                    cardImage.setX(initial_pos);
-                    cardImage.setY(initial_y);
-                }
-            }
-        });
-        cardImage.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (checkBounds(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
-                    cardImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                    cardImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                    cardImage.toFront();
-                } else {
-                    cardImage.setLayoutX(initial_pos);
-                    cardImage.setLayoutY(initial_y);
-                    mouseEvent.setDragDetect(false);
-                }
-            }
-        });
-        cardImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                cardImage.setCursor(Cursor.HAND);
-            }
-        });
-    }
-
-    private void checkIntersection(ImageView currentCard, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
-        //Diff pile numbers
-        for (Integer index : differentDecks.keySet()) {
-            List<Integer> currentPile = differentDecks.get(index);
-            // checks for intersection
-            ImageView pileLast = idImage.get(currentPile.get(currentPile.size()-1));
-            if (!currentCard.equals(pileLast)) {
-                // Change the logic for checking intersections
-                if ((currentCard.getBoundsInParent().intersects(pileLast.getBoundsInParent()))) {
-                    List<Object> cardWorking = new ArrayList<>();
-                    int stackFrom = getKey(indexMapped, currentCard);
-                    cardWorking.add(stackFrom);
-                    int stackTo = getKey(indexMapped, pileLast);
-                    cardWorking.add(stackTo);
-                    for (Integer id : differentDecks.get(stackFrom)) {
-                        if (idImage.get(id).equals(currentCard)) {
-                            cardWorking.add(differentDecks.get(stackFrom).indexOf(id));
-                        }
+                if(card.getIndex()!=0) {
+                    card.setStyle(styling);
+                    card.setCursor(Cursor.MOVE);
+                    tappedCards.add(card);
+                    if(card.getIndex()==differentDecks.keySet().size()){
+                        chooseWinner();
                     }
-                    System.out.println(cardWorking);
-                    gameControl.updateProtocol(cardWorking);
                 }
             }
-        }
+        });
+        card.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(card.getIndex()!=0){
+                    if(!tappedCards.contains(card)) {
+                        card.setFace();
+                        card.resetCard();
+                    }
+                }
+        }});
+        card.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (card.getIndex()==0) {
+                    card.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                    card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                    card.toFront();
+                    card.setFace();
+                    card.resetCard();
+                } else {
+                    return;
+                }
+            }
+        });
+        card.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(card.getIndex()!=0) {
+                    List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
+                    for (PartyCards card : listOfCards) {
+                        card.changeFace();
+                        changeVbox(card);
+                    }
+
+
+                }
+                card.setCursor(Cursor.HAND);
+            }
+        });
+    }
+    private void changeVbox(PartyCards card){
+        card.clearCard();
     }
 
-    private Integer getKey(Map<Integer, List<ImageView>> map, ImageView v) {
-        for (Integer check : map.keySet()) {
-            for (ImageView imageIterate : map.get(check)) {
-                if (imageIterate.equals(v)) {
-                    System.out.println(v);
-                    return check;
-                }
-            }
+    private void chooseWinner(){
+        // TODO : backend stuff
+        // logic might be a bit off here but make a button for each player and then hide them when the host has chosen the winner
+        for(int i=1;i<=differentDecks.keySet().size();i++){
+            ButtonFactory choose= new ButtonFactory("Player "+ i, 35, 150);
+            gameScene.getChildren().addAll(choose);
+            choose.setOnAction(e->{
+               // gameControl.chooseWinner(choose.getText(),tappedCards);
+                choose.setVisible(false);
+            });
         }
-        return 0;
+        for(VboxFactory card:tappedCards){
+            if(gameScene.getChildren().remove(card)== false){
+                endGame();
+            }
+            gameScene.getChildren().remove(card);
+        }
+
     }
+
+    private void endGame(){
+        // take the user to the end screen 
+    }
+
 
     private boolean checkBounds(double v, double v1) {
         if (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0) {
@@ -240,74 +221,10 @@ public class CAHScreen extends GameScreen {
         return false;
     }
 
-    private void setUpPot(Playable playable) {
-        playable.setFaceUp(false);
-      /*  playable.getBackImageView().setX(0);
-        playable.getBackImageView().setY(0);
-        gameScene.getChildren().add(playable.getBackImageView());*/
-    }
-
-//    private void setUpCards(List<Playable> playingCards) {
-//        setupMainDeck(playingCards);
-//        int shiftX = 0;
-//        int shiftY = 0;
-//        for (int i=1;i<differentDecks.length;i++){
-//            for(int j=0;j<(playingCards.size()/differentDecks.length)-1;j++){
-//                differentDecks[i].addCard(playingCards.get(j));
-//               /* if(j==7){
-//                    playingCards.get(j).setFaceUp(true);
-//                    playingCards.get(j).getFrontImageView().setX(0+shiftX);
-//                    playingCards.get(j).getFrontImageView().setY(0+shiftY);
-//                    shiftY = shiftY+10;
-//                    gameScene.getChildren().add(playingCards.get(j).getFrontImageView());
-//                } else{
-//                    playingCards.get(j).setFaceUp(false);
-//                    playingCards.get(j).getFrontImageView().setX(0+shiftX);
-//                    playingCards.get(j).getFrontImageView().setY(0+shiftY);
-//                    shiftY = shiftY+10;
-//                    gameScene.getChildren().add(playingCards.get(j).getBackImageView());
-//                }*/
-//                playingCards.remove(playingCards.get(j));
-//            }
-//            shiftX = shiftX+30;
-//        }
-//
-//    }
-////
-//    private void setupMainDeck( List<Playable> playingCards) {
-//        for (int i=0;i<48;i++){
-//            differentDecks[0].addCard(playingCards.get(i));
-//            playingCards.remove(playingCards.get(i));
-//        }
-//    }
-
-//    private void generateCards(){
-//        for
-//    }
-
     public Scene getScene(UserInterface ui) {
-        Group startRoot = new Group();
-//        startRoot.getChildren().add(dummyCard);
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
         ImagePattern backgroundPattern = new ImagePattern(background);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
-    }
-
-    private void moveCard(Playable card) {
-
-    }
-
-    private static ResourceBundle getResourceBundleFromPath(String path) {
-        try {
-            //System.out.println("data/cardDecks/" + path + "/" + path);
-            File file = new File("data/cardDecks/" + path);
-            URL[] urls = {file.toURI().toURL()};
-            ClassLoader loader = new URLClassLoader(urls);
-            return ResourceBundle.getBundle(path, Locale.getDefault(), loader);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 }
