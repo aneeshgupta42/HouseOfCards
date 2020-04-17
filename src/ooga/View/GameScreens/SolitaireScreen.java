@@ -229,12 +229,8 @@ public class SolitaireScreen extends GameScreen {
                     }
                     currentCardSet.setLayoutX(targetCard.getX()- currentCard.getLayoutBounds().getMinX());
                     currentCardSet.setLayoutY(targetCard.getY()+YOFFSET- currentCard.getLayoutBounds().getMinY());
-                    System.out.println(targetCard.getX());
-                    System.out.println(targetCard.getY());
-                    System.out.println(currentCard.getX());
-                    System.out.println(currentCard.getY());
-                    gameControl.updateProtocol(cardWorking);
-                    return true;
+                    List<Object> ret = gameControl.updateProtocol(cardWorking);
+                    return ((Integer) ret.get(0) == 1);
                 }
             }
         }
