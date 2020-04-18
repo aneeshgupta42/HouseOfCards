@@ -15,28 +15,24 @@ import java.util.List;
 import java.util.Map;
 
 public class SolitaireDriver extends GameDriver {
-    private Player player;
-    private CardDeck allGameCards;
-    private Map<Integer, CardDeck> piles;
-    private GameController controller;
     int score;
 
     //many decks since solitaire contains decks everywhere
     // TODO: add a method to get the number of suits.
     public SolitaireDriver(GameController controller) {
-        this.controller = controller;
+        super(controller);
         makeDecks();
-
     }
 
     private void makeDecks() {
-        allGameCards = new CardDeck(DeckType.POKER);
-        CardDeck completeDeck = new CardDeck(GameTypes.SOLITAIRE);
-        CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER);
+        allGameCards = new CardDeck(DeckType.POKER, new ArrayList<>());
+        CardDeck completeDeck = new CardDeck(DeckType.POKER);
+        CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER, new ArrayList<>());
 
         for (Playable card : completeDeck.getCards()) {
             if (card.getValue().equals("S")) {
                 deckWithSpecifiedSuits.addCard(card);
+               // System.out.println("enter");
             }
         }
         for (int i = 0; i < 8; i++) {
@@ -45,12 +41,13 @@ public class SolitaireDriver extends GameDriver {
                 allGameCards.addCard(card);
             }
         }
+        allGameCards.shuffleDeck();
         makePiles();
     }
 
-    private void makePiles() {
+    @Override
+    protected void makePiles() {
         allGameCards.shuffleDeck();
-        piles = new HashMap<>();
         for (int i = 0; i < 11; i++) {
             if (i == 0) {
                 piles.putIfAbsent(0, new CardDeck(DeckType.POKER, allGameCards.popCards(50)));
@@ -62,31 +59,6 @@ public class SolitaireDriver extends GameDriver {
                 piles.get(i).getCards().get(4).setFaceUp(true);
             }
         }
-    }
-
-    @Override
-    public Object sendCards() {
-        Map<Integer, List<Integer>> ret = new HashMap<>();
-        for (Integer index : piles.keySet()){
-            ret.put(index, piles.get(index).getIDList());
-        }
-        return ret;
-    }
-
-    @Override
-    public String getCardImagePath(int cardID) {
-        Playable card = getCard(cardID);
-        return card.getCardFrontImagePath();
-    }
-
-    @Override
-    public void makePlayer(String userName) {
-        player = new Player(userName);
-    }
-
-    @Override
-    public Player getPlayer() {
-        return player;
     }
 
     @Override
@@ -191,27 +163,6 @@ public class SolitaireDriver extends GameDriver {
     @Override
     public void startGame() {
 
-    }
-
-    @Override
-    public boolean IsCardFaceUp(int cardID) {
-        Playable card = getCard(cardID);
-        return card.isFaceUp();
-    }
-
-    @Override
-    protected Playable getCard(int cardID) {
-        for (Integer i : piles.keySet()){
-            if (piles.get(i).isCardPresent(cardID)){
-                return piles.get(i).getCardWithID(cardID);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void setFaceUp(int cardID) {
-        getCard(cardID).setFaceUp(true);
     }
 
     public static void main(String[] args) {

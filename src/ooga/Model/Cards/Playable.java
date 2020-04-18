@@ -20,9 +20,9 @@ public interface Playable {
      * Get the image path of
      * @return
      */
-    String getCardFrontImagePath();
+    String getCardImagePath();
 
-    void setCardFrontImagePath(String cardFrontImagePath);
+    void setCardImagePath(String cardFrontImagePath);
 
     String getValue();
 

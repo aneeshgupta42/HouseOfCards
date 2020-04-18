@@ -14,26 +14,11 @@ public class CardDeck implements Deck {
     DeckType deckType;
     List<Playable> gameCards;
 
-    public CardDeck (GameTypes type){
-        switch (type){
-            // need to split this to 2 different decks for the questions and answers
-            case HUMANITY:
-                deckType = DeckType.HUMANITY;
-                break;
-            case UNO:
-                deckType = DeckType.UNO;
-                break;
-            default:
-                deckType = DeckType.POKER;
-        }
-        gameCards = new ArrayList<>();
-        CardFactory.initializeDeck(this, deckType);
-
-    }
 
     public CardDeck (DeckType deckType){
         this.deckType = deckType;
         this.gameCards = new ArrayList<>();
+        CardFactory.initializeDeck(this, deckType);
     }
 
     public CardDeck(DeckType deckType, List<Playable>gameCards){
@@ -107,7 +92,7 @@ public class CardDeck implements Deck {
 
     @Override
     public CardDeck returnADeepCopy() {
-        CardDeck ret = new CardDeck(this.deckType);
+        CardDeck ret = new CardDeck(this.deckType, new ArrayList<>());
         for (Playable card : gameCards){
             Playable temp = CardFactory.makeACopy(card, this.deckType);
             ret.addCard(temp);
