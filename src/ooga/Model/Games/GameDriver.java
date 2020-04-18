@@ -41,7 +41,7 @@ public abstract class GameDriver implements Game {
     @Override
     public String getCardImagePath(int cardID) {
         Playable card = getCard(cardID);
-        return card.getCardFrontImagePath();
+        return card.getCardImagePath();
     }
 
     @Override

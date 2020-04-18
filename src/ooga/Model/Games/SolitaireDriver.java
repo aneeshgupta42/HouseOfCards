@@ -32,6 +32,7 @@ public class SolitaireDriver extends GameDriver {
         for (Playable card : completeDeck.getCards()) {
             if (card.getValue().equals("S")) {
                 deckWithSpecifiedSuits.addCard(card);
+               // System.out.println("enter");
             }
         }
         for (int i = 0; i < 8; i++) {

@@ -40,7 +40,7 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
-    public String getCardFrontImagePath() {
+    public String getCardImagePath() {
         return cardFrontImagePath;
     }
 

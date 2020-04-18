@@ -92,7 +92,7 @@ public class CardDeck implements Deck {
 
     @Override
     public CardDeck returnADeepCopy() {
-        CardDeck ret = new CardDeck(this.deckType);
+        CardDeck ret = new CardDeck(this.deckType, new ArrayList<>());
         for (Playable card : gameCards){
             Playable temp = CardFactory.makeACopy(card, this.deckType);
             ret.addCard(temp);

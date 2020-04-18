@@ -37,7 +37,7 @@ public class CardFactory {
 //            case UNO:
 //            case HUMANITY:
             default:
-               ret = new PokerCard(card.getCardFrontImagePath(), card.getNumber(), card.getValue(), cardID);
+               ret = new PokerCard(card.getCardImagePath(), card.getNumber(), card.getValue(), cardID);
          }
          return ret;
       }
