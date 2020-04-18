@@ -29,6 +29,11 @@ public abstract class GameDriver implements Game {
         piles = new HashMap<>();
     }
 
+    public String getCardValue(int cardID){
+        return getCard(cardID).getValue();
+    }
+
+
     @Override
     public Object sendCards() {
         Map<Integer, List<Integer>> ret = new HashMap<>();
@@ -47,6 +52,7 @@ public abstract class GameDriver implements Game {
     @Override
     public void makePlayer(String userName) {
         playerList.add(new Player(userName));
+        makePiles();
     }
 
     @Override

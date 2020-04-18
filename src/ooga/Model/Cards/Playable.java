@@ -22,7 +22,7 @@ public interface Playable {
      */
     String getCardImagePath();
 
-    void setCardFrontImagePath(String cardFrontImagePath);
+    void setCardImagePath(String cardFrontImagePath);
 
     String getValue();
 

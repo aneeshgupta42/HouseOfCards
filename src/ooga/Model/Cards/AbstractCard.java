@@ -45,7 +45,7 @@ public abstract class AbstractCard implements Playable {
     }
 
     @Override
-    public void setCardFrontImagePath(String cardFrontImagePath) {
+    public void setCardImagePath(String cardFrontImagePath) {
         this.cardFrontImagePath = cardFrontImagePath;
     }
 
