@@ -53,7 +53,10 @@ public class CardFactory {
    private static Playable makeCard(DeckType deckType, String imagePath, String[] attributes, int id) {
       Playable card;
       switch (deckType){
-         case HUMANITY:
+         case HUMANITYQUES:
+            card = null;
+            break;
+         case HUMANITYANS:
             card = null;
             break;
          case UNO:

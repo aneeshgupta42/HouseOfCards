@@ -2,6 +2,7 @@ package ooga.Controller;
 
 public enum DeckType {
     POKER,
-    HUMANITY,
+    HUMANITYQUES,
+    HUMANITYANS,
     UNO
 }

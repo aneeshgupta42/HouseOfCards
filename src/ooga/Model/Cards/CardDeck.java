@@ -14,22 +14,6 @@ public class CardDeck implements Deck {
     DeckType deckType;
     List<Playable> gameCards;
 
-    public CardDeck (GameTypes type){
-        switch (type){
-            // need to split this to 2 different decks for the questions and answers
-            case HUMANITY:
-                deckType = DeckType.HUMANITY;
-                break;
-            case UNO:
-                deckType = DeckType.UNO;
-                break;
-            default:
-                deckType = DeckType.POKER;
-        }
-        gameCards = new ArrayList<>();
-        CardFactory.initializeDeck(this, deckType);
-
-    }
 
     public CardDeck (DeckType deckType){
         this.deckType = deckType;
@@ -39,6 +23,10 @@ public class CardDeck implements Deck {
     public CardDeck(DeckType deckType, List<Playable>gameCards){
         this.deckType = deckType;
         this.gameCards = gameCards;
+    }
+
+    public void makeDeck (){
+        CardFactory.initializeDeck(this, deckType);
     }
 
     @Override
