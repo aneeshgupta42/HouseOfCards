@@ -1,6 +1,5 @@
 package ooga.Model.Games;
 
-import ooga.Model.Cards.Playable;
 import ooga.Model.Players.Player;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 public interface Game {
     void makePlayer(String userName);
 
-    Player getPlayer();
+    List<Player> getPlayerList();
 
     boolean checkWin();
 
