@@ -240,7 +240,6 @@ public class SolitaireScreen extends GameScreen {
     private void dealCards(){
         List<Integer> drawPileIDs = differentDecks.get(0);
         List<Integer> dealingIDs = (List<Integer>)gameControl.updateProtocol(null).get(0);
-        System.out.println("dealing IDS size: " + dealingIDs.size());
         //TODO: instead of this use back end's list of 10 cards
 //        for(int i = 0; i<10; i++){
 //            int cardID = drawPileIDs.get(i);

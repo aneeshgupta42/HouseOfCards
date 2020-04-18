@@ -86,7 +86,6 @@ public class UserInput {
                 showMessage(Alert.AlertType.ERROR, "Please enter the player names");
                 return;
             } else {
-                System.out.println(game);
                 mainView.initializeGame(game);
         // go to the game scene
     }}});
