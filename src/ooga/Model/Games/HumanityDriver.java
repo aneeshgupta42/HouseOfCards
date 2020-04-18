@@ -10,6 +10,7 @@ import java.util.List;
 public class HumanityDriver extends GameDriver{
     public HumanityDriver(GameController controller) {
         super(controller);
+        makePiles();
     }
 
     @Override
