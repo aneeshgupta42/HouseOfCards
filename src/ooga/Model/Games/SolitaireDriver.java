@@ -71,11 +71,12 @@ public class SolitaireDriver extends GameDriver {
 
     @Override
     public List<Object> updateProtocol(List<Object> args) {
-        if (args == null){
-            drawPileProtocol();
-            return null;
-        }
         List<Object> ret = new ArrayList<>();
+        if (args == null){
+           List<Integer> id =  drawPileProtocol();
+           ret.add(id);
+           return ret;
+        }
         int sourcePile = (Integer) args.get(0);
         int destPile = (Integer) args.get(1);
         int indexInSource = (Integer) args.get(2);
@@ -91,9 +92,6 @@ public class SolitaireDriver extends GameDriver {
 //        System.out.println("cond1: " + cond1 + "cond2: " + cond2);
         updatePiles(cond1&&cond2, sourcePile, indexInSource, destPile);
         //TODO: Add functionality to check for a complete set
-//        for (int i = 0; i < piles.size(); i++) {
-//            System.out.println("Pile" + i + ":");
-//            System.out.println(piles.get(i));}
         return ret;
     }
 
@@ -135,8 +133,15 @@ public class SolitaireDriver extends GameDriver {
         return destNum - sourceNum == 1;
     }
 
-    private void drawPileProtocol() {
-
+    private List<Integer> drawPileProtocol() {
+        List<Playable> drawCards = piles.get(0).popCards(10);
+        List<Integer> ret = new ArrayList<>();
+        for(int i = 1 ; i < 11; i++){
+            Playable card = drawCards.remove(0);
+            piles.get(i).addCard(card);
+            ret.add(card.getID());
+        }
+        return ret;
     }
 
 
@@ -167,22 +172,27 @@ public class SolitaireDriver extends GameDriver {
 
     public static void main(String[] args) {
         SolitaireDriver test = new SolitaireDriver(new GameController());
-        Map<Integer, List<Integer>> temp = new HashMap<>();
-        temp = (Map<Integer, List<Integer>>)test.sendCards();
-        for (Integer i : temp.keySet()){
-            System.out.println("INDEX = " + i);
-            for (int j : temp.get(i)) {
-                System.out.println("Value = " + j);
-            }
-            }
+//        Map<Integer, List<Integer>> temp = new HashMap<>();
+//        temp = (Map<Integer, List<Integer>>)test.sendCards();
+//        for (Integer i : temp.keySet()){
+//            System.out.println("INDEX = " + i);
+//            for (int j : temp.get(i)) {
+//                System.out.println("Value = " + j);
+//            }
+//            }
+
+        for (int i = 0; i < test.piles.size(); i++) {
+            System.out.println("Pile" + i + ":");
+            System.out.println(test.piles.get(i));
         }
-//        for (int i = 0; i < test.piles.size(); i++) {
-//            System.out.println("Pile" + i + ":");
-//            System.out.println(test.piles.get(i));
-//            for (Playable card : test.piles.get(i).getCards()){
-//                System.out.println(card.isFaceUp());
-//           }
-//        }
+        test.updateProtocol(null);
+        for (int i = 0; i < test.piles.size(); i++) {
+            System.out.println("Pile" + i + ":");
+            System.out.println(test.piles.get(i));
+        }
+
+        }
+
 
     }
 
