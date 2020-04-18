@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ooga.Controller.GameController;
+import ooga.View.GameScreens.CAHScreen;
 import ooga.View.GameScreens.SolitaireScreen;
 
 public class UserInterface extends Application implements Viewable {
@@ -99,6 +100,12 @@ public class UserInterface extends Application implements Viewable {
     public void initializeGame(String gameName){
         if(gameName=="Solitaire"){
             SolitaireScreen screen = new SolitaireScreen(passingController);
+            Scene gameScene = screen.getScene(this);
+            myStage.setScene(gameScene);
+            myStage.show();
+        }
+        if(gameName=="Humanity"){
+            CAHScreen screen = new CAHScreen(passingController);
             Scene gameScene = screen.getScene(this);
             myStage.setScene(gameScene);
             myStage.show();

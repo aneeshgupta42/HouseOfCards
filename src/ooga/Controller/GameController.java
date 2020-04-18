@@ -74,8 +74,8 @@ public class GameController {
     public void makePlayer(String playerName){
         currentGame.makePlayer(playerName);
     }
-    public void getValue(int cardID){
-        currentGame.getCardValue(cardID);
+    public String getValue(int cardID){
+        return currentGame.getCardValue(cardID);
     }
     public void pauseGame(){}
     public void resumeGame(){}

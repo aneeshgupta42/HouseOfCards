@@ -18,7 +18,11 @@ public class VboxFactory extends VBox {
         setSpacing(spacing);
         setIndex(index);
         setStyle(styling);
-        face = false;
+        if(index==0){
+            face= true;
+        } else {
+            face = false;
+        }
     }
 
     private void setIndex(Integer index){
@@ -36,10 +40,14 @@ public class VboxFactory extends VBox {
     public void setFace(){
         face= !face;
     }
+    public void setFace(Boolean value){
+        face= value;
+    }
 
     public void resetCard(VboxFactory cardHolder, Label cardText, Rectangle imageViewLike) {
         if (!cardHolder.getFace() && cardHolder.getChildren().size() > 0) {
-            cardHolder.getChildren().removeAll();
+            cardHolder.getChildren().removeAll(cardText, imageViewLike);
+
         } else if (cardHolder.getFace() && cardHolder.getChildren().size() <= 0) {
             cardHolder.getChildren().addAll(cardText, imageViewLike);
         }
