@@ -1,19 +1,11 @@
 package ooga.Model.Cards;
 
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import ooga.Controller.CardColors;
 import ooga.Controller.DeckType;
-import ooga.Controller.GameTypes;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -53,10 +45,10 @@ public class CardFactory {
    private static Playable makeCard(DeckType deckType, String imagePath, String[] attributes, int id) {
       Playable card;
       switch (deckType){
-         case HUMANITYQUES:
+         case HUMANITY_QUES:
             card = null;
             break;
-         case HUMANITYANS:
+         case HUMANITY_ANS:
             card = null;
             break;
          case UNO:

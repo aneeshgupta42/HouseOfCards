@@ -18,15 +18,12 @@ public class CardDeck implements Deck {
     public CardDeck (DeckType deckType){
         this.deckType = deckType;
         this.gameCards = new ArrayList<>();
+        CardFactory.initializeDeck(this, deckType);
     }
 
     public CardDeck(DeckType deckType, List<Playable>gameCards){
         this.deckType = deckType;
         this.gameCards = gameCards;
-    }
-
-    public void makeDeck (){
-        CardFactory.initializeDeck(this, deckType);
     }
 
     @Override

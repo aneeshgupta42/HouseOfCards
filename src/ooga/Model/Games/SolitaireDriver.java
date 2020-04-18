@@ -25,9 +25,9 @@ public class SolitaireDriver extends GameDriver {
     }
 
     private void makeDecks() {
-        allGameCards = new CardDeck(DeckType.POKER);
+        allGameCards = new CardDeck(DeckType.POKER, new ArrayList<>());
         CardDeck completeDeck = new CardDeck(DeckType.POKER);
-        CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER);
+        CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER, new ArrayList<>());
 
         for (Playable card : completeDeck.getCards()) {
             if (card.getValue().equals("S")) {

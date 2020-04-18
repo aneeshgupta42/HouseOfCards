@@ -1,6 +1,8 @@
 package ooga.Model.Games;
 
+import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
+import ooga.Model.Cards.CardDeck;
 
 import java.util.List;
 
@@ -16,7 +18,8 @@ public class HumanityDriver extends GameDriver{
 
     @Override
     protected void makePiles() {
-
+        piles.putIfAbsent(0, new CardDeck(DeckType.HUMANITY_QUES));
+        piles.putIfAbsent(1, new CardDeck(DeckType.HUMANITY_ANS));
     }
 
     @Override
