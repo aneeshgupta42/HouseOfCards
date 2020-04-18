@@ -91,8 +91,30 @@ public class SolitaireDriver extends GameDriver {
         }
 //        System.out.println("cond1: " + cond1 + "cond2: " + cond2);
         updatePiles(cond1&&cond2, sourcePile, indexInSource, destPile);
-        //TODO: Add functionality to check for a complete set
+        // Logic to check for a complete set;
+        int indexOfCompleteSet = checkCompleteSet(destPile);
+        //System.out.println("index: " + indexOfCompleteSet);
+        if (indexOfCompleteSet != -1){ret.add(indexOfCompleteSet);}
         return ret;
+    }
+
+    private int checkCompleteSet(int destPile) {
+        List<Playable> pile = piles.get(destPile).getCards();
+        int index = pile.size() - 1;
+        int currentNum = 1;
+        while (true) {
+            int cardNumber = pile.get(index).getNumber();
+            if (cardNumber != currentNum) {
+                break;
+            }
+            if (cardNumber == 13) {
+                return index;
+            }
+            index--;
+            currentNum++;
+
+        }
+        return -1;
     }
 
     private void updatePiles(boolean cond, int sourcePile, int indexInSource, int destPile) {
@@ -116,7 +138,6 @@ public class SolitaireDriver extends GameDriver {
         for (int i = indexInSource + 1; i < temp.getDeckSize(); i++){
             if (cardNum - temp.getCards().get(i).getNumber() == 1){
                 cardNum = temp.getCards().get(i).getNumber();
-                continue;
             }else{
                 return false;
             }
