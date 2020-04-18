@@ -83,9 +83,9 @@ public class CAHScreen extends GameScreen {
     //TODO: Get a Map of (Integer, List<Integer>) instead?
     public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
+        gameControl.initializeGame(GameTypes.HUMANITY);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
-        gameControl.initializeGame(GameTypes.HUMANITY);
         addCards(gameControl);
     }
 
