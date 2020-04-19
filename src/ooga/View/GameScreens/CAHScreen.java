@@ -30,6 +30,7 @@ public class CAHScreen extends GameScreen {
     private ImageView dummyCard;
     private Group gameScene;
     private Delta dragDelta = new Delta();
+    private String backImagePath = "cardDecks/poker/red_back.png";
     private GameController gameControl;
     private Map<Integer, List<PartyCards>> indexMapped = new HashMap<>();
     //what we get
@@ -65,10 +66,11 @@ public class CAHScreen extends GameScreen {
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
         for(Integer pile: deckMap.keySet()){
             List<PartyCards> cardList= new ArrayList<>();
+            Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(backImagePath));
             for (Integer promptInt: deckMap.get(pile)){
-                PartyCards makingCard = new PartyCards(pile);
+                PartyCards makingCard = new PartyCards(pile, cardImage);
                  String prompt = gameControl.getValue(promptInt);
-                makingCard.setText(prompt);
+                 makingCard.setText(prompt);
                 cardList.add(makingCard);
             }
             indexMapped.put(pile, cardList);
