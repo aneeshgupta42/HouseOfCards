@@ -225,7 +225,14 @@ public class CAHScreen extends GameScreen {
         for(int i=1;i<=differentDecks.keySet().size()-1;i++){
             ButtonFactory gameButton = new ButtonFactory("Player "+i, XPos+initialDistance, YPos );
            gameButton.setOnAction(e->{
-                // gameControl.chooseWinner(choose.getText(),tappedCards);
+               List<Object> cardsChosen = new ArrayList<>();
+               for(VboxFactory cards:tappedCards){
+                   cardsChosen.add(cards.getIndex());
+               }
+               String[] buttonName = gameButton.getText().split(" ");
+               Integer playerIndex = Integer.parseInt(buttonName[1]);
+               cardsChosen.add(playerIndex);
+                gameControl.updateProtocol(cardsChosen);
                 gameScene.getChildren().remove(gameButton);
                 for(VboxFactory card:tappedCards){
                     if(gameScene.getChildren().remove(card)== false){
