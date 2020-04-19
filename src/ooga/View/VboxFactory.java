@@ -1,6 +1,7 @@
 package ooga.View;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
@@ -44,14 +45,16 @@ public class VboxFactory extends VBox {
         face= value;
     }
 
-    public void resetCard(VboxFactory cardHolder, Label cardText, Rectangle imageViewLike) {
-        if (!cardHolder.getFace() && cardHolder.getChildren().size() > 0) {
+    public void resetCard(VboxFactory cardHolder, Label cardText, Rectangle imageViewLike, ImageView image) {
+        if (!cardHolder.getFace() && cardHolder.getChildren().size() > 1) {
             cardHolder.getChildren().removeAll(cardText, imageViewLike);
+            cardHolder.getChildren().add(image);
 
-        } else if (cardHolder.getFace() && cardHolder.getChildren().size() <= 0) {
+        } else if (cardHolder.getFace() && cardHolder.getChildren().size() <= 1) {
             cardHolder.getChildren().addAll(cardText, imageViewLike);
+            cardHolder.getChildren().remove(image);
         }
     }
 
-    public void resetCard(){resetCard(this,(Label)this.getChildren().get(0), (Rectangle)this.getChildren().get(1));}
+    public void resetCard(){resetCard(this,(Label)this.getChildren().get(0), (Rectangle)this.getChildren().get(1), (ImageView)this.getChildren().get(2));}
 }

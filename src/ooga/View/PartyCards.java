@@ -3,6 +3,8 @@ package ooga.View;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,13 +17,18 @@ public class PartyCards {
     private VboxFactory cardHolder;
     private Label cardText;
     private Rectangle imageViewLike;
+    private ImageView imageView;
     private String styling="-fx-border-color: black;-fx-background-color: rgba(0, 0, 0, 0.8);-fx-padding: 2 2 2 2 ";
 
-    public PartyCards(Integer pileIndex){
+    public PartyCards(Integer pileIndex, Image image){
         cardHolder = new VboxFactory(10, pileIndex,styling);
         cardText = new Label();
+        imageView= new ImageView();
+        imageView.setFitWidth(60);
+        imageView.setFitHeight(90);
         cardText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 8));
         cardText.setWrapText(true);
+        imageView.setImage(image);
         cardHolder.setAlignment(Pos.CENTER);
         if(pileIndex==0){
             cardText.setTextFill(Color.BLACK);
@@ -32,12 +39,13 @@ public class PartyCards {
     }
 
     public VboxFactory getScene(){
-
         if(cardHolder.getFace() && cardHolder.getChildren().size()<=0){
             cardHolder.getChildren().addAll(cardText,imageViewLike);
-        } else if(cardHolder.getFace()==false && cardHolder.getChildren().size()>0){
+            cardHolder.getChildren().remove(imageView);
+        } else if(cardHolder.getFace()==false && cardHolder.getChildren().size()>1 ){
             cardHolder.getChildren().remove(cardText);
             cardHolder.getChildren().remove(imageViewLike);
+            cardHolder.getChildren().add(imageView);
         }
         return cardHolder;
     }
@@ -54,7 +62,7 @@ public class PartyCards {
 
     }
     public void clearCard(){
-        cardHolder.resetCard(cardHolder, cardText,imageViewLike);
+        cardHolder.resetCard(cardHolder, cardText,imageViewLike,imageView);
 
     }
 

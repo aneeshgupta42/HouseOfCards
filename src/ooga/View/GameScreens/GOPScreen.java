@@ -22,7 +22,7 @@ import java.util.Map;
 
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
-public class CAHScreen extends GameScreen {
+public class GOPScreen extends GameScreen {
     private List<ImageView> cards;
     private ImageView dummyCard;
     private Group gameScene;
@@ -66,8 +66,8 @@ public class CAHScreen extends GameScreen {
             Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(backImagePath));
             for (Integer promptInt: deckMap.get(pile)){
                 PartyCards makingCard = new PartyCards(pile, cardImage);
-                 String prompt = gameControl.getValue(promptInt);
-                 makingCard.setText(prompt);
+                String prompt = gameControl.getValue(promptInt);
+                makingCard.setText(prompt);
                 cardList.add(makingCard);
             }
             indexMapped.put(pile, cardList);
@@ -76,7 +76,7 @@ public class CAHScreen extends GameScreen {
 
     //TODO: initializeGame before requestCards
     //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public CAHScreen(GameController setUpController) {
+    public GOPScreen(GameController setUpController) {
         gameControl = setUpController;
         gameControl.initializeGame(GameTypes.HUMANITY);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
@@ -93,14 +93,9 @@ public class CAHScreen extends GameScreen {
         double l = 0;
         for (Integer key : indexMapped.keySet()) {
             List<PartyCards> playingCards = indexMapped.get(key);
-            if (key==0) {
+
                 setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 450);
-            } else if(key==2 || key==3 || key==4){
-                setUponScreen(playingCards, 0, 70, l, j, 20, 0);
-            }
-            i = 0;
-            l = 0;
-            j = j+100;
+
         }
     }
 
@@ -127,19 +122,18 @@ public class CAHScreen extends GameScreen {
     }
 
     private void setUpListeners(VboxFactory card) {
-        final VboxFactory[] cardChosen = {new VboxFactory(card.getIndex())};
         card.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if(card.getIndex()!=0) {
-                    List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
-                    for (PartyCards card : listOfCards) {
-                        card.changeFace(true);
-                        changeVbox(card);
+                List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
+                    for (PartyCards cardObj : listOfCards) {
+                        if(cardObj.getScene() == card)
+                        cardObj.changeFace(true);
+                        changeVbox(cardObj);
                     }
 
 
-                }
+
                 card.setCursor(Cursor.HAND);
 //                if(card.getIndex()!=0) {
 //                    card.setCursor(Cursor.MOVE);
@@ -150,64 +144,7 @@ public class CAHScreen extends GameScreen {
 //                }
             }
         });
-        card.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                if(card.getIndex()!=0){
-//                    List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
-//                    for (PartyCards card : listOfCards) {
-//                        if(!tappedCards.contains(card.getScene()))
-//                        card.getScene().setFace();
-//                        changeVbox(card);
-//                    }
-//                }
-        }});
-        card.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (card.getIndex()==0) {
-                    card.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                    card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                    card.toFront();
-                    card.setFace();
-                    card.setStyle(style);
-                    tappedCards.add(card);
-                } else {
-                    if(card.getIndex()!=0) {
-                        card.setCursor(Cursor.MOVE);
-                        card.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                        card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                        tappedCards.add(card);
-                        if(card.getIndex()==differentDecks.keySet().size()-1){
-                            chooseWinner();
-                        }
-                    }
-                    if(card.getIndex()!=0){
-                        List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
-                        for (PartyCards card : listOfCards) {
-                            if(!tappedCards.contains(card.getScene()))
-                            card.changeFace(false);
-                            changeVbox(card);
-                        }
-                    }
-                }
-            }
-        });
-        card.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                if(card.getIndex()!=0) {
-//                    List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
-//                    for (PartyCards card : listOfCards) {
-//                        card.changeFace();
-//                        changeVbox(card);
-//                    }
-//
-//
-//                }
-//                card.setCursor(Cursor.HAND);
-            }
-        });
+
     }
     private void changeVbox(PartyCards card){
         card.clearCard();
@@ -215,7 +152,7 @@ public class CAHScreen extends GameScreen {
 
     private void chooseWinner(){
         // TODO : backend stuff
-       setupButtons(10, 10);
+        setupButtons(10, 10);
 
 
     }
@@ -224,7 +161,7 @@ public class CAHScreen extends GameScreen {
         int initialDistance=0;
         for(int i=1;i<=differentDecks.keySet().size()-1;i++){
             ButtonFactory gameButton = new ButtonFactory("Player "+i, XPos+initialDistance, YPos );
-           gameButton.setOnAction(e->{
+            gameButton.setOnAction(e->{
                 // gameControl.chooseWinner(choose.getText(),tappedCards);
                 gameScene.getChildren().remove(gameButton);
                 for(VboxFactory card:tappedCards){
@@ -243,7 +180,7 @@ public class CAHScreen extends GameScreen {
     }
 
     private void endGame(){
-        // take the user to the end screen 
+        // take the user to the end screen
     }
 
 
