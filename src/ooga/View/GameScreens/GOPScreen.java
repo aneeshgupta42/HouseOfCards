@@ -144,7 +144,7 @@ public class GOPScreen extends GameScreen {
 //                }
             }
         });
-      
+
     }
     private void changeVbox(PartyCards card){
         card.clearCard();
