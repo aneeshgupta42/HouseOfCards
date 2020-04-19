@@ -10,19 +10,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
-import ooga.Model.Cards.Playable;
 import ooga.View.UserInterface;
 import ooga.View.utils.CardSet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class SolitaireScreen extends GameScreen {
-    private List<ImageView> cards;
-    private ImageView dummyCard;
     private Group gameScene;
     private String backImagePath = "cardDecks/poker/red_back.png";
     private String baseImagePath = "cardDecks/poker/blue_border.jpg";
@@ -60,7 +54,7 @@ public class SolitaireScreen extends GameScreen {
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
 //        System.out.println(differentDecks.toString());
         initializeImageMap(differentDecks);
-        addCards(gameControl);
+        addCards();
     }
 
     private void initDiffDecks(){
@@ -81,14 +75,14 @@ public class SolitaireScreen extends GameScreen {
         ImageView card = idImage.get(id);
         Image cardImage;
         if(id<0){
-            cardImage =  new Image(getClass().getClassLoader().getResourceAsStream(baseImagePath));
+            cardImage =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
         }
         else if(faceUp){
             String imagePath = gameControl.getImagePath(id);
-            cardImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
+            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(imagePath)));
         }
         else{
-            cardImage = new Image(getClass().getClassLoader().getResourceAsStream(backImagePath));
+            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(backImagePath)));
         }
         card.setImage(cardImage);
     }
@@ -99,7 +93,7 @@ public class SolitaireScreen extends GameScreen {
             for (Integer id : deckMap.get(pile)) {
                 ImageView cardImage;
                 if(id<0){
-                    Image card =  new Image(getClass().getClassLoader().getResourceAsStream(baseImagePath));
+                    Image card =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
                     cardImage = new ImageView (card);
                 }
                 else{
@@ -120,7 +114,7 @@ public class SolitaireScreen extends GameScreen {
 
 
 
-    private void addCards(GameController setUpController) {
+    private void addCards() {
         gameScene = new Group();
         setUpButtons(gameScene);
         //TODO: change this to receive a map instead
@@ -343,7 +337,7 @@ public class SolitaireScreen extends GameScreen {
                         completeSet(stackTo, (Integer) ret.get(1));
                     }
                     //System.out.println("Update protocol: " + (Integer) ret.get(0));
-                    return ((Inn teger) ret.get(0) == 1);
+                    return ((Integer) ret.get(0) == 1);
                 }
             }
         }
@@ -385,18 +379,9 @@ public class SolitaireScreen extends GameScreen {
     }
 
     private boolean checkBounds(double v, double v1) {
-        if (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0) {
-            return true;
-        }
-        return false;
+        return (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0);
     }
 
-    private void setUpPot(Playable playable) {
-        playable.setFaceUp(false);
-      /*  playable.getBackImageView().setX(0);
-        playable.getBackImageView().setY(0);
-        gameScene.getChildren().add(playable.getBackImageView());*/
-    }
 
 //    private void setUpCards(List<Playable> playingCards) {
 //        setupMainDeck(playingCards);
@@ -429,12 +414,9 @@ public class SolitaireScreen extends GameScreen {
 
 
     public Scene getScene(UserInterface ui) {
-        Group startRoot = new Group();
-//        startRoot.getChildren().add(dummyCard);
-        Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
+        Image background = new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg")));
         ImagePattern backgroundPattern = new ImagePattern(background);
-        Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
-        return solitaireScene;
+        return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
 
 
