@@ -108,6 +108,7 @@ public class SolitaireDriver extends GameDriver {
                 break;
             }
             if (cardNumber == 13) {
+                removeCompleteSet(destPile, index);
                 return index;
             }
             index--;
@@ -115,6 +116,13 @@ public class SolitaireDriver extends GameDriver {
 
         }
         return -1;
+    }
+
+    private void removeCompleteSet(int destPile, int index) {
+        List<Playable> removePile = List.copyOf(piles.get(destPile).getCards());
+        for (int i = index; i < removePile.size(); i++){
+            piles.get(destPile).removeCard(removePile.get(i).getID());
+        }
     }
 
     private void updatePiles(boolean cond, int sourcePile, int indexInSource, int destPile) {
