@@ -296,6 +296,7 @@ public class SolitaireScreen extends GameScreen {
 
     private boolean checkIntersection(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         //Diff pile numbers
+        System.out.println(differentDecks.toString());
         ImageView currentCard = currentCardSet.getHeadCard();
         Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
         for (Integer index : differentDecks.keySet()) {
@@ -335,7 +336,13 @@ public class SolitaireScreen extends GameScreen {
                     }
 
                     if(ret.size()==2){
-                        completeSet(stackTo, (Integer) ret.get(1));
+                        int KingPositionInDest = (Integer) ret.get(1);
+                        completeSet(stackTo, KingPositionInDest);
+                        System.out.println("telling back to remove complete set");
+                        List<Object> removeCompSet = new ArrayList<>();
+                        removeCompSet.add(stackTo);
+                        removeCompSet.add(KingPositionInDest);
+                        gameControl.updateProtocol(removeCompSet);
                     }
                     //System.out.println("Update protocol: " + (Integer) ret.get(0));
                     return ((Integer) ret.get(0) == 1);
@@ -344,16 +351,26 @@ public class SolitaireScreen extends GameScreen {
         }
         return false;
     }
-
+    /***
+     * Frontend moves. Calls update protocol.
+     * UpdateProt. validates moves, places new cards into destination pile.
+     * CompleteSet is formed. Backend does not remove CompleteSet from pile yet.
+     * Front calls request cards.
+     * Front does movement.
+     * Once movements is done, front tells back to now remove CompleteSet.
+     * front will do: gameControl.removeCompleteSet.
+     * then front calls request cards again.
+     * ***/
     private void completeSet(int stackTo, int KingDestIndex){
         System.out.println("detected complete set");
+        System.out.println("getting updated piles from back");
+        initDiffDecks();
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         List<Integer> destPile = differentDecks.get(stackTo);
         int kingID = destPile.get(KingDestIndex+1);
         ImageView kingImage = idImage.get(kingID);
         CardSet cardSet = new CardSet(kingImage, idImage, differentDecks);
         cardSet.winProtocol();
-//        initDiffDecks();
     }
 
     private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {

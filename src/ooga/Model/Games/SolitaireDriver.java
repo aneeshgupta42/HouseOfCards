@@ -72,15 +72,15 @@ public class SolitaireDriver extends GameDriver {
     @Override
     public List<Object> updateProtocol(List<Object> args) {
         //case when removeCompleteSets is called
+        List<Object> ret = new ArrayList<>();
+        if (args == null){
+            List<Integer> id =  drawPileProtocol();
+            ret.add(id);
+            return ret;
+        }
         if (args.size() == 2){
             removeCompleteSet((Integer) args.get(0), (Integer) args.get(1));
             return null;
-        }
-        List<Object> ret = new ArrayList<>();
-        if (args == null){
-           List<Integer> id =  drawPileProtocol();
-           ret.add(id);
-           return ret;
         }
         int sourcePile = (Integer) args.get(0);
         int destPile = (Integer) args.get(1);
