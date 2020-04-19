@@ -323,31 +323,27 @@ public class SolitaireScreen extends GameScreen {
                         }
                     }
                     System.out.println(cardWorking);
-                    if (targetID <0){
-                        System.out.println("placing on empty pile");
-                        currentCardSet.setLayoutX(targetCard.getLayoutX()- currentCard.getLayoutBounds().getMinX());
-                        currentCardSet.setLayoutY(targetCard.getLayoutY()- currentCard.getLayoutBounds().getMinY());
-                    }
-                    currentCardSet.setLayoutX(targetCard.getLayoutX()- currentCard.getLayoutBounds().getMinX());
-                    currentCardSet.setLayoutY(targetCard.getLayoutY()+YOFFSET- currentCard.getLayoutBounds().getMinY());
-//                    currentCardSet.setX(targetCard.getX());
-//                    currentCardSet.setY(targetCard.getY()+YOFFSET);
-//                    System.out.println("Post landing");
-//                    System.out.println("ID:" + getCardID(idImage, targetCard));
-//                    System.out.println(targetCard.getLayoutX());
-//                    System.out.println(targetCard.getLayoutY());
-//                    System.out.println("ID:" + getCardID(idImage, currentCard));
-//                    System.out.println(currentCard.getLayoutX());
-//                    System.out.println(currentCard.getLayoutY());
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
                     initDiffDecks();
+                    System.out.println(this.differentDecks.toString());
                     boolean success = (Integer) ret.get(0) == 1;
                     System.out.println(success);
+                    if(success) {
+                        if (targetID < 0) {
+                            System.out.println("placing on empty pile");
+                            currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
+                            currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
+                        } else {
+                            currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
+                            currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
+                        }
+                    }
+
                     if(ret.size()==2){
                         completeSet(stackTo, (Integer) ret.get(1));
                     }
                     //System.out.println("Update protocol: " + (Integer) ret.get(0));
-                    return ((Integer) ret.get(0) == 1);
+                    return ((Inn teger) ret.get(0) == 1);
                 }
             }
         }
@@ -359,7 +355,7 @@ public class SolitaireScreen extends GameScreen {
         initDiffDecks();
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         List<Integer> destPile = differentDecks.get(stackTo);
-        int kingID = destPile.get(KingDestIndex);
+        int kingID = destPile.get(KingDestIndex+1);
         ImageView kingImage = idImage.get(kingID);
         CardSet cardSet = new CardSet(kingImage, idImage, differentDecks);
         cardSet.winProtocol();
@@ -429,16 +425,8 @@ public class SolitaireScreen extends GameScreen {
 //
 //    }
 ////
-//    private void setupMainDeck( List<Playable> playingCards) {
-//        for (int i=0;i<48;i++){
-//            differentDecks[0].addCard(playingCards.get(i));
-//            playingCards.remove(playingCards.get(i));
-//        }
-//    }
 
-//    private void generateCards(){
-//        for
-//    }
+
 
     public Scene getScene(UserInterface ui) {
         Group startRoot = new Group();

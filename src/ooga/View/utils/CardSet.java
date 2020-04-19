@@ -51,9 +51,11 @@ public class CardSet {
         for(ImageView card: cardsList){
             card.setLayoutY(finalY + card.getLayoutY()-headInitY);
         }
-
     }
 
+    public void setEmpty(){
+
+    }
     public double getLayoutX(){
         return 0;
     }
