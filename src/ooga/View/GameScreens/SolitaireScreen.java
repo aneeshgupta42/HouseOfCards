@@ -343,7 +343,7 @@ public class SolitaireScreen extends GameScreen {
                         completeSet(stackTo, (Integer) ret.get(1));
                     }
                     //System.out.println("Update protocol: " + (Integer) ret.get(0));
-                    return ((Inn teger) ret.get(0) == 1);
+                    return ((Integer) ret.get(0) == 1);
                 }
             }
         }

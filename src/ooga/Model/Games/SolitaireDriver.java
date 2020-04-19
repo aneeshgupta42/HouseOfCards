@@ -99,7 +99,7 @@ public class SolitaireDriver extends GameDriver {
     }
 
     private int checkCompleteSet(int destPile) {
-        //TODO: what if destination pile is empty?
+        if (piles.get(destPile).getDeckSize() == 0){return -1;}
         List<Playable> pile = piles.get(destPile).getCards();
         int index = pile.size() - 1;
         int currentNum = 1;
