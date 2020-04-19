@@ -213,6 +213,7 @@ public class SolitaireScreen extends GameScreen {
                         cardImage.setCursor(Cursor.HAND);
                         int pileFrom = getCardPile(differentDecks, cardImage);
                         boolean success = checkIntersection(cardSet, differentDecks, initial_pos, initial_y);
+                        initDiffDecks();
                         if (!success) {
                             cardSet.setLayoutX(initial_pos - cardImage.getLayoutBounds().getMinX());
                             cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
@@ -318,7 +319,7 @@ public class SolitaireScreen extends GameScreen {
                     }
                     System.out.println(cardWorking);
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
-                    initDiffDecks();
+//                    initDiffDecks();
                     System.out.println(this.differentDecks.toString());
                     boolean success = (Integer) ret.get(0) == 1;
                     System.out.println(success);
@@ -346,13 +347,13 @@ public class SolitaireScreen extends GameScreen {
 
     private void completeSet(int stackTo, int KingDestIndex){
         System.out.println("detected complete set");
-        initDiffDecks();
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         List<Integer> destPile = differentDecks.get(stackTo);
         int kingID = destPile.get(KingDestIndex+1);
         ImageView kingImage = idImage.get(kingID);
         CardSet cardSet = new CardSet(kingImage, idImage, differentDecks);
         cardSet.winProtocol();
+//        initDiffDecks();
     }
 
     private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
