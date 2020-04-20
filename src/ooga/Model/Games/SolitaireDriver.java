@@ -71,11 +71,16 @@ public class SolitaireDriver extends GameDriver {
 
     @Override
     public List<Object> updateProtocol(List<Object> args) {
+        //case when removeCompleteSets is called
         List<Object> ret = new ArrayList<>();
         if (args == null){
-           List<Integer> id =  drawPileProtocol();
-           ret.add(id);
-           return ret;
+            List<Integer> id =  drawPileProtocol();
+            ret.add(id);
+            return ret;
+        }
+        if (args.size() == 2){
+            removeCompleteSet((Integer) args.get(0), (Integer) args.get(1));
+            return null;
         }
         int sourcePile = (Integer) args.get(0);
         int destPile = (Integer) args.get(1);
@@ -99,6 +104,7 @@ public class SolitaireDriver extends GameDriver {
     }
 
     private int checkCompleteSet(int destPile) {
+        if (piles.get(destPile).getDeckSize() == 0){return -1;}
         List<Playable> pile = piles.get(destPile).getCards();
         int index = pile.size() - 1;
         int currentNum = 1;
@@ -115,6 +121,13 @@ public class SolitaireDriver extends GameDriver {
 
         }
         return -1;
+    }
+
+    private void removeCompleteSet(int destPile, int index) {
+        List<Playable> removePile = List.copyOf(piles.get(destPile).getCards());
+        for (int i = index; i < removePile.size(); i++){
+            piles.get(destPile).removeCard(removePile.get(i).getID());
+        }
     }
 
     private void updatePiles(boolean cond, int sourcePile, int indexInSource, int destPile) {
