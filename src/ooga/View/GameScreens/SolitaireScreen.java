@@ -370,6 +370,8 @@ public class SolitaireScreen extends GameScreen {
         int kingID = destPile.get(KingDestIndex+1);
         ImageView kingImage = idImage.get(kingID);
         CardSet cardSet = new CardSet(kingImage, idImage, differentDecks);
+        int cardBeforeID = differentDecks.get(stackTo).get(KingDestIndex);
+        setCardFace(cardBeforeID, true);
         cardSet.winProtocol();
     }
 
