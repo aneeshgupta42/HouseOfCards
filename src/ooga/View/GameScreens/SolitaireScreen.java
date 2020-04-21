@@ -326,7 +326,7 @@ public class SolitaireScreen extends GameScreen {
                     System.out.println(success);
                     if(success) {
                         if (targetID < 0) {
-                            System.out.println("placing on empty pile");
+//                            System.out.println("placing on empty pile");
                             currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
                             currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
                         } else {
@@ -338,7 +338,7 @@ public class SolitaireScreen extends GameScreen {
                     if(ret.size()==2){
                         int KingPositionInDest = (Integer) ret.get(1);
                         completeSet(stackTo, KingPositionInDest);
-                        System.out.println("telling back to remove complete set");
+//                        System.out.println("telling back to remove complete set");
                         List<Object> removeCompSet = new ArrayList<>();
                         removeCompSet.add(stackTo);
                         removeCompSet.add(KingPositionInDest);
@@ -362,8 +362,8 @@ public class SolitaireScreen extends GameScreen {
      * then front calls request cards again.
      * ***/
     private void completeSet(int stackTo, int KingDestIndex){
-        System.out.println("detected complete set");
-        System.out.println("getting updated piles from back");
+//        System.out.println("detected complete set");
+//        System.out.println("getting updated piles from back");
         initDiffDecks();
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         List<Integer> destPile = differentDecks.get(stackTo);
