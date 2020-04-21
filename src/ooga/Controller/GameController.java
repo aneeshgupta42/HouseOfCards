@@ -1,6 +1,5 @@
 package ooga.Controller;
 
-import javafx.scene.image.ImageView;
 import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
@@ -25,8 +24,8 @@ public class GameController {
     public GameController(){
 
     }
-
-    public void initializeGame(GameTypes type){
+//Refactor this to read from data files.
+    public Map<String, Object> initializeGame(GameTypes type){
         int index;
         switch (type){
             case SOLITAIRE:
@@ -46,29 +45,27 @@ public class GameController {
             e.printStackTrace();
         }
         //use reflections to make an instance of the appropriate game class and assign to currentGame
+        Map<String, Object> ret = readJSON("view", type.toString().toLowerCase().strip());
+        return ret;
     }
+
 
     //TODO: Front end needs to implement this
     public void giveGameScreen (GameScreen game){
         currentScreen = game;
     }
 
-    private void testJson(){
-        String path = "data/solitaire.json";
+    private Map<String, Object> readJSON(String dataRequestedFor, String gameType){
+        String path = "data/gameFiles/" + gameType + ".json";
         Map<String, Object> ret = null;
         try {
-            ret = JSONReader.getData(path);
+            ret = JSONReader.getData("view", path);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        for (String s : ret.keySet()){
-            System.out.println(s + ": ");
-            System.out.println(ret.get(s));
-        }
-
+        return ret;
     }
 
     public List<Object> updateProtocol(List<Object> args){
@@ -102,6 +99,11 @@ public class GameController {
 
     public static void main(String[] args) {
         GameController test = new GameController();
-        test.testJson();
+        Map<String, Object> m = test.initializeGame(GameTypes.SOLITAIRE);
+        for (String s : m.keySet()){
+            System.out.println(s + ": ");
+            System.out.println(m.get(s));
+        }
+
     }
 }

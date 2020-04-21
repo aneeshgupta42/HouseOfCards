@@ -11,10 +11,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class JSONReader {
-    public static Map<String, Object> getData(String path) throws IOException, ParseException {
+    public static Map<String, Object> getData(String dataRequestedFor, String path) throws IOException, ParseException {
         Object obj = new JSONParser().parse(new FileReader(path));
         JSONObject jo = (JSONObject) obj;
-        Map m = (Map)jo.get("view");
+        Map m = (Map)jo.get(dataRequestedFor);
         return m;
     }
 
