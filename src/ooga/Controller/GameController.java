@@ -6,9 +6,11 @@ import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
 import ooga.Model.Games.UnoDriver;
 import ooga.View.GameScreens.GameScreen;
+import org.json.simple.parser.ParseException;
 //import ooga.View.Game;
 //import ooga.View.GameScreens.GameScreen;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -51,6 +53,24 @@ public class GameController {
         currentScreen = game;
     }
 
+    private void testJson(){
+        String path = "data/solitaire.json";
+        Map<String, Object> ret = null;
+        try {
+            ret = JSONReader.getData(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        for (String s : ret.keySet()){
+            System.out.println(s + ": ");
+            System.out.println(ret.get(s));
+        }
+
+    }
+
     public List<Object> updateProtocol(List<Object> args){
         List<Object> ret = currentGame.updateProtocol(args);
         return ret;
@@ -82,7 +102,6 @@ public class GameController {
 
     public static void main(String[] args) {
         GameController test = new GameController();
-        test.initializeGame(GameTypes.SOLITAIRE);
-        System.out.println(test.requestCards());
+        test.testJson();
     }
 }
