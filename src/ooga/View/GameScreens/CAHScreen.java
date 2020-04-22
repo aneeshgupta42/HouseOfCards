@@ -63,6 +63,7 @@ public class CAHScreen extends GameScreen {
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
         for(Integer pile: deckMap.keySet()){
             List<PartyCards> cardList= new ArrayList<>();
+            //read in from the JSON
             Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(backImagePath));
             for (Integer promptInt: deckMap.get(pile)){
                 PartyCards makingCard = new PartyCards(pile, cardImage);
@@ -254,12 +255,6 @@ public class CAHScreen extends GameScreen {
     }
 
 
-    private boolean checkBounds(double v, double v1) {
-        if (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0) {
-            return true;
-        }
-        return false;
-    }
 
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
