@@ -33,7 +33,7 @@ public class CardSet {
     }
 
     public void winProtocol(){
-        System.out.println(cardsList);
+//        System.out.println(cardsList);
         for (ImageView card: cardsList){
             card.setLayoutY(400-card.getLayoutBounds().getMinY()); card.setLayoutX(400-card.getLayoutBounds().getMinX());
         }
