@@ -184,12 +184,6 @@ public class GOPScreen extends GameScreen {
     }
 
 
-    private boolean checkBounds(double v, double v1) {
-        if (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0) {
-            return true;
-        }
-        return false;
-    }
 
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
