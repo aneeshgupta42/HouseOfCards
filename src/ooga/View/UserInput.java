@@ -22,8 +22,8 @@ public class UserInput {
     private VBox playerNames = new VBox(30);;
     private TextArea name;
     private Scene userScene;
-    private Label namePrompt;
-    private UserInterface mainView;
+    private Label namePrompt;  private UserInterface mainView;
+
     private String game;
     private ComboBox<Integer> numOfPlayers;
     private List<Integer> numbers= Arrays.asList(1,2,3,4,5);

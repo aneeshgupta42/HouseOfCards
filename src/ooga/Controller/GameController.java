@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-
+//TODO: deal with makePlayer
 public class GameController {
     private static final List<String> DEFAULT_GAMES = List.of(
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
@@ -87,6 +87,7 @@ public class GameController {
     public void setToFaceUp(int cardID){
         currentGame.setFaceUp(cardID);
     }
+    //TODO: getPlayerNames, getPlayerScores
 
     public void makePlayer(String playerName){
         currentGame.makePlayer(playerName);
