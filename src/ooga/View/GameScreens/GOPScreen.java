@@ -34,6 +34,7 @@ public class GOPScreen extends GameScreen {
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
     //we'll make this (pile: List of Images)
     private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
+    private Map<String, Object> jsonData = new HashMap<>();
     private List<VboxFactory> tappedCards = new ArrayList<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
     private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
@@ -78,7 +79,7 @@ public class GOPScreen extends GameScreen {
     //TODO: Get a Map of (Integer, List<Integer>) instead?
     public GOPScreen(GameController setUpController) {
         gameControl = setUpController;
-        gameControl.initializeGame(GameTypes.HUMANITY);
+        jsonData= gameControl.initializeGame(GameTypes.HUMANITY);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
