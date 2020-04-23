@@ -8,6 +8,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,15 +80,19 @@ public class UserInput {
         return userScene;
     }
     private void setUpNextButton(VBox players) {
+        List<String> playerNames = new ArrayList<>();
         nextButton.setOnAction(e -> {
             for (int i = 0; i < players.getChildren().size(); i++) {
             VBox checkPlayerName = (VBox)players.getChildren().get(i);
             TextArea checkPlayerString= (TextArea) checkPlayerName.getChildren().get(1);
+            playerNames.add(checkPlayerString.getText());
             if (checkPlayerString.getText().isEmpty()) {
                 showMessage(Alert.AlertType.ERROR, "Please enter the player names");
                 return;
             } else {
-                mainView.initializeGame(game);
+                if(playerNames.size()==players.getChildren().size()) {
+                    mainView.initializeGame(game, playerNames);
+                }
         // go to the game scene
     }}});
     // gameController.makePlayer(textEntered);s
