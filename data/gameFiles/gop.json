@@ -1,6 +1,6 @@
 {
   "view": {
-    "backImagePath_humanity" : "cardDecks/poker/red_back.png",
+    "backImagePath_GOP": "cardDecks/poker/red_back.png",
     "positions": {
       "Xzero_index": 850,
       "Yzero_index": 450,
@@ -16,7 +16,7 @@
     },
     "button_label": "Player",
     "background_string": "viewAssets/green_felt.jpg",
-    "listeners_method_CAH": "setupListeners"
+    "listeners_method_GOP": "setUpListeners"
   },
   "model": {
     "streetAddress": "21 2nd Street",
