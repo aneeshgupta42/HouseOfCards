@@ -49,9 +49,7 @@ public class SolitaireScreen extends GameScreen {
     private double initial_x;
     private double initial_y;
     private int numCompleteSets = 0;
-    private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
-    private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
 
 
@@ -79,7 +77,7 @@ public class SolitaireScreen extends GameScreen {
     }
 
     private void initDiffDecks(){
-        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
+        differentDecks = gameControl.requestCards();
         for(int i = -10; i<0; i++){
             List<Integer> pile = differentDecks.get(i*-1);
             pile.add(0, i);
@@ -128,7 +126,7 @@ public class SolitaireScreen extends GameScreen {
                 idImage.put(id, cardImage);
                 imageList.add(cardImage);
             }
-            imageMap.put(pile, imageList);
+//            imageMap.put(pile, imageList);
         }
     }
 
@@ -178,7 +176,7 @@ public class SolitaireScreen extends GameScreen {
             setUpListeners(cardImage);
             List<ImageView> images = new ArrayList<>();
             images.add(cardImage);
-            indexMapped.put(index, images);
+//            indexMapped.put(index, images);
             if(cardID>0) {
                 j = j + v;
                 i = i + v1;
@@ -187,7 +185,6 @@ public class SolitaireScreen extends GameScreen {
         }
 
     }
-
 
     private void setUpListeners(ImageView cardImage) {
         int pile = getCardPile(differentDecks, cardImage);

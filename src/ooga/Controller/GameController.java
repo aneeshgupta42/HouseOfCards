@@ -21,15 +21,11 @@ public class GameController {
     GameScreen currentScreen;
 
     public GameController(){
-        System.out.println(DEFAULT_GAMES.get(0));
-
     }
+
     public GameScreen getGameScreen(String gameName, List<String> playerNames){
-        System.out.println(gameName);
         Map<String, Object> ret = readJSON("gameScreen", gameName.toLowerCase());
-        System.out.println(ret.toString());
         String gameScreenClass = (String) ret.get("className");
-        System.out.println(gameScreenClass);
         GameScreen gameScreen = null;
         try {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
@@ -89,7 +85,7 @@ public class GameController {
     } //return a list when win condition is met. Score is updated
 
 
-    public Object requestCards (){
+    public Map<Integer, List<Integer>> requestCards (){
         //for solitaire this is a Map<Integer, List<Integer>>
         return currentGame.sendCards();
     }
