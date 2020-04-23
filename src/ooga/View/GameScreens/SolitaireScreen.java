@@ -23,8 +23,9 @@ public class SolitaireScreen extends GameScreen {
     private static final double YOFFSET = 20;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
-    double initial_pos;
-    double initial_y;
+    private double initial_pos;
+    private double initial_y;
+    private int numCompleteSets = 0;
     private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
     //what we get
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
@@ -135,25 +136,9 @@ public class SolitaireScreen extends GameScreen {
             index++;
             j = 0;
         }
-//        List<Playable> playingCards = cards.getCards();
-//        setUpCards(playingCards);
-//        setUponScreen();
-//        int j=10;
-//        for(int i=0;i<playingCards.size();i++){
-//            playingCards.get(i).setFaceUp(false);
-//          /*  playingCards.get(i).getFrontImageView().setFitWidth(60);
-//            playingCards.get(i).getFrontImageView().setFitHeight(20);
-//            playingCards.get(i).getFrontImageView().setX(0);
-//            playingCards.get(i).getFrontImageView().setY(0+j);
-//            j=j+10;
-//            gameScene.getChildren().add(playingCards.get(i).getFrontImageView());*/
-//
-//        }
 
     }
 
-
-    // records relative x and y co-ordinates.
     class Delta {
         double x, y;
     }
@@ -296,7 +281,7 @@ public class SolitaireScreen extends GameScreen {
 
     private boolean checkIntersection(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
         //Diff pile numbers
-        System.out.println(differentDecks.toString());
+//        System.out.println(differentDecks.toString());
         ImageView currentCard = currentCardSet.getHeadCard();
         Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
         for (Integer index : differentDecks.keySet()) {
@@ -318,12 +303,12 @@ public class SolitaireScreen extends GameScreen {
                             cardWorking.add(differentDecks.get(stackFrom).indexOf(id)-1);
                         }
                     }
-                    System.out.println(cardWorking);
+//                    System.out.println(cardWorking);
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
 //                    initDiffDecks();
-                    System.out.println(this.differentDecks.toString());
+//                    System.out.println(this.differentDecks.toString());
                     boolean success = (Integer) ret.get(0) == 1;
-                    System.out.println(success);
+//                    System.out.println(success);
                     if(success) {
                         if (targetID < 0) {
 //                            System.out.println("placing on empty pile");
@@ -364,6 +349,7 @@ public class SolitaireScreen extends GameScreen {
     private void completeSet(int stackTo, int KingDestIndex){
 //        System.out.println("detected complete set");
 //        System.out.println("getting updated piles from back");
+        numCompleteSets++;
         initDiffDecks();
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         List<Integer> destPile = differentDecks.get(stackTo);
@@ -372,7 +358,7 @@ public class SolitaireScreen extends GameScreen {
         CardSet cardSet = new CardSet(kingImage, idImage, differentDecks);
         int cardBeforeID = differentDecks.get(stackTo).get(KingDestIndex);
         setCardFace(cardBeforeID, true);
-        cardSet.winProtocol();
+        cardSet.winProtocol(numCompleteSets);
     }
 
     private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
@@ -402,42 +388,10 @@ public class SolitaireScreen extends GameScreen {
         return (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0);
     }
 
-
-//    private void setUpCards(List<Playable> playingCards) {
-//        setupMainDeck(playingCards);
-//        int shiftX = 0;
-//        int shiftY = 0;
-//        for (int i=1;i<differentDecks.length;i++){
-//            for(int j=0;j<(playingCards.size()/differentDecks.length)-1;j++){
-//                differentDecks[i].addCard(playingCards.get(j));
-//               /* if(j==7){
-//                    playingCards.get(j).setFaceUp(true);
-//                    playingCards.get(j).getFrontImageView().setX(0+shiftX);
-//                    playingCards.get(j).getFrontImageView().setY(0+shiftY);
-//                    shiftY = shiftY+10;
-//                    gameScene.getChildren().add(playingCards.get(j).getFrontImageView());
-//                } else{
-//                    playingCards.get(j).setFaceUp(false);
-//                    playingCards.get(j).getFrontImageView().setX(0+shiftX);
-//                    playingCards.get(j).getFrontImageView().setY(0+shiftY);
-//                    shiftY = shiftY+10;
-//                    gameScene.getChildren().add(playingCards.get(j).getBackImageView());
-//                }*/
-//                playingCards.remove(playingCards.get(j));
-//            }
-//            shiftX = shiftX+30;
-//        }
-//
-//    }
-////
-
-
-
     public Scene getScene(UserInterface ui) {
         Image background = new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg")));
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
-
 
 }
