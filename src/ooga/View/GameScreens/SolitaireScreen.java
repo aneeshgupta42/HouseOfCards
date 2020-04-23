@@ -13,17 +13,23 @@ import ooga.Controller.GameTypes;
 import ooga.View.UserInterface;
 import ooga.View.utils.CardSet;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 
 public class SolitaireScreen extends GameScreen {
     private Group gameScene;
     private Map<String, Object> jsonData;
-    private double cardWidth = 60;
     private final List<String> playerNames;
+    private double cardWidth = 60;
     private double cardHeight = 90;
     private double sceneWidth = 1200;
     private double sceneHeight = 650;
+    private double drawPileX = 850;
+    private double drawPileY = 500;
+    private double cardPileX = 20;
+    private double cardPileY = 10;
     private String gameBackground = "viewAssets/green_felt.jpg";
     private String backImagePath = "cardDecks/poker/red_back.png";
     private String baseImagePath = "cardDecks/poker/blue_border.jpg";
@@ -57,6 +63,7 @@ public class SolitaireScreen extends GameScreen {
         gameControl = setUpController;
         playerNames = playNames;
         jsonData = gameControl.initializeGame(GameTypes.SOLITAIRE);
+        System.out.println(jsonData.toString());
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
@@ -122,10 +129,10 @@ public class SolitaireScreen extends GameScreen {
         for (Integer key : differentDecks.keySet()) {
             //playingCards is a list of IDs for that the pile "key"
             List<Integer> playingCards = differentDecks.get(key);
-            if (playingCards.size() > 30) {
-                setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 500, index);
+            if (key == 0) {
+                setUponScreen(playingCards, 0.2, 0.1, i, j, drawPileX, drawPileY, index);
             } else {
-                setUponScreen(playingCards, YOFFSET, 0, l, j, 20, 10, index);
+                setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY, index);
             }
             i = i + 100;
             l = l + 100;
@@ -245,14 +252,14 @@ public class SolitaireScreen extends GameScreen {
 //        }
         int targetPile = 1;
         for(Integer id: dealingIDs){
-            int cardID = (Integer) id;
+            int cardID = id;
             addCardToPile(targetPile, cardID);
             targetPile++;
         }
         initDiffDecks();
 //        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         for(Integer id: dealingIDs){
-            int cardID = (Integer) id;
+            int cardID = id;
             ImageView cardImage = idImage.get(cardID);
             setUpListeners(cardImage);
         }
