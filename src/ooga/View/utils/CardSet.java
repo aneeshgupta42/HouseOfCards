@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class CardSet {
     private List<ImageView> cardsList;
+    private final double completeSetX = 400;
+    private final double completeSetY = 400;
     private ImageView headCard;
 
     public CardSet(ImageView topCard, Map<Integer, ImageView> idImage, Map<Integer, List<Integer>> diffDecks) {
@@ -32,10 +34,12 @@ public class CardSet {
         }
     }
 
-    public void winProtocol(){
+    public void winProtocol(int completeSetNumber){
 //        System.out.println(cardsList);
+        double xLoc = completeSetX+ (completeSetNumber-1)*(cardsList.get(0).getFitWidth() + 10);
         for (ImageView card: cardsList){
-            card.setLayoutY(400-card.getLayoutBounds().getMinY()); card.setLayoutX(400-card.getLayoutBounds().getMinX());
+            card.setLayoutY(completeSetY-card.getLayoutBounds().getMinY());
+            card.setLayoutX(xLoc-card.getLayoutBounds().getMinX());
         }
 
     }

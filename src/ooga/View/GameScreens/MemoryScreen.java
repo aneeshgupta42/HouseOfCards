@@ -14,10 +14,8 @@ import ooga.View.UserInterface;
 import ooga.View.utils.CardSet;
 
 import java.util.*;
-import java.util.List;
 
-
-public class SolitaireScreen extends GameScreen {
+public class MemoryScreen extends GameScreen{
     private Group gameScene;
     private Map<String, Object> gameData;
     private final List<String> playerNames;
@@ -32,7 +30,7 @@ public class SolitaireScreen extends GameScreen {
     private static final String GAMEBACK = "gameBackground";
     private static final String BACKIMAGE = "backImagePath";
     private static final String BASEIMAGE = "baseImagePath";
-//    private double cardWidth = 60;
+    //    private double cardWidth = 60;
 //    private double cardHeight = 90;
 //    private double sceneWidth = 1200;
 //    private double sceneHeight = 650;
@@ -69,9 +67,12 @@ public class SolitaireScreen extends GameScreen {
      * This calls updateProtocol (which takes in indA, indB, ind.within.A)
      *
      * ***/
-    public SolitaireScreen(GameController setUpController, List<String> playNames) {
+    public MemoryScreen(GameController setUpController, List<String> playNames) {
         gameControl = setUpController;
         playerNames = playNames;
+        //TODO:
+        //TODO: Change this to memory, once backend has stuff for that
+        //TODO:
         gameData = gameControl.initializeGame(GameTypes.SOLITAIRE);
         initDiffDecks();
         initializeImageMap(differentDecks);
@@ -405,5 +406,4 @@ public class SolitaireScreen extends GameScreen {
         double sceneHeight = Double.parseDouble((String)gameData.get(SCENEHEIGHT));
         return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
     }
-
 }
