@@ -24,8 +24,8 @@ public class PartyCards {
         cardHolder = new VboxFactory(10, pileIndex,styling);
         cardText = new Label();
         imageView= new ImageView();
-        imageView.setFitWidth(60);
-        imageView.setFitHeight(90);
+        imageView.setFitWidth(80);
+        imageView.setFitHeight(110);
         cardText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 8));
         cardText.setWrapText(true);
         imageView.setImage(image);
