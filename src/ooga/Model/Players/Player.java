@@ -16,4 +16,8 @@ public class Player {
         this.name = name;
         playerHand = deck;
     }
+
+    public void setDeck (CardDeck deck){
+        this.playerHand = deck;
+    }
 }

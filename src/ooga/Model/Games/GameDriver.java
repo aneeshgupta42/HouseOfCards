@@ -20,7 +20,7 @@ public abstract class GameDriver implements Game {
     protected CardDeck allGameCards;
     protected Map<Integer, CardDeck> piles;
     protected GameController controller;
-      private List<Player> playerList;
+    protected List<Player> playerList;
 
 
     public GameDriver(GameController controller){

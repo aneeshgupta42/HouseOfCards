@@ -5,7 +5,9 @@ import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.HumanityCard;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HumanityDriver extends GameDriver{
     public HumanityDriver(GameController controller) {
@@ -22,11 +24,22 @@ public class HumanityDriver extends GameDriver{
     protected void makePiles() {
         piles.putIfAbsent(0, new CardDeck(DeckType.HUMANITY_QUES));
         piles.putIfAbsent(1, new CardDeck(DeckType.HUMANITY_ANS));
+        makePlayer("dd");makePlayer("33");makePlayer("ee");
         piles.get(0).shuffleDeck();
         piles.get(1).shuffleDeck();
-        piles.put(2, new CardDeck(DeckType.HUMANITY_ANS, piles.get(1).popCards(10)));
-        piles.put(3, new CardDeck(DeckType.HUMANITY_ANS, piles.get(1).popCards(10)));
-        piles.put(4, new CardDeck(DeckType.HUMANITY_ANS, piles.get(1).popCards(10)));
+        for (int index = 2; index < playerList.size()+2; index++){
+            piles.put(index, new CardDeck(DeckType.HUMANITY_ANS, piles.get(1).popCards(10)));
+        }
+    }
+
+    @Override
+    public Object sendCards() {
+        Map<Integer, List<Integer>> ret = new HashMap<>();
+        ret.put(0, piles.get(0).getIDList());
+        for (int i = 2; i < piles.size(); i++){
+            ret.put(i-1, piles.get(i).getIDList());
+        }
+        return ret;
     }
 
     @Override
