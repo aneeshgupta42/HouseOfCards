@@ -101,15 +101,12 @@ public class SolitaireScreen extends GameScreen {
         String imagePath;
         if(id<0){
             imagePath = (String) gameData.get(BASEIMAGE);
-//            cardImage =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
         }
         else if(faceUp){
             imagePath = gameControl.getImagePath(id);
-//            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(imagePath)));
         }
         else{
             imagePath = (String) gameData.get(BACKIMAGE);
-//            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(backImagePath)));
         }
         Image cardImage = imageGetter(imagePath);
         card.setImage(cardImage);
@@ -122,7 +119,7 @@ public class SolitaireScreen extends GameScreen {
                 ImageView cardImage;
                 if(id<0){
                     String baseImagePath = (String) gameData.get(BASEIMAGE);
-                    Image card =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
+                    Image card = imageGetter(baseImagePath);
                     cardImage = new ImageView (card);
                 }
                 else{
@@ -264,7 +261,6 @@ public class SolitaireScreen extends GameScreen {
     }
 
     private void dealCards(){
-        List<Integer> drawPileIDs = differentDecks.get(0);
         List<Integer> dealingIDs = (List<Integer>)gameControl.updateProtocol(null).get(0);
         //TODO: instead of this use back end's list of 10 cards
 //        for(int i = 0; i<10; i++){
@@ -322,17 +318,13 @@ public class SolitaireScreen extends GameScreen {
                     }
 //                    System.out.println(cardWorking);
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
-//                    initDiffDecks();
-//                    System.out.println(this.differentDecks.toString());
                     boolean success = (Integer) ret.get(0) == 1;
-//                    System.out.println(success);
                     if(success) {
+                        currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
                         if (targetID < 0) {
 //                            System.out.println("placing on empty pile");
-                            currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
                             currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
                         } else {
-                            currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
                             currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
                         }
                     }
@@ -340,13 +332,11 @@ public class SolitaireScreen extends GameScreen {
                     if(ret.size()==2){
                         int KingPositionInDest = (Integer) ret.get(1);
                         completeSet(stackTo, KingPositionInDest);
-//                        System.out.println("telling back to remove complete set");
                         List<Object> removeCompSet = new ArrayList<>();
                         removeCompSet.add(stackTo);
                         removeCompSet.add(KingPositionInDest);
                         gameControl.updateProtocol(removeCompSet);
                     }
-                    //System.out.println("Update protocol: " + (Integer) ret.get(0));
                     return ((Integer) ret.get(0) == 1);
                 }
             }
@@ -405,7 +395,7 @@ public class SolitaireScreen extends GameScreen {
     @Override
     public Scene getScene(UserInterface ui) {
         String gameBackground = (String) gameData.get(GAMEBACK);
-        Image background = new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(gameBackground)));
+        Image background = imageGetter(gameBackground);
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
