@@ -18,18 +18,23 @@ import java.util.*;
 
 public class SolitaireScreen extends GameScreen {
     private Group gameScene;
+    private Map<String, Object> jsonData;
+    private double cardWidth = 60;
+    private final List<String> playerNames;
+    private double cardHeight = 90;
+    private double sceneWidth = 1200;
+    private double sceneHeight = 650;
+    private String gameBackground = "viewAssets/green_felt.jpg";
     private String backImagePath = "cardDecks/poker/red_back.png";
     private String baseImagePath = "cardDecks/poker/blue_border.jpg";
     private static final double YOFFSET = 20;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
-    private double initial_pos;
+    private double initial_x;
     private double initial_y;
     private int numCompleteSets = 0;
     private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
-    //what we get
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
-    //we'll make this (pile: List of Images)
     private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
 
@@ -48,12 +53,11 @@ public class SolitaireScreen extends GameScreen {
      * This calls updateProtocol (which takes in indA, indB, ind.within.A)
      *
      * ***/
-    public SolitaireScreen(GameController setUpController) {
+    public SolitaireScreen(GameController setUpController, List<String> playNames) {
         gameControl = setUpController;
-        gameControl.initializeGame(GameTypes.SOLITAIRE);
+        playerNames = playNames;
+        jsonData = gameControl.initializeGame(GameTypes.SOLITAIRE);
         initDiffDecks();
-//        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
-//        System.out.println(differentDecks.toString());
         initializeImageMap(differentDecks);
         addCards();
     }
@@ -105,15 +109,7 @@ public class SolitaireScreen extends GameScreen {
             }
             imageMap.put(pile, imageList);
         }
-
-//        for (int i = -10; i<0; i++){
-//            Image card =  new Image(getClass().getClassLoader().getResourceAsStream(baseImagePath));
-//            ImageView cardImage = new ImageView (card);
-//            idImage.put(i, cardImage);
-//        }
     }
-
-
 
     private void addCards() {
         gameScene = new Group();
@@ -150,8 +146,8 @@ public class SolitaireScreen extends GameScreen {
             ImageView cardImage = idImage.get(cardID);
             // TODO: use this way to keep bottom pule always back face up?
             setCardFace(cardID, cardID == lastId && (getCardPile(differentDecks, cardImage) !=0));
-            cardImage.setFitWidth(60);
-            cardImage.setFitHeight(90);
+            cardImage.setFitWidth(cardWidth);
+            cardImage.setFitHeight(cardHeight);
             cardImage.setLayoutX(XPos + i - cardImage.getLayoutBounds().getMinX());
             cardImage.setLayoutY(YPos + j- cardImage.getLayoutBounds().getMinY());
             setUpListeners(cardImage);
@@ -175,17 +171,11 @@ public class SolitaireScreen extends GameScreen {
             cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    initial_pos = cardImage.getLayoutX();
+                    initial_x = cardImage.getLayoutX();
                     initial_y = cardImage.getLayoutY();
-//                System.out.println("Press coords for ID:" + getCardID(idImage, cardImage));
-//                System.out.println(initial_pos);
-//                System.out.println(initial_y);
-                    // record a delta distance for the drag and drop operation.
                     CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
                     dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
                     //TODO: I didn't know what this was, so commented out:
-//                    System.out.println(cardImage.getY());
-//                    System.out.println(cardImage.getX());
                     dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
                     cardImage.setCursor(Cursor.MOVE);
                 }
@@ -197,10 +187,10 @@ public class SolitaireScreen extends GameScreen {
                     if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
                         cardImage.setCursor(Cursor.HAND);
                         int pileFrom = getCardPile(differentDecks, cardImage);
-                        boolean success = checkIntersection(cardSet, differentDecks, initial_pos, initial_y);
+                        boolean success = checkUpdate(cardSet, differentDecks);
                         initDiffDecks();
                         if (!success) {
-                            cardSet.setLayoutX(initial_pos - cardImage.getLayoutBounds().getMinX());
+                            cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
                             cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
                         } else {
 //                            differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
@@ -208,7 +198,7 @@ public class SolitaireScreen extends GameScreen {
                             setCardFace(sourcePile.get(sourcePile.size() - 1), true);
                         }
                     } else {
-                        cardSet.setLayoutX(initial_pos - cardImage.getLayoutBounds().getMinX());
+                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
                         cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
                     }
                 }
@@ -218,12 +208,11 @@ public class SolitaireScreen extends GameScreen {
                 public void handle(MouseEvent mouseEvent) {
                     CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
                     if (checkBounds(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
-                        //change this to cardSet
                         cardSet.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
                         cardSet.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
                         cardSet.toFront();
                     } else {
-                        cardSet.setLayoutX(initial_pos - cardImage.getLayoutBounds().getMinX());
+                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
                         cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
                         mouseEvent.setDragDetect(false);
                     }
@@ -279,7 +268,7 @@ public class SolitaireScreen extends GameScreen {
         cardImage.setLayoutY(lastCard.getLayoutY()+YOFFSET- cardImage.getLayoutBounds().getMinY());
     }
 
-    private boolean checkIntersection(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks, double xpos, double ypos) {
+    private boolean checkUpdate(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks) {
         //Diff pile numbers
 //        System.out.println(differentDecks.toString());
         ImageView currentCard = currentCardSet.getHeadCard();
@@ -336,6 +325,7 @@ public class SolitaireScreen extends GameScreen {
         }
         return false;
     }
+
     /***
      * Frontend moves. Calls update protocol.
      * UpdateProt. validates moves, places new cards into destination pile.
@@ -384,12 +374,12 @@ public class SolitaireScreen extends GameScreen {
         return -1;
     }
 
-    private boolean checkBounds(double v, double v1) {
-        return (v <= 1200 && v1 <= 650 && v >= 0 && v1 >= 0);
+    private boolean checkBounds(double x, double y) {
+        return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
     }
 
     public Scene getScene(UserInterface ui) {
-        Image background = new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg")));
+        Image background = new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(gameBackground)));
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
