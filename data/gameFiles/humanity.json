@@ -1,20 +1,20 @@
 {
   "view": {
     "backImagePath_humanity" : "cardDecks/poker/red_back.png",
-    "positions": {
-      "Xzero_index": 850,
-      "Yzero_index": 450,
-      "Xindex": 20,
-      "Yindex": 0,
-      "Distance": 100,
-      "ButtonX": 10,
-      "ButtonY": 10
-    },
-    "dimensions": {
-      "width": 60,
-      "height": 90
-    },
-    "button_label": "Player",
+      "Xzero_index": "850",
+      "Yzero_index": "450",
+      "Xindex": "20",
+      "Yindex": "0",
+      "Distance": "100",
+      "ButtonX": "10",
+      "ButtonY": "10",
+    "verticalZ": "0.2",
+    "horizZ": "0.1",
+    "verticalN": "0",
+    "horizN": "70",
+    "width": "60",
+      "height": "90",
+    "button_label": "Player ",
     "background_string": "viewAssets/green_felt.jpg",
     "listeners_method_CAH": "setupListeners"
   },

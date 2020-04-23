@@ -14,7 +14,9 @@ import ooga.View.ButtonFactory;
 import ooga.View.PartyCards;
 import ooga.View.UserInterface;
 import ooga.View.VboxFactory;
+import org.json.simple.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,21 +25,31 @@ import java.util.Map;
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
 public class CAHScreen extends GameScreen {
-    private List<ImageView> cards;
-    private ImageView dummyCard;
     private Group gameScene;
     private Delta dragDelta = new Delta();
-    private String backImagePath = "cardDecks/poker/red_back.png";
     private GameController gameControl;
     private Map<Integer, List<PartyCards>> indexMapped = new HashMap<>();
-    //what we get
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
-    //we'll make this (pile: List of Images)
-    private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
     private Map<String, Object> jsonData = new HashMap<>();
     private List<VboxFactory> tappedCards = new ArrayList<>();
-    private Map<Integer, ImageView> idImage = new HashMap<>();
+    private static final String BACK_IMAGE_PATH = "backImagePath_humanity";
     private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
+    private static final String VERTICAL_Z_KEY ="verticalZ";
+    private static final String HORIZ_Z_KEY="horizZ";
+    private static final String X_ZERO_KEY = "Xzero_index";
+    private static final String Y_ZERO_KEY="Yzero_index";
+    private static final String VERTICAL_N_KEY= "verticalN";
+    private static final String HORIZ_N_KEY="horizN";
+    private static final String X_INDEX_KEY= "Xindex";
+    private static final String Y_INDEX_KEY="Yindex";
+    private static final String  DISTANCE_KEY="Distance";
+    private static final String WIDTH_KEY="width";
+    private static final String HEIGHT_KEY="height";
+    private static final String BUTTON_X_KEY= "ButtonX";
+    private static final String BUTTON_Y_KEY="ButtonY";
+    private static final String BUTTON_TEXT_KEY="button_label";
+    private static final String BACKGROUND_KEY="background_string";
+    private static final String EMPTY =" ";
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -65,7 +77,7 @@ public class CAHScreen extends GameScreen {
         for(Integer pile: deckMap.keySet()){
             List<PartyCards> cardList= new ArrayList<>();
             //read in from the JSON
-            Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(backImagePath));
+            Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACK_IMAGE_PATH)));
             for (Integer promptInt: deckMap.get(pile)){
                 PartyCards makingCard = new PartyCards(pile, cardImage);
                  String prompt = gameControl.getValue(promptInt);
@@ -96,13 +108,13 @@ public class CAHScreen extends GameScreen {
         for (Integer key : indexMapped.keySet()) {
             List<PartyCards> playingCards = indexMapped.get(key);
             if (key==0) {
-                setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 450);
+                setUponScreen(playingCards, Double.parseDouble((String)jsonData.get(VERTICAL_Z_KEY)), Double.parseDouble((String)jsonData.get(HORIZ_Z_KEY)), i, j, Double.parseDouble((String)jsonData.get(X_ZERO_KEY)), Double.parseDouble((String)jsonData.get(Y_ZERO_KEY)));
             } else if(key==2 || key==3 || key==4){
-                setUponScreen(playingCards, 0, 70, l, j, 20, 0);
+                setUponScreen(playingCards, Double.parseDouble((String)jsonData.get(VERTICAL_N_KEY)), Double.parseDouble((String)jsonData.get(HORIZ_N_KEY)), l, j, Double.parseDouble((String)jsonData.get(X_INDEX_KEY)), Double.parseDouble((String)jsonData.get(Y_INDEX_KEY)));
             }
             i = 0;
             l = 0;
-            j = j+100;
+            j = j+Double.parseDouble((String)jsonData.get(DISTANCE_KEY));
         }
     }
 
@@ -115,8 +127,8 @@ public class CAHScreen extends GameScreen {
     private void setUponScreen(List<PartyCards> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
         for (PartyCards card : playingCards) {
             VboxFactory cardSet = card.getScene();
-            cardSet.setPrefWidth(60);
-            cardSet.setPrefHeight(90);
+             cardSet.setPrefWidth(Double.parseDouble((String)jsonData.get(WIDTH_KEY)));
+            cardSet.setPrefHeight(Double.parseDouble((String)jsonData.get(HEIGHT_KEY)));
             cardSet.setLayoutX(XPos + i -cardSet.getLayoutBounds().getMinX());
             cardSet.setLayoutY(YPos + j- cardSet.getLayoutBounds().getMinY());
             setUpListeners(cardSet);
@@ -217,21 +229,21 @@ public class CAHScreen extends GameScreen {
 
     private void chooseWinner(){
         // TODO : backend stuff
-       setupButtons(10, 10);
+       setupButtons(Double.parseDouble((String)jsonData.get(BUTTON_X_KEY)), Double.parseDouble((String)jsonData.get(BUTTON_Y_KEY)));
 
 
     }
     private void setupButtons( double XPos, double YPos){
-        int distanceBetweenButtons=200;
+        double distanceBetweenButtons=2* Double.parseDouble((String)jsonData.get(DISTANCE_KEY));
         int initialDistance=0;
         for(int i=1;i<=differentDecks.keySet().size()-1;i++){
-            ButtonFactory gameButton = new ButtonFactory("Player "+i, XPos+initialDistance, YPos );
+            ButtonFactory gameButton = new ButtonFactory((String)jsonData.get(BUTTON_TEXT_KEY) +i, XPos+initialDistance, YPos );
            gameButton.setOnAction(e->{
                List<Object> cardsChosen = new ArrayList<>();
                for(VboxFactory cards:tappedCards){
                    cardsChosen.add(cards.getIndex());
                }
-               String[] buttonName = gameButton.getText().split(" ");
+               String[] buttonName = gameButton.getText().split(EMPTY);
                Integer playerIndex = Integer.parseInt(buttonName[1]);
                cardsChosen.add(playerIndex);
                 gameControl.updateProtocol(cardsChosen);
@@ -258,7 +270,7 @@ public class CAHScreen extends GameScreen {
 
 
     public Scene getScene(UserInterface ui) {
-        Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
+        Image background = new Image(this.getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACKGROUND_KEY)));
         ImagePattern backgroundPattern = new ImagePattern(background);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
