@@ -1,0 +1,28 @@
+{
+  "driverClass": "test",
+  "gameScreen": {
+    "className": "ooga.View.GameScreens.MemoryScreen"
+  },
+  "view": {
+    "gameName": "Memory",
+    "cardWidth" : "60",
+    "cardHeight" : "90",
+    "sceneWidth" : "1200",
+    "sceneHeight" : "650",
+    "drawPileX" : "850",
+    "drawPileY" : " 500",
+    "cardPileX" : "20",
+    "cardPileY" : "10",
+    "gameBackground" : "viewAssets/yellow_felt.jpg",
+    "backImagePath" : "cardDecks/poker/red_back.png",
+    "baseImagePath" : "cardDecks/poker/blue_border.jpg"
+  },
+
+
+  "model": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": 10021
+  }
+}
