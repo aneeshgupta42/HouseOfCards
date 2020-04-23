@@ -1,4 +1,6 @@
-{
+{"gameScreen": {
+  "className": "ooga.View.GameScreens.GOPScreen"
+},
   "view": {
     "backImagePath_GOP": "cardDecks/poker/red_back.png",
     "positions": {

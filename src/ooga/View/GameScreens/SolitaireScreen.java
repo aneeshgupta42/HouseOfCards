@@ -13,26 +13,36 @@ import ooga.Controller.GameTypes;
 import ooga.View.UserInterface;
 import ooga.View.utils.CardSet;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 
 public class SolitaireScreen extends GameScreen {
     private Group gameScene;
-    private Map<String, Object> jsonData;
+    private Map<String, Object> gameData;
     private final List<String> playerNames;
-    private double cardWidth = 60;
-    private double cardHeight = 90;
-    private double sceneWidth = 1200;
-    private double sceneHeight = 650;
-    private double drawPileX = 850;
-    private double drawPileY = 500;
-    private double cardPileX = 20;
-    private double cardPileY = 10;
-    private String gameBackground = "viewAssets/green_felt.jpg";
-    private String backImagePath = "cardDecks/poker/red_back.png";
-    private String baseImagePath = "cardDecks/poker/blue_border.jpg";
+    private static final String CARDWIDTH = "cardWidth";
+    private static final String CARDHEIGHT = "cardHeight";
+    private static final String SCENEWIDTH = "sceneWidth";
+    private static final String SCENEHEIGHT = "sceneHeight";
+    private static final String DRAWPILEX = "drawPileX";
+    private static final String DRAWPILEY = "drawPileY";
+    private static final String CARDPILEX = "cardPileX";
+    private static final String CARDPILY = "cardPileY";
+    private static final String GAMEBACK = "gameBackground";
+    private static final String BACKIMAGE = "backImagePath";
+    private static final String BASEIMAGE = "baseImagePath";
+//    private double cardWidth = 60;
+//    private double cardHeight = 90;
+//    private double sceneWidth = 1200;
+//    private double sceneHeight = 650;
+//    private double drawPileX = 850;
+//    private double drawPileY = 500;
+//    private double cardPileX = 20;
+//    private double cardPileY = 10;
+//    private String gameBackground = "viewAssets/green_felt.jpg";
+//    private String backImagePath = "cardDecks/poker/red_back.png";
+//    private String baseImagePath = "cardDecks/poker/blue_border.jpg";
     private static final double YOFFSET = 20;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
@@ -62,8 +72,7 @@ public class SolitaireScreen extends GameScreen {
     public SolitaireScreen(GameController setUpController, List<String> playNames) {
         gameControl = setUpController;
         playerNames = playNames;
-        jsonData = gameControl.initializeGame(GameTypes.SOLITAIRE);
-        System.out.println(jsonData.toString());
+        gameData = gameControl.initializeGame(GameTypes.SOLITAIRE);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
@@ -77,25 +86,32 @@ public class SolitaireScreen extends GameScreen {
         }
     }
 
+    private Image imageGetter(String path){
+        return new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+    }
+
     private ImageView getIDImage(int id) {
         String imagePath = gameControl.getImagePath(id);
-        Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
+        Image cardImage = imageGetter(imagePath);
         return new ImageView(cardImage);
     }
 
     private void setCardFace(int id, boolean faceUp){
         ImageView card = idImage.get(id);
-        Image cardImage;
+        String imagePath;
         if(id<0){
-            cardImage =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
+            imagePath = (String) gameData.get(BASEIMAGE);
+//            cardImage =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
         }
         else if(faceUp){
-            String imagePath = gameControl.getImagePath(id);
-            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(imagePath)));
+            imagePath = gameControl.getImagePath(id);
+//            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(imagePath)));
         }
         else{
-            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(backImagePath)));
+            imagePath = (String) gameData.get(BACKIMAGE);
+//            cardImage = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(backImagePath)));
         }
+        Image cardImage = imageGetter(imagePath);
         card.setImage(cardImage);
     }
 
@@ -105,6 +121,7 @@ public class SolitaireScreen extends GameScreen {
             for (Integer id : deckMap.get(pile)) {
                 ImageView cardImage;
                 if(id<0){
+                    String baseImagePath = (String) gameData.get(BASEIMAGE);
                     Image card =  new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(baseImagePath)));
                     cardImage = new ImageView (card);
                 }
@@ -130,8 +147,12 @@ public class SolitaireScreen extends GameScreen {
             //playingCards is a list of IDs for that the pile "key"
             List<Integer> playingCards = differentDecks.get(key);
             if (key == 0) {
+                double drawPileX = Double.parseDouble((String)gameData.get(DRAWPILEX));
+                double drawPileY = Double.parseDouble((String)gameData.get(DRAWPILEY));
                 setUponScreen(playingCards, 0.2, 0.1, i, j, drawPileX, drawPileY, index);
             } else {
+                double cardPileX = Double.parseDouble((String)gameData.get(CARDPILEX));
+                double cardPileY = Double.parseDouble((String)gameData.get(CARDPILY));
                 setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY, index);
             }
             i = i + 100;
@@ -153,8 +174,8 @@ public class SolitaireScreen extends GameScreen {
             ImageView cardImage = idImage.get(cardID);
             // TODO: use this way to keep bottom pule always back face up?
             setCardFace(cardID, cardID == lastId && (getCardPile(differentDecks, cardImage) !=0));
-            cardImage.setFitWidth(cardWidth);
-            cardImage.setFitHeight(cardHeight);
+            cardImage.setFitWidth(Double.parseDouble((String)gameData.get(CARDWIDTH)));
+            cardImage.setFitHeight(Double.parseDouble((String)gameData.get(CARDHEIGHT)));
             cardImage.setLayoutX(XPos + i - cardImage.getLayoutBounds().getMinX());
             cardImage.setLayoutY(YPos + j- cardImage.getLayoutBounds().getMinY());
             setUpListeners(cardImage);
@@ -381,14 +402,18 @@ public class SolitaireScreen extends GameScreen {
         return -1;
     }
 
-    private boolean checkBounds(double x, double y) {
-        return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
-    }
-
+    @Override
     public Scene getScene(UserInterface ui) {
+        String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(gameBackground)));
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
+    }
+
+    private boolean checkBounds(double x, double y) {
+        double sceneWidth = Double.parseDouble((String)gameData.get(SCENEWIDTH));
+        double sceneHeight = Double.parseDouble((String)gameData.get(SCENEHEIGHT));
+        return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
     }
 
 }

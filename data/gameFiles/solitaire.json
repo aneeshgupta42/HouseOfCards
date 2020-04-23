@@ -1,10 +1,11 @@
 {
   "driverClass": "test",
-
+  "gameScreen": {
+    "className": "ooga.View.GameScreens.SolitaireScreen"
+  },
   "view": {
     "gameName": "Solitaire",
-    "gameScreen": "SolitaireScreen",
-    "cardWidth" : 60,
+    "cardWidth" : "60",
     "cardHeight" : "90",
     "sceneWidth" : "1200",
     "sceneHeight" : "650",
