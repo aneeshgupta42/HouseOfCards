@@ -10,6 +10,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
@@ -53,7 +54,9 @@ public class CAHScreen extends GameScreen {
     private static final String BACKGROUND_KEY="background_string";
     private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
-    private static int round =0;
+    private int round =0;
+    private HBox buttonHolder = new HBox(50);
+    private int roundNumber =1;
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -214,7 +217,8 @@ public class CAHScreen extends GameScreen {
                         card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
                         tappedCards.add(card);
                         if(card.getIndex()==differentDecks.keySet().size()-1){
-                            chooseWinner();
+                            setupButtons(Double.parseDouble((String)jsonData.get(BUTTON_X_KEY)), Double.parseDouble((String)jsonData.get(BUTTON_Y_KEY)));
+
                         }
                     }
                     if(card.getIndex()!=0){
@@ -257,38 +261,53 @@ public class CAHScreen extends GameScreen {
     private void chooseWinner(){
         // TODO : backend stuff
         //setUpTappedCards();
-       setupButtons(Double.parseDouble((String)jsonData.get(BUTTON_X_KEY)), Double.parseDouble((String)jsonData.get(BUTTON_Y_KEY)));
 
 
     }
     private void setupButtons( double XPos, double YPos){
-        double distanceBetweenButtons=Double.parseDouble((String)jsonData.get(BUTTON_DISTANCE));
-        int initialDistance=0;
-        for(int i=1;i<=differentDecks.keySet().size()-1;i++){
-            ButtonFactory gameButton = new ButtonFactory((String)jsonData.get(BUTTON_TEXT_KEY) +i, XPos+initialDistance, YPos );
-           gameButton.setOnAction(e->{
-
-               changeCards(differentDecks.keySet().size()-1);
-               List<Object> cardsChosen = new ArrayList<>();
-               for(VboxFactory cards:tappedCards){
-                   cardsChosen.add(cards.getIndex());
-               }
-               String[] buttonName = gameButton.getText().split(EMPTY);
-               Integer playerIndex = Integer.parseInt(buttonName[1]);
-               cardsChosen.add(playerIndex);
-                gameControl.updateProtocol(cardsChosen);
-                gameScene.getChildren().remove(gameButton);
-                for(VboxFactory card:tappedCards){
-                    if(gameScene.getChildren().remove(card)== false){
-                        endGame();
+            double distanceBetweenButtons = Double.parseDouble((String) jsonData.get(BUTTON_DISTANCE));
+            int initialDistance = 0;
+            for (int i = 1; i <= differentDecks.keySet().size() - 1; i++) {
+                ButtonFactory gameButton = new ButtonFactory((String) jsonData.get(BUTTON_TEXT_KEY) + i, XPos + initialDistance, YPos);
+                gameButton.setOnAction(e -> {
+                    changeCards(differentDecks.keySet().size() - 1);
+                    List<Object> cardsChosen = new ArrayList<>();
+                    for (VboxFactory cards : tappedCards) {
+                        cardsChosen.add(cards.getIndex());
                     }
-                    gameScene.getChildren().remove(card);
+                    String[] buttonName = gameButton.getText().split(EMPTY);
+                    Integer playerIndex = Integer.parseInt(buttonName[1]);
+                    cardsChosen.add(playerIndex);
+                    gameControl.updateProtocol(cardsChosen);
+                    gameScene.getChildren().remove(gameButton);
+                    for (VboxFactory card : tappedCards) {
+                        if (gameScene.getChildren().remove(card) == false) {
+                            endGame();
+                        }
+                        gameScene.getChildren().remove(card);
+                    }
+                    gameScene.getChildren().remove(buttonHolder);
+                });
+                if (buttonHolder.getChildren().size() <= differentDecks.keySet().size() - 1) {
+                    addToHbox(gameButton);
                 }
-            });
-            gameScene.getChildren().add(gameButton);
-            initialDistance+=distanceBetweenButtons;
 
+
+            }
+
+
+    }
+
+    private void addToHbox(ButtonFactory gameButton) {
+        if(buttonHolder.getChildren().size()== differentDecks.keySet().size()-1){
+            buttonHolder.setLayoutX(100);
+            buttonHolder.setLayoutY(500);
+            if(!gameScene.getChildren().contains(buttonHolder)) {
+                gameScene.getChildren().add(buttonHolder);
+            }
+            return;
         }
+        buttonHolder.getChildren().add(gameButton);
 
 
     }
