@@ -123,9 +123,11 @@ public class CAHScreen extends GameScreen {
 
     //TODO: initializeGame before requestCards
     //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public CAHScreen(GameController setUpController) {
+    public CAHScreen(GameController setUpController, List<String> playerNames) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
+        System.out.println(playerNames);
+       // gameControl.makePlayer(playerNames);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
