@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -11,7 +12,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.View.ButtonFactory;
@@ -56,7 +61,7 @@ public class CAHScreen extends GameScreen {
     private static final String EMPTY =" ";
     private int round =0;
     private HBox buttonHolder = new HBox(50);
-    private int roundNumber =1;
+    private Label playerLabel = new Label(" ");
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -105,6 +110,8 @@ public class CAHScreen extends GameScreen {
         for(PartyCards card: cardsToPresent){
             if(!tappedCards.contains(card.getScene())) {
                 card.getScene().setVisible(!card.getScene().isVisible());
+                playerLabel.setVisible(card.getScene().isVisible());
+                playerLabel.setText((String) jsonData.get(BUTTON_TEXT_KEY) + round);
             }
         }
     }
@@ -126,6 +133,8 @@ public class CAHScreen extends GameScreen {
 
     private void addCards(GameController setUpController) {
         gameScene = new Group();
+        setStylingForLabel();
+        gameScene.getChildren().add(playerLabel);
         setUpButtons(gameScene);
         //TODO: change this to receive a map instead
         double i = 0;
@@ -142,6 +151,13 @@ public class CAHScreen extends GameScreen {
             l = 0;
             j = j+Double.parseDouble((String)jsonData.get(DISTANCE_KEY));
         }
+    }
+
+    private void setStylingForLabel() {
+        playerLabel.setLayoutX(500);
+        playerLabel.setLayoutY(150);
+        playerLabel.setTextFill(Color.WHITE);
+        playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
     }
 
 
