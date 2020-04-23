@@ -80,6 +80,7 @@ public class GOPScreen extends GameScreen {
     public GOPScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData= gameControl.initializeGame(GameTypes.HUMANITY);
+
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
