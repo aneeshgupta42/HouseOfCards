@@ -6,6 +6,9 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
@@ -14,9 +17,8 @@ import ooga.View.ButtonFactory;
 import ooga.View.PartyCards;
 import ooga.View.UserInterface;
 import ooga.View.VboxFactory;
-import org.json.simple.JSONObject;
 
-import java.io.InputStream;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +51,9 @@ public class CAHScreen extends GameScreen {
     private static final String BUTTON_Y_KEY="ButtonY";
     private static final String BUTTON_TEXT_KEY="button_label";
     private static final String BACKGROUND_KEY="background_string";
+    private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
+    private static int round =0;
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -84,7 +88,26 @@ public class CAHScreen extends GameScreen {
                  makingCard.setText(prompt);
                 cardList.add(makingCard);
             }
+
             indexMapped.put(pile, cardList);
+
+
+        }
+    }
+
+    private void changeCards(int roundNumber){
+        round = roundNumber;
+        checkRound();
+        List<PartyCards> cardsToPresent = indexMapped.get(round);
+        for(PartyCards card: cardsToPresent){
+            if(!tappedCards.contains(card.getScene())) {
+                card.getScene().setVisible(!card.getScene().isVisible());
+            }
+        }
+    }
+    private void checkRound(){
+        if(round>differentDecks.keySet().size()-1){
+            round=1;
         }
     }
 
@@ -109,7 +132,7 @@ public class CAHScreen extends GameScreen {
             List<PartyCards> playingCards = indexMapped.get(key);
             if (key==0) {
                 setUponScreen(playingCards, Double.parseDouble((String)jsonData.get(VERTICAL_Z_KEY)), Double.parseDouble((String)jsonData.get(HORIZ_Z_KEY)), i, j, Double.parseDouble((String)jsonData.get(X_ZERO_KEY)), Double.parseDouble((String)jsonData.get(Y_ZERO_KEY)));
-            } else if(key==2 || key==3 || key==4){
+            } else {
                 setUponScreen(playingCards, Double.parseDouble((String)jsonData.get(VERTICAL_N_KEY)), Double.parseDouble((String)jsonData.get(HORIZ_N_KEY)), l, j, Double.parseDouble((String)jsonData.get(X_INDEX_KEY)), Double.parseDouble((String)jsonData.get(Y_INDEX_KEY)));
             }
             i = 0;
@@ -131,13 +154,25 @@ public class CAHScreen extends GameScreen {
             cardSet.setPrefHeight(Double.parseDouble((String)jsonData.get(HEIGHT_KEY)));
             cardSet.setLayoutX(XPos + i -cardSet.getLayoutBounds().getMinX());
             cardSet.setLayoutY(YPos + j- cardSet.getLayoutBounds().getMinY());
+            if(cardSet.getIndex()!=0) {
+                cardSet.setVisible(false);
+            }
             setUpListeners(cardSet);
             j = j + v;
             i = i + v1;
 
             gameScene.getChildren().add(cardSet);
-        }
+            gameScene.setOnKeyPressed(e-> handleKeyPressed(e.getCode()));
 
+    }}
+
+    private void handleKeyPressed(KeyCode code){
+        if(code==KeyCode.E){
+            changeCards(++round);
+        } else if(code==KeyCode.N){
+            changeCards(round);
+            changeCards(++round);
+        }
     }
 
     private void setUpListeners(VboxFactory card) {
@@ -155,27 +190,13 @@ public class CAHScreen extends GameScreen {
 
                 }
                 card.setCursor(Cursor.HAND);
-//                if(card.getIndex()!=0) {
-//                    card.setCursor(Cursor.MOVE);
-//                    tappedCards.add(card);
-//                    if(card.getIndex()==differentDecks.keySet().size()-1){
-//                        chooseWinner();
-//                    }
-//                }
             }
         });
         card.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-//                if(card.getIndex()!=0){
-//                    List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
-//                    for (PartyCards card : listOfCards) {
-//                        if(!tappedCards.contains(card.getScene()))
-//                        card.getScene().setFace();
-//                        changeVbox(card);
-//                    }
-//                }
         }});
+
         card.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -210,35 +231,44 @@ public class CAHScreen extends GameScreen {
         card.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-//                if(card.getIndex()!=0) {
-//                    List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
-//                    for (PartyCards card : listOfCards) {
-//                        card.changeFace();
-//                        changeVbox(card);
-//                    }
-//
-//
-//                }
-//                card.setCursor(Cursor.HAND);
             }
         });
     }
     private void changeVbox(PartyCards card){
         card.clearCard();
     }
+//    private void setUpTappedCards(){
+//        for(VboxFactory card: tappedCards){
+//            card.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//                @Override
+//                public void handle(MouseEvent event) {
+//                    changeCards(differentDecks.keySet().size()-1);
+//                    List<Object> cardsChosen = new ArrayList<>();
+//                    for(VboxFactory cards:tappedCards){
+//                        cardsChosen.add(cards.getIndex());
+//                        gameScene.getChildren().remove(cards);
+//                    }
+//                    gameControl.updateProtocol(cardsChosen);
+//                }
+//            });
+//        }
+//    }
 
     private void chooseWinner(){
         // TODO : backend stuff
+        //setUpTappedCards();
        setupButtons(Double.parseDouble((String)jsonData.get(BUTTON_X_KEY)), Double.parseDouble((String)jsonData.get(BUTTON_Y_KEY)));
 
 
     }
     private void setupButtons( double XPos, double YPos){
-        double distanceBetweenButtons=2* Double.parseDouble((String)jsonData.get(DISTANCE_KEY));
+        double distanceBetweenButtons=Double.parseDouble((String)jsonData.get(BUTTON_DISTANCE));
         int initialDistance=0;
         for(int i=1;i<=differentDecks.keySet().size()-1;i++){
             ButtonFactory gameButton = new ButtonFactory((String)jsonData.get(BUTTON_TEXT_KEY) +i, XPos+initialDistance, YPos );
            gameButton.setOnAction(e->{
+
+               changeCards(differentDecks.keySet().size()-1);
                List<Object> cardsChosen = new ArrayList<>();
                for(VboxFactory cards:tappedCards){
                    cardsChosen.add(cards.getIndex());
