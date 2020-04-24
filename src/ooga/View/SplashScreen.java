@@ -2,6 +2,7 @@ package ooga.View;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,6 +13,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import ooga.Main;
 
 import java.util.List;
 
@@ -61,6 +64,7 @@ public class SplashScreen {
         rules.setLayoutX(width/2-100); rules.setLayoutY(300);
         rules.setFont(new Font("Garamond", 15));
         startRoot.getChildren().addAll(rules);
+
     }
     private void setupButtons(UserInterface mainView, Group sceneGroup, double XPos, double YPos){
         int distanceBetweenButtons=40;
@@ -72,8 +76,19 @@ public class SplashScreen {
             initialDistance+=distanceBetweenButtons;
 
         }
+        ButtonFactory newWorkSpace = new ButtonFactory("New Workspace", (double)1000, 10);
+        sceneGroup.getChildren().add(newWorkSpace);
+        newWorkSpace.setOnAction(e-> newWindowButton());
 
-
+    }
+    private void newWindowButton(){
+        Stage newScreen = new Stage();
+       UserInterface newSimulation = new UserInterface();
+        try {
+            newSimulation.start(newScreen);
+        } catch (Exception ex) {
+//            showMessage(Alert.AlertType.ERROR, ex.getMessage());
+        }
     }
 
     public Scene getStartScene() {

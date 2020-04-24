@@ -19,7 +19,7 @@
     "width": "80",
     "height": "110",
     "button_label": "Player ",
-    "background_string": "viewAssets/green_felt.jpg",
+    "background_string": "viewAssets/cards.jpg",
     "listeners_method_CAH": "setupListeners"
   },
   "model": {
