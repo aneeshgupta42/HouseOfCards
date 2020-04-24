@@ -33,7 +33,7 @@ public class GameController {
         this.playerNames = playerNames;
         try {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
-            gameScreen =(GameScreen) constructor.newInstance((GameController) this, this.playerNames);
+            gameScreen =(GameScreen) constructor.newInstance((GameController) this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

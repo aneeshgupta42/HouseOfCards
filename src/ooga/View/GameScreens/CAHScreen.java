@@ -60,21 +60,6 @@ public class CAHScreen extends GameScreen {
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label(" ");
 
-    /***
-     * Get: Map of Integer (pile number) : List<IDs> in that pile
-     * Want: Map of Integer (pile number): List<ImageViews>
-     * Want: Map of ID -> ImageView
-     *
-     * Change:
-     * How we put on cards, and how we check for intersection.
-     *
-     * Basic pipeline:
-     *
-     * Front (attempts to) moves card from Pile A to Pile B.
-     * This calls updateProtocol (which takes in indA, indB, ind.within.A)
-     *
-     * ***/
-
     private ImageView getIDImage(int id){
         String imagePath = gameControl.getImagePath(id);
         Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
@@ -120,7 +105,7 @@ public class CAHScreen extends GameScreen {
 
     //TODO: initializeGame before requestCards
     //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public CAHScreen(GameController setUpController, List<String> playerNames) {
+    public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
        // System.out.println(playerNames);

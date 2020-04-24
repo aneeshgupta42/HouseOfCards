@@ -18,7 +18,7 @@ import java.util.*;
 public class MemoryScreen extends GameScreen{
     private Group gameScene;
     private Map<String, Object> gameData;
-    private final List<String> playerNames;
+    private List<String> playerNames;
     private static final String CARDWIDTH = "cardWidth";
     private static final String CARDHEIGHT = "cardHeight";
     private static final String SCENEWIDTH = "sceneWidth";
@@ -30,17 +30,6 @@ public class MemoryScreen extends GameScreen{
     private static final String GAMEBACK = "gameBackground";
     private static final String BACKIMAGE = "backImagePath";
     private static final String BASEIMAGE = "baseImagePath";
-    //    private double cardWidth = 60;
-//    private double cardHeight = 90;
-//    private double sceneWidth = 1200;
-//    private double sceneHeight = 650;
-//    private double drawPileX = 850;
-//    private double drawPileY = 500;
-//    private double cardPileX = 20;
-//    private double cardPileY = 10;
-//    private String gameBackground = "viewAssets/green_felt.jpg";
-//    private String backImagePath = "cardDecks/poker/red_back.png";
-//    private String baseImagePath = "cardDecks/poker/blue_border.jpg";
     private static final double YOFFSET = 20;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
@@ -67,9 +56,8 @@ public class MemoryScreen extends GameScreen{
      * This calls updateProtocol (which takes in indA, indB, ind.within.A)
      *
      * ***/
-    public MemoryScreen(GameController setUpController, List<String> playNames) {
+    public MemoryScreen(GameController setUpController) {
         gameControl = setUpController;
-        playerNames = playNames;
         //TODO:
         //TODO: Change this to memory, once backend has stuff for that
         //TODO:
@@ -81,10 +69,6 @@ public class MemoryScreen extends GameScreen{
 
     private void initDiffDecks(){
         differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
-        for(int i = -10; i<0; i++){
-            List<Integer> pile = differentDecks.get(i*-1);
-            pile.add(0, i);
-        }
     }
 
     private Image imageGetter(String path){
@@ -380,16 +364,6 @@ public class MemoryScreen extends GameScreen{
             }
         }
         System.out.println("pile not found");
-        return -1;
-    }
-
-    private Integer getCardID(Map<Integer, ImageView>map, ImageView card){
-        for (Integer check : map.keySet()) {
-            if (map.get(check).equals(card)) {
-                return check;
-            }
-        }
-        System.out.println("id not found");
         return -1;
     }
 
