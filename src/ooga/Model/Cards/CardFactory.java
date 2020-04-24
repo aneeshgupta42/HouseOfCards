@@ -8,10 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardFactory {
@@ -25,6 +22,9 @@ public class CardFactory {
          case HUMANITY_QUES:
             initializeHumanity(deck, deckType);
             break;
+         case GOP:
+            initializeHumanity(deck, deckType);
+
       }
    }
 
@@ -99,10 +99,8 @@ public class CardFactory {
       switch (deckType){
          case HUMANITY_ANS:
          case HUMANITY_QUES:
+         case GOP:
             card = new HumanityCard(attributes[0], id);
-            break;
-         case UNO:
-            card = null;
             break;
          default: //for poker cards
             card = new PokerCard(imagePath, Integer.parseInt(attributes[0]), attributes[1], id);
@@ -122,6 +120,12 @@ public class CardFactory {
          e.printStackTrace();
       }
       return null;
+   }
+
+   public static void main(String[] args) {
+      CardDeck deck = new CardDeck(DeckType.GOP, new ArrayList<>());
+      initializeDeck(deck, DeckType.GOP);
+      System.out.println(deck);
    }
    }
 
