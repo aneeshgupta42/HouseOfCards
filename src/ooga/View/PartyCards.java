@@ -13,15 +13,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.util.List;
+
 public class PartyCards {
     private VboxFactory cardHolder;
     private Label cardText;
     private Rectangle imageViewLike;
     private ImageView imageView;
-    private String styling="-fx-border-color: black;-fx-background-color: rgba(0, 0, 0, 0.8);-fx-padding: 2 2 2 2 ";
-
+    private List<String> colors = List.of("rgba(0,0,0,0.8)", "rgba(100,100,50,0.8)", "rgba(200,200,150,0.8)", "rgba(250,200,250,0.8)","rgba(170,100,170,0.8)", "rgba(230,150,230,0.8)" );
+    private String styling="-fx-border-color: black;-fx-padding: 2 2 2 2;-fx-background-color:  ";
     public PartyCards(Integer pileIndex, Image image){
-        cardHolder = new VboxFactory(10, pileIndex,styling);
+        String colorBackground = chooseColor(pileIndex);
+        cardHolder = new VboxFactory(10, pileIndex,colorBackground);
         cardText = new Label();
         imageView= new ImageView();
         imageView.setFitWidth(80);
@@ -36,6 +39,12 @@ public class PartyCards {
         cardText.setTextFill(Color.WHITE);}
         imageViewLike = new Rectangle(50,4);
         cardHolder.getChildren().addAll(cardText,imageViewLike);
+    }
+
+    private String chooseColor(Integer index) {
+       String colorsBack = styling+colors.get(index);
+       System.out.println(colorsBack);
+       return colorsBack;
     }
 
     public VboxFactory getScene(){
