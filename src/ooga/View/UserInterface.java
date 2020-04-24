@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import ooga.Controller.GameController;
 import ooga.View.GameScreens.CAHScreen;
@@ -12,6 +13,7 @@ import ooga.View.GameScreens.GameScreen;
 import ooga.View.GameScreens.SolitaireScreen;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserInterface extends Application implements Viewable {
     private double VIEW_WIDTH = 1200;
@@ -20,6 +22,7 @@ public class UserInterface extends Application implements Viewable {
     private static final int BUTTON_HEIGHT = 45;
     private static final int BUTTON_WIDTH = 120;
     private static final int BUTTON_FONT = 20;
+    private static final String loadingImagePath = "viewAssets/loading.gif";
     private static GameController passingController;
     private Scene splash;
 
@@ -105,19 +108,6 @@ public class UserInterface extends Application implements Viewable {
         Scene gameScene = gameScreen.getScene(this);
         myStage.setScene(gameScene);
         myStage.show();
-
-//        if(gameName=="Solitaire"){
-//            SolitaireScreen screen = new SolitaireScreen(passingController, playerNames);
-//            Scene gameScene = screen.getScene(this);
-//            myStage.setScene(gameScene);
-//            myStage.show();
-//        }
-//        if(gameName=="Humanity"){
-//            CAHScreen screen = new CAHScreen(passingController, playerNames);
-//            Scene gameScene = screen.getScene(this);
-//            myStage.setScene(gameScene);
-//            myStage.show();
-//        }
     }
 
     public double getWidth(){

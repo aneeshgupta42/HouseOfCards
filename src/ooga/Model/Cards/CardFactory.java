@@ -101,9 +101,9 @@ public class CardFactory {
          case HUMANITY_QUES:
             card = new HumanityCard(attributes[0], id);
             break;
-         case UNO:
-            card = null;
-            break;
+//         case UNO:
+//            card = null;
+//            break;
          default: //for poker cards
             card = new PokerCard(imagePath, Integer.parseInt(attributes[0]), attributes[1], id);
 

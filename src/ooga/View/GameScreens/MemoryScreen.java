@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import java.util.concurrent.TimeUnit;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -23,52 +24,32 @@ public class MemoryScreen extends GameScreen{
     private static final String CARDHEIGHT = "cardHeight";
     private static final String SCENEWIDTH = "sceneWidth";
     private static final String SCENEHEIGHT = "sceneHeight";
-    private static final String DRAWPILEX = "drawPileX";
-    private static final String DRAWPILEY = "drawPileY";
     private static final String CARDPILEX = "cardPileX";
     private static final String CARDPILY = "cardPileY";
     private static final String GAMEBACK = "gameBackground";
     private static final String BACKIMAGE = "backImagePath";
     private static final String BASEIMAGE = "baseImagePath";
     private static final double YOFFSET = 20;
-    private Delta dragDelta = new Delta();
     private GameController gameControl;
-    private double initial_x;
-    private double initial_y;
     private int numCompleteSets = 0;
-    private Map<Integer, List<ImageView>> indexMapped = new HashMap<>();
+    private List<Object> currentPair = new ArrayList<>();
+    private List<ImageView> currentPairImg = new ArrayList<>();
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
-    private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
+    private Map<Integer, String> idImagePath = new HashMap<>();
 
-
-    /***
-     * Get: Map of Integer (pile number) : List<IDs> in that pile
-     * Want: Map of Integer (pile number): List<ImageViews>
-     * Want: Map of ID -> ImageView
-     *
-     * Change:
-     * How we put on cards, and how we check for intersection.
-     *
-     * Basic pipeline:
-     *
-     * Front (attempts to) moves card from Pile A to Pile B.
-     * This calls updateProtocol (which takes in indA, indB, ind.within.A)
-     *
-     * ***/
     public MemoryScreen(GameController setUpController) {
         gameControl = setUpController;
-        //TODO:
-        //TODO: Change this to memory, once backend has stuff for that
-        //TODO:
-        gameData = gameControl.initializeGame(GameTypes.SOLITAIRE);
+        gameData = gameControl.initializeGame(GameTypes.MEMORY);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
     }
 
     private void initDiffDecks(){
-        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
+        currentPair = new ArrayList<>();
+        currentPairImg = new ArrayList<>();
+        differentDecks = gameControl.requestCards();
     }
 
     private Image imageGetter(String path){
@@ -84,11 +65,8 @@ public class MemoryScreen extends GameScreen{
     private void setCardFace(int id, boolean faceUp){
         ImageView card = idImage.get(id);
         String imagePath;
-        if(id<0){
-            imagePath = (String) gameData.get(BASEIMAGE);
-        }
-        else if(faceUp){
-            imagePath = gameControl.getImagePath(id);
+        if(faceUp){
+            imagePath = idImagePath.get(id);
         }
         else{
             imagePath = (String) gameData.get(BACKIMAGE);
@@ -99,21 +77,10 @@ public class MemoryScreen extends GameScreen{
 
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap) {
         for (Integer pile : deckMap.keySet()) {
-            List<ImageView> imageList = new ArrayList<>();
             for (Integer id : deckMap.get(pile)) {
-                ImageView cardImage;
-                if(id<0){
-                    String baseImagePath = (String) gameData.get(BASEIMAGE);
-                    Image card = imageGetter(baseImagePath);
-                    cardImage = new ImageView (card);
-                }
-                else{
-                    cardImage = getIDImage(id);
-                }
-                idImage.put(id, cardImage);
-                imageList.add(cardImage);
+                idImage.put(id, getIDImage(id));
+                idImagePath.put(id, gameControl.getImagePath(id));
             }
-            imageMap.put(pile, imageList);
         }
     }
 
@@ -123,30 +90,16 @@ public class MemoryScreen extends GameScreen{
         //TODO: change this to receive a map instead
         double i = 0;
         double j = 0;
-        double l = 0;
         int index = 0;
         for (Integer key : differentDecks.keySet()) {
             //playingCards is a list of IDs for that the pile "key"
             List<Integer> playingCards = differentDecks.get(key);
-            if (key == 0) {
-                double drawPileX = Double.parseDouble((String)gameData.get(DRAWPILEX));
-                double drawPileY = Double.parseDouble((String)gameData.get(DRAWPILEY));
-                setUponScreen(playingCards, 0.2, 0.1, i, j, drawPileX, drawPileY, index);
-            } else {
-                double cardPileX = Double.parseDouble((String)gameData.get(CARDPILEX));
-                double cardPileY = Double.parseDouble((String)gameData.get(CARDPILY));
-                setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY, index);
-            }
-            i = i + 100;
-            l = l + 100;
+            double drawPileX = Double.parseDouble((String)gameData.get(CARDPILEX));
+            double drawPileY = Double.parseDouble((String)gameData.get(CARDPILY));
+            setUponScreen(playingCards, 0, 80, i, j, drawPileX, drawPileY, index);
             index++;
-            j = 0;
+            j = j+150;
         }
-
-    }
-
-    class Delta {
-        double x, y;
     }
 
     private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
@@ -155,78 +108,62 @@ public class MemoryScreen extends GameScreen{
         for (Integer cardID : playingCards) {
             ImageView cardImage = idImage.get(cardID);
             // TODO: use this way to keep bottom pule always back face up?
-            setCardFace(cardID, cardID == lastId && (getCardPile(differentDecks, cardImage) !=0));
+            setCardFace(cardID, false);
             cardImage.setFitWidth(Double.parseDouble((String)gameData.get(CARDWIDTH)));
             cardImage.setFitHeight(Double.parseDouble((String)gameData.get(CARDHEIGHT)));
             cardImage.setLayoutX(XPos + i - cardImage.getLayoutBounds().getMinX());
             cardImage.setLayoutY(YPos + j- cardImage.getLayoutBounds().getMinY());
             setUpListeners(cardImage);
-            List<ImageView> images = new ArrayList<>();
-            images.add(cardImage);
-            indexMapped.put(index, images);
             if(cardID>0) {
                 j = j + v;
                 i = i + v1;
             }
             gameScene.getChildren().add(cardImage);
         }
-
     }
 
 
     private void setUpListeners(ImageView cardImage) {
+        boolean pairFormed = false;
         int pile = getCardPile(differentDecks, cardImage);
         if(getCardID(idImage, cardImage)<0) return;
-        if (pile != 0) {
             cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    initial_x = cardImage.getLayoutX();
-                    initial_y = cardImage.getLayoutY();
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
-                    dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
-                    //TODO: I didn't know what this was, so commented out:
-                    dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
-                    cardImage.setCursor(Cursor.MOVE);
+                    int cardID = getCardID(idImage, cardImage);
+                    if(! (currentPair.size()==2)) {
+                        setCardFace(cardID, true);
+                        if(!currentPair.contains(cardID)) {
+                            currentPair.add(cardID);
+                            currentPairImg.add(cardImage);
+                        }
+                    }
+                    else{
+//                        setCardFace((Integer) currentPair.get(0), false);
+//                        setCardFace((Integer) currentPair.get(1), false);
+//                        currentPair = new ArrayList<>();
+//                        currentPairImg = new ArrayList<>();
+//                        setCardFace(cardID, true);
+//                        System.out.println("card face up id" + cardID);
+//                        currentPair.add(cardID);
+//                        currentPairImg.add(cardImage);
+                    }
+                    cardImage.setCursor(Cursor.HAND);
                 }
             });
             cardImage.setOnMouseReleased(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
-                    if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
-                        cardImage.setCursor(Cursor.HAND);
-                        int pileFrom = getCardPile(differentDecks, cardImage);
-                        boolean success = checkUpdate(cardSet, differentDecks);
-                        initDiffDecks();
-                        if (!success) {
-                            cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
-                            cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
-                        } else {
-//                            differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
-                            List<Integer> sourcePile = differentDecks.get(pileFrom);
-                            setCardFace(sourcePile.get(sourcePile.size() - 1), true);
-                        }
-                    } else {
-                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
-                        cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
-                    }
-                }
-            });
-            cardImage.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
-                    if (checkBounds(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
-                        cardSet.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                        cardSet.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                        cardSet.toFront();
-                    } else {
-                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
-                        cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
-                        mouseEvent.setDragDetect(false);
-                    }
-                }
+               @Override
+                public void handle(MouseEvent mouseEvent){
+                   if(currentPair.size()==2){
+                       try {
+                           TimeUnit.SECONDS.sleep(1);
+                       } catch (InterruptedException e) {
+                           e.printStackTrace();
+                       }
+                       checkUpdate(currentPair);
+                       initDiffDecks();
+                   }
+               }
             });
             cardImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
@@ -235,124 +172,26 @@ public class MemoryScreen extends GameScreen{
                 }
             });
         }
-        else{
-            cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    dealCards();
-                }
-            });
-        }
-    }
 
-    private void dealCards(){
-        List<Integer> dealingIDs = (List<Integer>)gameControl.updateProtocol(null).get(0);
-        //TODO: instead of this use back end's list of 10 cards
-//        for(int i = 0; i<10; i++){
-//            int cardID = drawPileIDs.get(i);
-//            addCardToPile(i+1, cardID);
-//        }
-        int targetPile = 1;
-        for(Integer id: dealingIDs){
-            int cardID = id;
-            addCardToPile(targetPile, cardID);
-            targetPile++;
-        }
-        initDiffDecks();
-//        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
-        for(Integer id: dealingIDs){
-            int cardID = id;
-            ImageView cardImage = idImage.get(cardID);
-            setUpListeners(cardImage);
-        }
-    }
-
-    private void addCardToPile(int pileNumber, int cardID){
-        List<Integer> pile  = differentDecks.get(pileNumber);
-        ImageView lastCard = idImage.get(pile.get(pile.size()-1));
-        ImageView cardImage = idImage.get(cardID);
-        setCardFace(cardID, true);
-        cardImage.toFront();
-        cardImage.setLayoutX(lastCard.getLayoutX()- cardImage.getLayoutBounds().getMinX());
-        cardImage.setLayoutY(lastCard.getLayoutY()+YOFFSET- cardImage.getLayoutBounds().getMinY());
-    }
-
-    private boolean checkUpdate(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks) {
-        //Diff pile numbers
-//        System.out.println(differentDecks.toString());
-        ImageView currentCard = currentCardSet.getHeadCard();
-        Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
-        for (Integer index : differentDecks.keySet()) {
-            if(index==sourceCardIndex) continue;
-            List<Integer> currentPile = differentDecks.get(index);
-            // checks for intersection
-            ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
-            if (!currentCard.equals(targetCard)) {
-                int targetID = getCardID(idImage, targetCard);
-                // Change the logic for checking intersections
-                if ((currentCard.getBoundsInParent().intersects(targetCard.getBoundsInParent()))) {
-                    List<Object> cardWorking = new ArrayList<>();
-                    int stackFrom = getCardPile(differentDecks, currentCard);
-                    cardWorking.add(stackFrom);
-                    int stackTo = getCardPile(differentDecks, targetCard);
-                    cardWorking.add(stackTo);
-                    for (Integer id : differentDecks.get(stackFrom)) {
-                        if (idImage.get(id).equals(currentCard)) {
-                            cardWorking.add(differentDecks.get(stackFrom).indexOf(id)-1);
-                        }
-                    }
-//                    System.out.println(cardWorking);
-                    List<Object> ret = gameControl.updateProtocol(cardWorking);
+    private boolean checkUpdate(List<Object> currentPair) {
+                    List<Object> ret = gameControl.updateProtocol(currentPair);
                     boolean success = (Integer) ret.get(0) == 1;
+                    System.out.println(success);
+
                     if(success) {
-                        currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
-                        if (targetID < 0) {
-//                            System.out.println("placing on empty pile");
-                            currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
-                        } else {
-                            currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
-                        }
+                        gameScene.getChildren().removeAll(currentPairImg);
+                    }
+                    else{
+                        setCardFace((Integer) currentPair.get(0), false);
+                        setCardFace((Integer) currentPair.get(1), false);
                     }
 
                     if(ret.size()==2){
-                        int KingPositionInDest = (Integer) ret.get(1);
-                        completeSet(stackTo, KingPositionInDest);
-                        List<Object> removeCompSet = new ArrayList<>();
-                        removeCompSet.add(stackTo);
-                        removeCompSet.add(KingPositionInDest);
-                        gameControl.updateProtocol(removeCompSet);
-                    }
-                    return ((Integer) ret.get(0) == 1);
-                }
-            }
-        }
-        return false;
-    }
 
-    /***
-     * Frontend moves. Calls update protocol.
-     * UpdateProt. validates moves, places new cards into destination pile.
-     * CompleteSet is formed. Backend does not remove CompleteSet from pile yet.
-     * Front calls request cards.
-     * Front does movement.
-     * Once movements is done, front tells back to now remove CompleteSet.
-     * front will do: gameControl.removeCompleteSet.
-     * then front calls request cards again.
-     * ***/
-    private void completeSet(int stackTo, int KingDestIndex){
-//        System.out.println("detected complete set");
-//        System.out.println("getting updated piles from back");
-        numCompleteSets++;
-        initDiffDecks();
-//        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
-        List<Integer> destPile = differentDecks.get(stackTo);
-        int kingID = destPile.get(KingDestIndex+1);
-        ImageView kingImage = idImage.get(kingID);
-        CardSet cardSet = new CardSet(kingImage, idImage, differentDecks);
-        int cardBeforeID = differentDecks.get(stackTo).get(KingDestIndex);
-        setCardFace(cardBeforeID, true);
-        cardSet.winProtocol(numCompleteSets);
-    }
+                    }
+                    return success;
+                }
+
 
     private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
         Integer cardID = getCardID(idImage, card);
@@ -375,9 +214,4 @@ public class MemoryScreen extends GameScreen{
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
 
-    private boolean checkBounds(double x, double y) {
-        double sceneWidth = Double.parseDouble((String)gameData.get(SCENEWIDTH));
-        double sceneHeight = Double.parseDouble((String)gameData.get(SCENEHEIGHT));
-        return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
-    }
 }
