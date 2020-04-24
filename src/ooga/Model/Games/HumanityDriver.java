@@ -63,8 +63,9 @@ public class HumanityDriver extends GameDriver{
     }
 
     @Override
-    public void updateScore(int score, int playerIndex) {
-        System.out.println(playerList.get(playerIndex-1).getName());
+    public void updateScore(int score, int playerNum) {
+        //System.out.println(playerList.get(playerIndex-1).getName());
+        playerList.get(playerNum-1).addToScore(score);
     }
 
     @Override

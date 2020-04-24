@@ -37,4 +37,8 @@ public class Player {
     public void setDeck (CardDeck deck){
         this.playerHand = deck;
     }
+
+    public void addToScore(int score) {
+        this.score += score;
+    }
 }
