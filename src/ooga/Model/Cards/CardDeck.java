@@ -111,7 +111,7 @@ public class CardDeck implements Deck {
     public String toString(){
         String ret = "";
         for (Playable card : gameCards){
-            ret = ret + card.getNumber() + card.getValue() + "\n";
+            ret += "ID: " + card.getID() + "    Num: " + card.getNumber() + "   Value: " + card.getValue() + "\n";
         }
         return ret;
     }

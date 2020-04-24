@@ -1,6 +1,8 @@
 package ooga.Model.Games;
 
+import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
+import ooga.Model.Cards.CardDeck;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class GOPDriver extends GameDriver {
 
     @Override
     protected void makePiles() {
-
+        piles.put(0, new CardDeck(DeckType.GOP));
     }
 
     @Override
