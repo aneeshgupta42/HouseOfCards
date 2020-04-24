@@ -56,9 +56,7 @@ public class CAHScreen extends GameScreen {
     private static final String BACKGROUND_KEY="background_string";
     private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
-    private static final int FIXED_ROUND = 5;
     private int round =0;
-    private int roundNumber =1;
     private List<String> names = new ArrayList<>();
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label(" ");
@@ -101,12 +99,8 @@ public class CAHScreen extends GameScreen {
         }
     }
     private void checkRound(){
-        if(round>differentDecks.keySet().size()-1){
-            round=1;
-            roundNumber++;
-        }
-        if(roundNumber>FIXED_ROUND){
-            endGame();
+        if(round>differentDecks.keySet().size()-1) {
+            round = 1;
         }
     }
 
@@ -327,7 +321,7 @@ public class CAHScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACKGROUND_KEY)));
         ImagePattern backgroundPattern = new ImagePattern(background);
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Cards Against Humanity");
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
     }

@@ -264,7 +264,7 @@ public class TODScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/red.jpg"));
         ImagePattern backgroundPattern = new ImagePattern(background);
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Truth and Dare");
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
     }
