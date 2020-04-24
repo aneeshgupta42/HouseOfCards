@@ -222,11 +222,6 @@ public class SolitaireScreen extends GameScreen {
 
     private void dealCards(){
         List<Integer> dealingIDs = (List<Integer>)gameControl.updateProtocol(null).get(0);
-        //TODO: instead of this use back end's list of 10 cards
-//        for(int i = 0; i<10; i++){
-//            int cardID = drawPileIDs.get(i);
-//            addCardToPile(i+1, cardID);
-//        }
         int targetPile = 1;
         for(Integer id: dealingIDs){
             int cardID = id;
@@ -254,21 +249,18 @@ public class SolitaireScreen extends GameScreen {
     private boolean checkUpdate(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks){
         try {
             ImageView currentCard = currentCardSet.getHeadCard();
-            Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
+            Integer stackFrom = getCardPile(differentDecks, currentCard);
             for (Integer index : differentDecks.keySet()) {
-                if (index.equals(sourceCardIndex)) continue;
+                if (index.equals(stackFrom)) continue;
                 List<Integer> currentPile = differentDecks.get(index);
                 ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
                 if (!currentCard.equals(targetCard)) {
                     int targetID = getCardID(idImage, targetCard);
                     if ((currentCard.getBoundsInParent().intersects(targetCard.getBoundsInParent()))) {
                         List<Object> cardWorking = new ArrayList<>();
-                        int stackFrom = getCardPile(differentDecks, currentCard);
                         cardWorking.add(stackFrom);
-                        int stackTo = getCardPile(differentDecks, targetCard);
-                        cardWorking.add(stackTo);
-                        int currIndex = differentDecks.get(stackFrom).indexOf(getCardID(idImage, currentCard)) - 1;
-                        cardWorking.add(currIndex);
+                        cardWorking.add(index);
+                        cardWorking.add(differentDecks.get(stackFrom).indexOf(getCardID(idImage, currentCard)) - 1);
                         List<Object> ret = gameControl.updateProtocol(cardWorking);
                         boolean success = (Integer) ret.get(0) == 1;
                         if (success) {
@@ -281,11 +273,11 @@ public class SolitaireScreen extends GameScreen {
                         }
                         if (ret.size() == 2) {
                             int KingPositionInDest = (Integer) ret.get(1);
-                            completeSet(stackTo, KingPositionInDest);
-//                            List<Object> removeCompSet = new ArrayList<>();
-//                            removeCompSet.add(stackTo);
-//                            removeCompSet.add(KingPositionInDest);
-//                            gameControl.updateProtocol(removeCompSet);
+                            completeSet(index, KingPositionInDest);
+                            List<Object> removeCompSet = new ArrayList<>();
+                            removeCompSet.add(index);
+                            removeCompSet.add(KingPositionInDest);
+                            gameControl.updateProtocol(removeCompSet);
                         }
                         return success;
                     }
@@ -310,10 +302,6 @@ public class SolitaireScreen extends GameScreen {
         int cardBeforeID = differentDecks.get(stackTo).get(KingDestIndex);
         setCardFace(cardBeforeID, true);
         cardSet.winProtocol(numCompleteSets);
-        List<Object> removeCompSet = new ArrayList<>();
-        removeCompSet.add(stackTo);
-        removeCompSet.add(KingDestIndex);
-        gameControl.updateProtocol(removeCompSet);
     }
 
     private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
