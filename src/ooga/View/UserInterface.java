@@ -11,6 +11,7 @@ import ooga.Controller.GameController;
 import ooga.View.GameScreens.CAHScreen;
 import ooga.View.GameScreens.GameScreen;
 import ooga.View.GameScreens.SolitaireScreen;
+import ooga.View.utils.WinScreen;
 
 import java.util.List;
 import java.util.Objects;
@@ -109,6 +110,14 @@ public class UserInterface extends Application implements Viewable {
         myStage.setScene(gameScene);
         myStage.show();
     }
+
+    public void setWinScreen(String gameName, String playerName, int playerScore){
+        WinScreen winScreen = new WinScreen(this, gameName, playerName, playerScore, VIEW_WIDTH, VIEW_HEIGHT);
+        myStage.setScene(winScreen.getScene());
+        myStage.show();
+    }
+
+
 
     public double getWidth(){
         return VIEW_WIDTH;
