@@ -121,8 +121,8 @@ public class GameController {
             mappingPlayers.put(score,player);
         }
         Collections.sort(scores);
-        sendInformation.add(scores.get(0));
-        sendInformation.add(mappingPlayers.get(scores.get(0)));
+        sendInformation.add(scores.get(scores.size()-1));
+        sendInformation.add(mappingPlayers.get(scores.get(scores.size()-1)));
         return sendInformation;
     }
 
