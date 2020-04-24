@@ -43,7 +43,6 @@ public class PartyCards {
 
     private String chooseColor(Integer index) {
        String colorsBack = styling+colors.get(index);
-       System.out.println(colorsBack);
        return colorsBack;
     }
 

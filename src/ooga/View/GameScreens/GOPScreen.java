@@ -105,7 +105,7 @@ public class GOPScreen extends GameScreen {
     private void choosePlayer() {
         int player = getRandomInt();
         System.out.println(player);
-        playerLabel.setText("Player Chosen is "+ playerNames.get(player-1));
+        playerLabel.setText("Player Chosen is "+ playerNames.get(player-1) + " Score: "+ gameControl.getPlayerScore(playerNames.get(player-1)));
         playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         if(!gameScene.getChildren().contains(playerLabel)){
         gameScene.getChildren().add(playerLabel);}
@@ -154,7 +154,7 @@ public class GOPScreen extends GameScreen {
                         changeVbox(cardObj);
                         card.toFront();
                     }
-                    tappedCards.add(card);
+                    if(!tappedCards.contains(card)) tappedCards.add(card);
                     chooseWinner();
 
             }});
@@ -209,7 +209,6 @@ public class GOPScreen extends GameScreen {
                 gameControl.updateProtocol(cardsChosen);
                 gameScene.getChildren().remove(gameButton);
                 for (VboxFactory card : tappedCards) {
-                    System.out.println(tappedCards);
                     if (gameScene.getChildren().remove(card) == false) {
                         endGame();
                     }

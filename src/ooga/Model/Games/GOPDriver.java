@@ -5,6 +5,7 @@ import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Players.Player;
 
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +30,9 @@ public class GOPDriver extends GameDriver {
     @Override
     public List<Object> updateProtocol(List<Object> args) {
         removeCardFromPiles((Integer) args.get(0));
-        if((Integer) args.get(2) == 1){
-            updateScore(5, (String) args.get(1));
+        System.out.println(args.get(1));
+        if(((String)args.get(args.size()-2)).equals("Done")){
+            updateScore(1, (String) args.get(args.size()-1));
         }
         return null;
     }
