@@ -21,8 +21,9 @@ import java.util.List;
 public class SplashScreen {
     private Paint background = Color.WHITESMOKE;
     private Scene startScene;
-    private String logo = "cardDecks/poker/aces.png";
-    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "GOP", "Memory", "Snap");
+    private String logo = "viewAssets/loading.gif";
+//    private String logo = "cardDecks/poker/aces.png";
+    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "GOP", "Memory", "Concentration");
 
 
     public Rectangle generateLogo(){
