@@ -31,6 +31,9 @@ public class SolitaireScreen extends GameScreen {
     private static final String BACKIMAGE = "backImagePath";
     private static final String BASEIMAGE = "baseImagePath";
     private static final double YOFFSET = 20;
+    private static final double XOFFSET = 100;
+    private static final double DRAWDELX = 0.1;
+    private static final double DRAWDELY = 0.2;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
     private double initial_x;
@@ -103,22 +106,20 @@ public class SolitaireScreen extends GameScreen {
     private void addCards() {
         gameScene = new Group();
         setUpButtons(gameScene);
-        //TODO: change this to receive a map instead
         double i = 0, j = 0, l = 0;
-        int index = 0;
         for (Integer key : differentDecks.keySet()) {
             List<Integer> playingCards = differentDecks.get(key);
             if (key == 0) {
                 double drawPileX = Double.parseDouble((String)gameData.get(DRAWPILEX));
                 double drawPileY = Double.parseDouble((String)gameData.get(DRAWPILEY));
-                setUponScreen(playingCards, 0.2, 0.1, i, j, drawPileX, drawPileY, index);
+                setUponScreen(playingCards, DRAWDELY, DRAWDELX, i, j, drawPileX, drawPileY);
             } else {
                 double cardPileX = Double.parseDouble((String)gameData.get(CARDPILEX));
                 double cardPileY = Double.parseDouble((String)gameData.get(CARDPILY));
-                setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY, index);
+                setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY);
             }
-            i = i + 100; l = l + 100;
-            index++; j = 0;
+            i = i + XOFFSET; l = l + XOFFSET;
+            j = 0;
         }
     }
 
@@ -126,7 +127,7 @@ public class SolitaireScreen extends GameScreen {
         double x, y;
     }
 
-    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
+    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
         int pileSize = playingCards.size();
         int lastId = playingCards.get(pileSize-1);
         for (Integer cardID : playingCards) {
@@ -137,8 +138,6 @@ public class SolitaireScreen extends GameScreen {
             cardImage.setLayoutX(XPos + i - cardImage.getLayoutBounds().getMinX());
             cardImage.setLayoutY(YPos + j- cardImage.getLayoutBounds().getMinY());
             setUpListeners(cardImage);
-            List<ImageView> images = new ArrayList<>();
-            images.add(cardImage);
             if(cardID>0) {
                 j = j + v;
                 i = i + v1;
@@ -176,7 +175,6 @@ public class SolitaireScreen extends GameScreen {
                             cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
                             cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
                         } else {
-//                            differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
                             List<Integer> sourcePile = differentDecks.get(pileFrom);
                             setCardFace(sourcePile.get(sourcePile.size() - 1), true);
                         }
@@ -253,7 +251,7 @@ public class SolitaireScreen extends GameScreen {
         ImageView currentCard = currentCardSet.getHeadCard();
         Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
         for (Integer index : differentDecks.keySet()) {
-            if(index==sourceCardIndex) continue;
+            if(index.equals(sourceCardIndex)) continue;
             List<Integer> currentPile = differentDecks.get(index);
             ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
             if (!currentCard.equals(targetCard)) {

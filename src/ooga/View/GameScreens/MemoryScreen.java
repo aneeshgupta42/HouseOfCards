@@ -91,7 +91,6 @@ public class MemoryScreen extends GameScreen {
         //TODO: change this to receive a map instead
         double i = 0;
         double j = 0;
-        int index = 0;
         for (Integer key : differentDecks.keySet()) {
             //playingCards is a list of IDs for that the pile "key"
             List<Integer> playingCards = differentDecks.get(key);
@@ -99,13 +98,12 @@ public class MemoryScreen extends GameScreen {
             double drawPileY = Double.parseDouble((String) gameData.get(CARDPILY));
             double xOffset = Double.parseDouble((String) gameData.get(XOFFSET));
             double yOffset = Double.parseDouble((String) gameData.get(YOFFSET));
-            setUponScreen(playingCards, 0, xOffset, i, j, drawPileX, drawPileY, index);
-            index++;
+            setUponScreen(playingCards, 0, xOffset, i, j, drawPileX, drawPileY);
             j = j + yOffset;
         }
     }
 
-    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
+    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
         int pileSize = playingCards.size();
         for (Integer cardID : playingCards) {
             ImageView cardImage = idImage.get(cardID);
