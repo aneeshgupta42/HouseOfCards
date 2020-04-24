@@ -94,7 +94,7 @@ public class CAHScreen extends GameScreen {
             if(!tappedCards.contains(card.getScene())) {
                 card.getScene().setVisible(!card.getScene().isVisible());
                 playerLabel.setVisible(card.getScene().isVisible());
-                playerLabel.setText(names.get(round-1));
+                playerLabel.setText(names.get(round-1) + "   "+ gameControl.getPlayerScore(names.get(round-1)));
             }
         }
     }
