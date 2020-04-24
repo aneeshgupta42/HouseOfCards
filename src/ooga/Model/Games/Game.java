@@ -7,8 +7,6 @@ public interface Game {
 
     List<String> getPlayerNames();
 
-    List<Integer> getPlayerScores();
-
     boolean checkWin();
 
     /**
@@ -30,6 +28,8 @@ public interface Game {
     void resumeGame();
 
     void startGame();
+
+    int getPlayerScore(String playerName);
 
     boolean IsCardFaceUp(int cardID);
 
