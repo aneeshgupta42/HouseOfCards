@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -63,8 +64,8 @@ public class TODScreen extends GameScreen {
         Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
         return new ImageView(cardImage);
     }
-    public Rectangle generateLogo(){
-        Rectangle hypno = new Rectangle(1200, 170);
+    public Circle generateLogo(){
+        Circle hypno = new Circle(90);
         Image hypnoImage = new Image(this.getClass().getClassLoader().getResourceAsStream(logo));
         ImagePattern hypnoImagePattern = new ImagePattern(hypnoImage);
         hypno.setFill(hypnoImagePattern);
@@ -100,8 +101,8 @@ public class TODScreen extends GameScreen {
     private void addCards(GameController setUpController) {
         setStylingForLabel();
         gameScene = new Group();
-        Rectangle logo = generateLogo();
-        logo.setLayoutX(0); logo.setLayoutY(0);
+        Circle logo = generateLogo();
+        logo.setLayoutX(580); logo.setLayoutY(100);
         gameScene.getChildren().addAll(logo);
         choosePlayer();
         setUpButtons(gameScene);
