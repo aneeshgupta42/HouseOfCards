@@ -51,7 +51,7 @@ public class HumanityDriver extends GameDriver{
     @Override
     public List<Object> updateProtocol(List<Object> args) {
         String playerWon = (String) args.remove(args.size() - 1);
-        updateScore(5, playerWon);
+        updateScore(1, playerWon);
         //Remove used cards from the piles structure
         for (Object ID : args){
             removeCardFromPiles((Integer) ID);
