@@ -38,7 +38,7 @@ public class CAHScreen extends GameScreen {
     private Map<String, Object> jsonData = new HashMap<>();
     private List<VboxFactory> tappedCards = new ArrayList<>();
     private static final String BACK_IMAGE_PATH = "backImagePath_humanity";
-    private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
+    private String style = "-fx-border-color: black;-fx-background-color: rgba(155, 30, 15, 1);-fx-padding: 2 2 2 2 ";
     private static final String VERTICAL_Z_KEY ="verticalZ";
     private static final String HORIZ_Z_KEY="horizZ";
     private static final String X_ZERO_KEY = "Xzero_index";
@@ -320,6 +320,7 @@ public class CAHScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACKGROUND_KEY)));
         ImagePattern backgroundPattern = new ImagePattern(background);
+        setCommonButtons(ui);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
     }
