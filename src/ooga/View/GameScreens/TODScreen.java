@@ -1,6 +1,5 @@
 package ooga.View.GameScreens;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -26,7 +25,7 @@ import java.util.*;
 
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
-public class GOPScreen extends GameScreen {
+public class TODScreen extends GameScreen {
     private Group gameScene;
     private String backImagePath = "cardDecks/poker/red_back.png";
     private GameController gameControl;
@@ -89,9 +88,9 @@ public class GOPScreen extends GameScreen {
         }
     }
 
-    public GOPScreen(GameController setUpController) {
+    public TODScreen(GameController setUpController) {
         gameControl = setUpController;
-        jsonData= gameControl.initializeGame(GameTypes.GOP);
+        jsonData= gameControl.initializeGame(GameTypes.TOD);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         playerNames = setUpController.getPlayerNames();
         initializeImageMap(differentDecks);
