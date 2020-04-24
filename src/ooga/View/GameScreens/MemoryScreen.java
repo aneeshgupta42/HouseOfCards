@@ -158,7 +158,7 @@ public class MemoryScreen extends GameScreen{
                        } catch (InterruptedException e) {
                            e.printStackTrace();
                        }
-                       checkUpdate(currentPair);
+                       boolean success = checkUpdate(currentPair);
                        initDiffDecks();
                    }
                }
