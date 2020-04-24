@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -12,6 +13,8 @@ import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.View.UserInterface;
 import ooga.View.utils.CardSet;
+import ooga.View.utils.GameException;
+
 import java.util.*;
 import java.util.List;
 
@@ -19,6 +22,7 @@ public class SolitaireScreen extends GameScreen {
     private Group gameScene;
     private Map<String, Object> gameData;
     private List<String> playerNames;
+    private UserInterface userInterface;
     private static final String CARDWIDTH = "cardWidth";
     private static final String CARDHEIGHT = "cardHeight";
     private static final String SCENEWIDTH = "sceneWidth";
@@ -31,6 +35,9 @@ public class SolitaireScreen extends GameScreen {
     private static final String BACKIMAGE = "backImagePath";
     private static final String BASEIMAGE = "baseImagePath";
     private static final double YOFFSET = 20;
+    private static final double XOFFSET = 100;
+    private static final double DRAWDELX = 0.1;
+    private static final double DRAWDELY = 0.2;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
     private double initial_x;
@@ -103,22 +110,20 @@ public class SolitaireScreen extends GameScreen {
     private void addCards() {
         gameScene = new Group();
         setUpButtons(gameScene);
-        //TODO: change this to receive a map instead
         double i = 0, j = 0, l = 0;
-        int index = 0;
         for (Integer key : differentDecks.keySet()) {
             List<Integer> playingCards = differentDecks.get(key);
             if (key == 0) {
                 double drawPileX = Double.parseDouble((String)gameData.get(DRAWPILEX));
                 double drawPileY = Double.parseDouble((String)gameData.get(DRAWPILEY));
-                setUponScreen(playingCards, 0.2, 0.1, i, j, drawPileX, drawPileY, index);
+                setUponScreen(playingCards, DRAWDELY, DRAWDELX, i, j, drawPileX, drawPileY);
             } else {
                 double cardPileX = Double.parseDouble((String)gameData.get(CARDPILEX));
                 double cardPileY = Double.parseDouble((String)gameData.get(CARDPILY));
-                setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY, index);
+                setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY);
             }
-            i = i + 100; l = l + 100;
-            index++; j = 0;
+            i = i + XOFFSET; l = l + XOFFSET;
+            j = 0;
         }
     }
 
@@ -126,7 +131,7 @@ public class SolitaireScreen extends GameScreen {
         double x, y;
     }
 
-    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos, int index) {
+    private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
         int pileSize = playingCards.size();
         int lastId = playingCards.get(pileSize-1);
         for (Integer cardID : playingCards) {
@@ -137,8 +142,6 @@ public class SolitaireScreen extends GameScreen {
             cardImage.setLayoutX(XPos + i - cardImage.getLayoutBounds().getMinX());
             cardImage.setLayoutY(YPos + j- cardImage.getLayoutBounds().getMinY());
             setUpListeners(cardImage);
-            List<ImageView> images = new ArrayList<>();
-            images.add(cardImage);
             if(cardID>0) {
                 j = j + v;
                 i = i + v1;
@@ -176,7 +179,6 @@ public class SolitaireScreen extends GameScreen {
                             cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
                             cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
                         } else {
-//                            differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
                             List<Integer> sourcePile = differentDecks.get(pileFrom);
                             setCardFace(sourcePile.get(sourcePile.size() - 1), true);
                         }
@@ -249,46 +251,53 @@ public class SolitaireScreen extends GameScreen {
         cardImage.setLayoutY(lastCard.getLayoutY()+YOFFSET- cardImage.getLayoutBounds().getMinY());
     }
 
-    private boolean checkUpdate(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks) {
-        ImageView currentCard = currentCardSet.getHeadCard();
-        Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
-        for (Integer index : differentDecks.keySet()) {
-            if(index==sourceCardIndex) continue;
-            List<Integer> currentPile = differentDecks.get(index);
-            ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
-            if (!currentCard.equals(targetCard)) {
-                int targetID = getCardID(idImage, targetCard);
-                if ((currentCard.getBoundsInParent().intersects(targetCard.getBoundsInParent()))) {
-                    List<Object> cardWorking = new ArrayList<>();
-                    int stackFrom = getCardPile(differentDecks, currentCard);
-                    cardWorking.add(stackFrom);
-                    int stackTo = getCardPile(differentDecks, targetCard);
-                    cardWorking.add(stackTo);
-                    int currIndex = differentDecks.get(stackFrom).indexOf(getCardID(idImage, currentCard))-1;
-                    cardWorking.add(currIndex);
-                    List<Object> ret = gameControl.updateProtocol(cardWorking);
-                    boolean success = (Integer) ret.get(0) == 1;
-                    if(success) {
-                        currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
-                        if (targetID < 0) {
-                            currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
-                        } else {
-                            currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
+    private boolean checkUpdate(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks){
+        try {
+            ImageView currentCard = currentCardSet.getHeadCard();
+            Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
+            for (Integer index : differentDecks.keySet()) {
+                if (index.equals(sourceCardIndex)) continue;
+                List<Integer> currentPile = differentDecks.get(index);
+                ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
+                if (!currentCard.equals(targetCard)) {
+                    int targetID = getCardID(idImage, targetCard);
+                    if ((currentCard.getBoundsInParent().intersects(targetCard.getBoundsInParent()))) {
+                        List<Object> cardWorking = new ArrayList<>();
+                        int stackFrom = getCardPile(differentDecks, currentCard);
+                        cardWorking.add(stackFrom);
+                        int stackTo = getCardPile(differentDecks, targetCard);
+                        cardWorking.add(stackTo);
+                        int currIndex = differentDecks.get(stackFrom).indexOf(getCardID(idImage, currentCard)) - 1;
+                        cardWorking.add(currIndex);
+                        List<Object> ret = gameControl.updateProtocol(cardWorking);
+                        boolean success = (Integer) ret.get(0) == 1;
+                        if (success) {
+                            currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
+                            if (targetID < 0) {
+                                currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
+                            } else {
+                                currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
+                            }
                         }
+                        if (ret.size() == 2) {
+                            int KingPositionInDest = (Integer) ret.get(1);
+                            completeSet(stackTo, KingPositionInDest);
+//                            List<Object> removeCompSet = new ArrayList<>();
+//                            removeCompSet.add(stackTo);
+//                            removeCompSet.add(KingPositionInDest);
+//                            gameControl.updateProtocol(removeCompSet);
+                        }
+                        return success;
                     }
-                    if(ret.size()==2){
-                        int KingPositionInDest = (Integer) ret.get(1);
-                        completeSet(stackTo, KingPositionInDest);
-                        List<Object> removeCompSet = new ArrayList<>();
-                        removeCompSet.add(stackTo);
-                        removeCompSet.add(KingPositionInDest);
-                        gameControl.updateProtocol(removeCompSet);
-                    }
-                    return success;
                 }
             }
+            return false;
         }
-        return false;
+        catch(GameException e){
+            userInterface.setSplash();
+            showMessage(Alert.AlertType.ERROR, e.getMessage());
+            return false;
+        }
     }
 
     private void completeSet(int stackTo, int KingDestIndex){
@@ -301,6 +310,10 @@ public class SolitaireScreen extends GameScreen {
         int cardBeforeID = differentDecks.get(stackTo).get(KingDestIndex);
         setCardFace(cardBeforeID, true);
         cardSet.winProtocol(numCompleteSets);
+        List<Object> removeCompSet = new ArrayList<>();
+        removeCompSet.add(stackTo);
+        removeCompSet.add(KingDestIndex);
+        gameControl.updateProtocol(removeCompSet);
     }
 
     private Integer getCardPile(Map<Integer, List<Integer>> diffDecks, ImageView card) {
@@ -318,6 +331,8 @@ public class SolitaireScreen extends GameScreen {
 
     @Override
     public Scene getScene(UserInterface ui) {
+        userInterface = ui;
+        setCommonButtons(ui);
         String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = imageGetter(gameBackground);
         setCommonButtons(ui);
@@ -329,6 +344,10 @@ public class SolitaireScreen extends GameScreen {
         double sceneWidth = Double.parseDouble((String)gameData.get(SCENEWIDTH));
         double sceneHeight = Double.parseDouble((String)gameData.get(SCENEHEIGHT));
         return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
+    }
+
+    private void showMessage (Alert.AlertType type, String message) {
+        new Alert(type, message).showAndWait();
     }
 
 }
