@@ -243,6 +243,7 @@ public class GOPScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
         ImagePattern backgroundPattern = new ImagePattern(background);
+        setCommonButtons(ui);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
     }

@@ -31,7 +31,7 @@ public class GameController {
         this.playerNames = playerNames;
         try {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
-            gameScreen =(GameScreen) constructor.newInstance((GameController) this);
+            gameScreen =(GameScreen) constructor.newInstance((GameController) this, playerNames);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -97,7 +97,6 @@ public class GameController {
     public void setToFaceUp(int cardID){
         currentGame.setFaceUp(cardID);
     }
-    //TODO: getPlayerNames, getPlayerScores
 
     public List<String>getPlayerNames(){
         return currentGame.getPlayerNames();

@@ -3,8 +3,8 @@ package ooga.Model.Games;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
-import ooga.Model.Cards.Deck;
 import ooga.Model.Cards.Playable;
+import ooga.Model.Players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +48,7 @@ public class MemoryDriver extends GameDriver {
         if(card1.getNumber() == card2.getNumber() && card1.getValue().equals(card2.getValue())){
             ret.add(1);
             removeCardFromPiles((Integer) args.get(0)); removeCardFromPiles((Integer) args.get(1));
+            updateScore(5, "");
         }else{
             ret.add(0);
         }
@@ -55,8 +56,16 @@ public class MemoryDriver extends GameDriver {
     }
 
     @Override
-    public void updateScore(int score, int playerIndex) {
-
+    public void updateScore(int score, String playerName) {
+        if (playerName.equals("")){
+            playerList.get(0).addToScore(score);
+            return;
+        }
+        for (Player p : playerList){
+            if(playerName.equals(p.getName())){
+                p.addToScore(score);
+            }
+        }
     }
 
     @Override

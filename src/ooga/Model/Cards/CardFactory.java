@@ -22,7 +22,8 @@ public class CardFactory {
          case HUMANITY_QUES:
             initializeHumanity(deck, deckType);
             break;
-         case GOP:
+         case TRUTH:
+         case DARE:
             initializeHumanity(deck, deckType);
 
       }
@@ -99,7 +100,8 @@ public class CardFactory {
       switch (deckType){
          case HUMANITY_ANS:
          case HUMANITY_QUES:
-         case GOP:
+         case TRUTH:
+         case DARE:
             card = new HumanityCard(attributes[0], id);
             break;
          default: //for poker cards
@@ -123,9 +125,9 @@ public class CardFactory {
    }
 
    public static void main(String[] args) {
-      CardDeck deck = new CardDeck(DeckType.GOP, new ArrayList<>());
-      initializeDeck(deck, DeckType.GOP);
-      System.out.println(deck);
+//      CardDeck deck = new CardDeck(DeckType.GOP, new ArrayList<>());
+//      initializeDeck(deck, DeckType.GOP);
+//      System.out.println(deck);
    }
    }
 

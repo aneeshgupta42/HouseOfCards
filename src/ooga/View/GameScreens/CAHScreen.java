@@ -38,7 +38,7 @@ public class CAHScreen extends GameScreen {
     private Map<String, Object> jsonData = new HashMap<>();
     private List<VboxFactory> tappedCards = new ArrayList<>();
     private static final String BACK_IMAGE_PATH = "backImagePath_humanity";
-    private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
+    private String style = "-fx-border-color: black;-fx-background-color: rgba(155, 30, 15, 1);-fx-padding: 2 2 2 2 ";
     private static final String VERTICAL_Z_KEY ="verticalZ";
     private static final String HORIZ_Z_KEY="horizZ";
     private static final String X_ZERO_KEY = "Xzero_index";
@@ -57,6 +57,7 @@ public class CAHScreen extends GameScreen {
     private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
     private int round =0;
+    private List<String> names = new ArrayList<>();
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label(" ");
 
@@ -93,7 +94,7 @@ public class CAHScreen extends GameScreen {
             if(!tappedCards.contains(card.getScene())) {
                 card.getScene().setVisible(!card.getScene().isVisible());
                 playerLabel.setVisible(card.getScene().isVisible());
-                playerLabel.setText((String) jsonData.get(BUTTON_TEXT_KEY) + round);
+                playerLabel.setText(names.get(round-1));
             }
         }
     }
@@ -103,14 +104,14 @@ public class CAHScreen extends GameScreen {
         }
     }
 
-    //TODO: initializeGame before requestCards
-    //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public CAHScreen(GameController setUpController) {
+
+    public CAHScreen(GameController setUpController, List<String> playerNames) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
        // System.out.println(playerNames);
-       // gameControl.makePlayers(playerNames);
+       //gameControl.makePlayers(playerNames);
         differentDecks = setUpController.requestCards();
+        names= playerNames;
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }
@@ -268,16 +269,14 @@ public class CAHScreen extends GameScreen {
             double distanceBetweenButtons = Double.parseDouble((String) jsonData.get(BUTTON_DISTANCE));
             int initialDistance = 0;
             for (int i = 1; i <= differentDecks.keySet().size() - 1; i++) {
-                ButtonFactory gameButton = new ButtonFactory((String) jsonData.get(BUTTON_TEXT_KEY) + i, XPos + initialDistance, YPos);
+                ButtonFactory gameButton = new ButtonFactory(names.get(i-1), XPos + initialDistance, YPos);
                 gameButton.setOnAction(e -> {
                     changeCards(differentDecks.keySet().size() - 1);
                     List<Object> cardsChosen = new ArrayList<>();
                     for (VboxFactory cards : tappedCards) {
                         cardsChosen.add(cards.getIndex());
                     }
-                    String[] buttonName = gameButton.getText().split(EMPTY);
-                    Integer playerIndex = Integer.parseInt(buttonName[1]);
-                    cardsChosen.add(playerIndex);
+                    cardsChosen.add(gameButton.getText());
                     gameControl.updateProtocol(cardsChosen);
                     gameScene.getChildren().remove(gameButton);
                     for (VboxFactory card : tappedCards) {
@@ -321,6 +320,7 @@ public class CAHScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACKGROUND_KEY)));
         ImagePattern backgroundPattern = new ImagePattern(background);
+        setCommonButtons(ui);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
     }

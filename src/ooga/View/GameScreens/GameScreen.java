@@ -36,6 +36,9 @@ public abstract class GameScreen {
     }
 
     public abstract Scene getScene(UserInterface ui);
+    public void setCommonButtons(UserInterface ui){
+        restartButton.setOnMouseClicked(e-> ui.setSplash());
+    }
 //    public void userScreen(String gameName){
 //        UserInput c= new UserInput(gameName, this);
 //        myStage.setScene(c.getUserScene());
