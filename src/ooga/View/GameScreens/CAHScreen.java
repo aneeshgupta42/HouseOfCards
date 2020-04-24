@@ -56,7 +56,9 @@ public class CAHScreen extends GameScreen {
     private static final String BACKGROUND_KEY="background_string";
     private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
+    private static final int FIXED_ROUND = 5;
     private int round =0;
+    private int roundNumber =1;
     private List<String> names = new ArrayList<>();
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label(" ");
@@ -101,6 +103,10 @@ public class CAHScreen extends GameScreen {
     private void checkRound(){
         if(round>differentDecks.keySet().size()-1){
             round=1;
+            roundNumber++;
+        }
+        if(roundNumber>FIXED_ROUND){
+            endGame();
         }
     }
 
@@ -279,9 +285,10 @@ public class CAHScreen extends GameScreen {
                     cardsChosen.add(gameButton.getText());
                     gameControl.updateProtocol(cardsChosen);
                     gameScene.getChildren().remove(gameButton);
+
                     for (VboxFactory card : tappedCards) {
                         if (gameScene.getChildren().remove(card) == false) {
-                            endGame();
+
                         }
                         gameScene.getChildren().remove(card);
                     }
@@ -312,7 +319,7 @@ public class CAHScreen extends GameScreen {
     }
 
     private void endGame(){
-        // take the user to the end screen 
+        System.out.println(gameControl.getWinner());
     }
 
 
