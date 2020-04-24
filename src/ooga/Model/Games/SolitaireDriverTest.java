@@ -17,7 +17,7 @@ class SolitaireDriverTest {
 
     @BeforeEach
     void setUp() {
-        test = new SolitaireDriver(new GameController());
+        test = new SolitaireDriver(new GameController(), new ArrayList<>());
     }
 
     @Test

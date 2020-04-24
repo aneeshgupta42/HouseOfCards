@@ -7,9 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -24,7 +22,6 @@ import ooga.View.PartyCards;
 import ooga.View.UserInterface;
 import ooga.View.VboxFactory;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -126,9 +123,9 @@ public class CAHScreen extends GameScreen {
     public CAHScreen(GameController setUpController, List<String> playerNames) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
-        System.out.println(playerNames);
-       // gameControl.makePlayer(playerNames);
-        differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
+       // System.out.println(playerNames);
+       // gameControl.makePlayers(playerNames);
+        differentDecks = setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }

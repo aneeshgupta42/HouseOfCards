@@ -5,7 +5,7 @@ import ooga.Model.Players.Player;
 import java.util.List;
 
 public interface Game {
-    void makePlayer(List<String> userName);
+    void makePlayers(List<String> userName);
 
     List<Player> getPlayerList();
 
@@ -17,7 +17,7 @@ public interface Game {
      */
     List<Object> updateProtocol(List<Object> args);
 
-    void updateScore(int score, String playerName);
+    void updateScore(int score, int playerIndex);
 
     void changeLevel(int level);
 

@@ -1,5 +1,6 @@
 package ooga.Controller;
 
+import ooga.Model.Cards.Playable;
 import ooga.Model.Games.GameDriver;
 import ooga.Model.Games.HumanityDriver;
 import ooga.Model.Games.SolitaireDriver;
@@ -18,24 +19,27 @@ public class GameController {
     private static final List<String> DEFAULT_GAMES = List.of(
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
     GameDriver currentGame;
+    List<String>playerNames;
     GameScreen currentScreen;
 
     public GameController(){
+        playerNames = new ArrayList<>();
     }
 
     public GameScreen getGameScreen(String gameName, List<String> playerNames){
         Map<String, Object> ret = readJSON("gameScreen", gameName.toLowerCase());
         String gameScreenClass = (String) ret.get("className");
         GameScreen gameScreen = null;
+        this.playerNames = playerNames;
         try {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
-            gameScreen =(GameScreen) constructor.newInstance((GameController) this, (List<String>) playerNames);
+            gameScreen =(GameScreen) constructor.newInstance((GameController) this, this.playerNames);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return gameScreen;
     }
-//Refactor this to read from data files.
+//TODO: Refactor this to read from data files.
     public Map<String, Object> initializeGame(GameTypes type){
         int index;
         switch (type){
@@ -51,7 +55,7 @@ public class GameController {
 
         try {
             Constructor<?> constructor = Class.forName(DEFAULT_GAMES.get(index)).getDeclaredConstructors()[0];
-            currentGame =(GameDriver) constructor.newInstance(this);
+            currentGame =(GameDriver) constructor.newInstance(this, playerNames);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -95,8 +99,8 @@ public class GameController {
     }
     //TODO: getPlayerNames, getPlayerScores
 
-    public void makePlayer(List<String> playerName){
-        currentGame.makePlayer(playerName);
+    public void makePlayers(List<String> playerName){
+        this.playerNames = playerName;
     }
     public String getValue(int cardID){
         return currentGame.getCardValue(cardID);

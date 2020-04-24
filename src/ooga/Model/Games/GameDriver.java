@@ -50,7 +50,7 @@ public abstract class GameDriver implements Game {
     }
 
     @Override
-    public void makePlayer(List<String>names) {
+    public void makePlayers(List<String>names) {
         for (String name : names){
             playerList.add(new Player(name));
         }
