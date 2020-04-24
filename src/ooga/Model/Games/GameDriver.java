@@ -57,8 +57,21 @@ public abstract class GameDriver implements Game {
     }
 
     @Override
-    public List<Player> getPlayerList() {
-        return playerList;
+    public List<String> getPlayerNames(){
+        List<String>ret = new ArrayList<>();
+        for (Player p : playerList){
+            ret.add(p.getName());
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Integer> getPlayerScores() {
+        List<Integer>ret = new ArrayList<>();
+        for (Player p : playerList){
+            ret.add(p.getScore());
+        }
+        return ret;
     }
 
     @Override

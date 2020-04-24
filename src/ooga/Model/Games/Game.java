@@ -7,7 +7,9 @@ import java.util.List;
 public interface Game {
     void makePlayers(List<String> userName);
 
-    List<Player> getPlayerList();
+    List<String> getPlayerNames();
+
+    List<Integer> getPlayerScores();
 
     boolean checkWin();
 

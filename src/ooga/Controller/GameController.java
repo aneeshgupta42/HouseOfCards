@@ -99,6 +99,14 @@ public class GameController {
     }
     //TODO: getPlayerNames, getPlayerScores
 
+    public List<String>getPlayerNames(){
+        return currentGame.getPlayerNames();
+    }
+
+    public List<Integer>getPlayerScores(){
+        return currentGame.getPlayerScores();
+    }
+
     public void makePlayers(List<String> playerName){
         this.playerNames = playerName;
     }
