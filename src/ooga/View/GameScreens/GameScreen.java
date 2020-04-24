@@ -42,11 +42,16 @@ public abstract class GameScreen {
     public void setCommonButtons(UserInterface ui, GameController gameController, String gameName){
         restartButton.setOnMouseClicked(e-> ui.setSplash());
         exitButton.setOnMouseClicked(e->{
-            List<Object> winner = gameController.getWinner();
-            ui.setWinScreen(gameName, (String) winner.get(1),(Integer)winner.get(0) );
+           endGame(ui, gameController, gameName);
 
         } );
     }
+
+    public void endGame(UserInterface ui, GameController gameController, String gameName){
+        List<Object> winner = gameController.getWinner();
+        ui.setWinScreen(gameName, (String) winner.get(1),(Integer)winner.get(0) );
+    }
+
 //    public void userScreen(String gameName){
 //        UserInput c= new UserInput(gameName, this);
 //        myStage.setScene(c.getUserScene());
