@@ -45,7 +45,6 @@ public class MemoryScreen extends GameScreen {
         gameControl = setUpController;
         gameData = gameControl.initializeGame(GameTypes.MEMORY);
         playerNames = gameControl.getPlayerNames();
-        System.out.println(playerNames);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();

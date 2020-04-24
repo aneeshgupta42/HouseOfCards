@@ -49,7 +49,6 @@ public class SolitaireScreen extends GameScreen {
         gameControl = setUpController;
         gameData = gameControl.initializeGame(GameTypes.SOLITAIRE);
         playerNames = gameControl.getPlayerNames();
-        System.out.println(playerNames);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
