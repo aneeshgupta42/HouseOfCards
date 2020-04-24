@@ -183,7 +183,7 @@ public class SolitaireDriver extends GameDriver {
     }
 
     @Override
-    public void updateScore(int score, int playerIndex) {
+    public void updateScore(int score, String playerName) {
 
     }
 

@@ -3,7 +3,9 @@ package ooga.Model.Games;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
+import ooga.Model.Players.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GOPDriver extends GameDriver {
@@ -15,7 +17,8 @@ public class GOPDriver extends GameDriver {
 
     @Override
     protected void makePiles() {
-        piles.put(0, new CardDeck(DeckType.GOP));
+        piles.put(0, new CardDeck(DeckType.TRUTH));
+        piles.put(1, new CardDeck(DeckType.DARE));
     }
 
     @Override
@@ -25,12 +28,20 @@ public class GOPDriver extends GameDriver {
 
     @Override
     public List<Object> updateProtocol(List<Object> args) {
+        removeCardFromPiles((Integer) args.get(0));
+        if((Integer) args.get(2) == 1){
+            updateScore(5, (String) args.get(1));
+        }
         return null;
     }
 
     @Override
-    public void updateScore(int score, int playerIndex) {
-
+    public void updateScore(int score, String playerName) {
+        for (Player p : playerList){
+            if(playerName.equals(p.getName())){
+                p.addToScore(score);
+            }
+        }
     }
 
     @Override
@@ -51,5 +62,13 @@ public class GOPDriver extends GameDriver {
     @Override
     public void startGame() {
 
+    }
+
+    public static void main(String[] args) {
+        GOPDriver test = new GOPDriver(new GameController(), new ArrayList<>());
+        for(Integer i : test.piles.keySet()){
+            System.out.println("Pile: " + i);
+            System.out.println(test.piles.get(i));
+        }
     }
 }
