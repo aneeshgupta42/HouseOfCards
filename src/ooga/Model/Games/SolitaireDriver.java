@@ -1,9 +1,11 @@
 package ooga.Model.Games;
 
+import javafx.scene.control.Alert;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.Playable;
+import ooga.View.utils.GameException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,37 +67,44 @@ public class SolitaireDriver extends GameDriver {
     }
 
     @Override
-    public List<Object> updateProtocol(List<Object> args) {
-        //case when removeCompleteSets is called
-        List<Object> ret = new ArrayList<>();
-        if (args == null){
-            List<Integer> id =  drawPileProtocol();
-            ret.add(id);
+    public List<Object> updateProtocol(List<Object> args) throws GameException {
+        try {
+            //case when removeCompleteSets is called
+            List<Object> ret = new ArrayList<>();
+            if (args == null) {
+                List<Integer> id = drawPileProtocol();
+                ret.add(id);
+                return ret;
+            }
+            if (args.size() == 2) {
+                removeCompleteSet((Integer) args.get(0), (Integer) args.get(1));
+                return null;
+            }
+            int sourcePile = (Integer) args.get(0);
+            int destPile = (Integer) args.get(1);
+            int indexInSource = (Integer) args.get(2);
+
+            boolean cond1 = checkSourcePileOrder(sourcePile, indexInSource);
+            boolean cond2 = checkNumericalContinuity(sourcePile, indexInSource, destPile);
+
+            if (cond1 && cond2) {
+                ret.add(1);
+            } else {
+                ret.add(0);
+            }
+//        System.out.println("cond1: " + cond1 + "cond2: " + cond2);
+            updatePiles(cond1 && cond2, sourcePile, indexInSource, destPile);
+            // Logic to check for a complete set;
+            int indexOfCompleteSet = checkCompleteSet(destPile);
+            //System.out.println("index: " + indexOfCompleteSet);
+            if (indexOfCompleteSet != -1) {
+                ret.add(indexOfCompleteSet);
+            }
             return ret;
         }
-        if (args.size() == 2){
-            removeCompleteSet((Integer) args.get(0), (Integer) args.get(1));
-            return null;
+        catch(IndexOutOfBoundsException e){
+            throw new GameException("Invalid bug");
         }
-        int sourcePile = (Integer) args.get(0);
-        int destPile = (Integer) args.get(1);
-        int indexInSource = (Integer) args.get(2);
-
-        boolean cond1 = checkSourcePileOrder(sourcePile, indexInSource);
-        boolean cond2 = checkNumericalContinuity(sourcePile, indexInSource, destPile);
-
-        if (cond1 && cond2){
-            ret.add(1);
-        }else{
-            ret.add(0);
-        }
-//        System.out.println("cond1: " + cond1 + "cond2: " + cond2);
-        updatePiles(cond1&&cond2, sourcePile, indexInSource, destPile);
-        // Logic to check for a complete set;
-        int indexOfCompleteSet = checkCompleteSet(destPile);
-        //System.out.println("index: " + indexOfCompleteSet);
-        if (indexOfCompleteSet != -1){ret.add(indexOfCompleteSet);}
-        return ret;
     }
 
 
