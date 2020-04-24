@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
@@ -21,6 +22,7 @@ public class MemoryScreen extends GameScreen {
     private Group gameScene;
     private Map<String, Object> gameData;
     private List<String> playerNames;
+    private UserInterface userInterface;
     private static final String CARDWIDTH = "cardWidth";
     private static final String CARDHEIGHT = "cardHeight";
     private static final String CARDPILEX = "cardPileX";
@@ -30,6 +32,7 @@ public class MemoryScreen extends GameScreen {
     private static final String YOFFSET = "YOFFSET";
     private static final String XOFFSET = "XOFFSET";
     private GameController gameControl;
+    private boolean cheatCodeActive = false;
     private int numCompletePairs = 0;
 
     private List<Object> currentPair = new ArrayList<>();
@@ -67,7 +70,7 @@ public class MemoryScreen extends GameScreen {
     private void setCardFace(int id, boolean faceUp) {
         ImageView card = idImage.get(id);
         String imagePath;
-        if (faceUp) {
+        if (faceUp||cheatCodeActive) {
             imagePath = idImagePath.get(id);
         } else {
             imagePath = (String) gameData.get(BACKIMAGE);
@@ -88,7 +91,7 @@ public class MemoryScreen extends GameScreen {
     private void addCards() {
         gameScene = new Group();
         setUpButtons(gameScene);
-        //TODO: change this to receive a map instead
+        gameScene.setOnKeyPressed(e-> handleKeyPressed(e.getCode()));
         double i = 0;
         double j = 0;
         for (Integer key : differentDecks.keySet()) {
@@ -104,7 +107,6 @@ public class MemoryScreen extends GameScreen {
     }
 
     private void setUponScreen(List<Integer> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
-        int pileSize = playingCards.size();
         for (Integer cardID : playingCards) {
             ImageView cardImage = idImage.get(cardID);
             // TODO: use this way to keep bottom pule always back face up?
@@ -117,6 +119,19 @@ public class MemoryScreen extends GameScreen {
             j = j + v;
             i = i + v1;
             gameScene.getChildren().add(cardImage);
+        }
+    }
+
+    private void handleKeyPressed(KeyCode code){
+        initDiffDecks();
+        if(code==KeyCode.Q){
+            cheatCodeActive = true;
+            for(Integer pile: differentDecks.keySet()){
+                for(Integer id: differentDecks.get(pile)){
+                    setCardFace(id, true);
+                }
+            }
+
         }
     }
 
@@ -165,17 +180,20 @@ public class MemoryScreen extends GameScreen {
         if (success) {
             gameScene.getChildren().removeAll(currentPairImg);
             numCompletePairs++;
+        }else {
+            setCardFace((Integer) currentPair.get(0), success);
+            setCardFace((Integer) currentPair.get(1), success);
         }
-        setCardFace((Integer) currentPair.get(0), success);
-        setCardFace((Integer) currentPair.get(1), success);
         if (ret.size() == 2) {
-
+            userInterface.setWinScreen("Memory", playerNames.get(0), numCompletePairs);
+            System.out.println("GAME WON!!!");
         }
         return success;
     }
 
     @Override
     public Scene getScene(UserInterface ui) {
+        userInterface = ui;
         setCommonButtons(ui);
         String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = imageGetter(gameBackground);
