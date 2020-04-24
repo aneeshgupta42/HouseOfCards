@@ -100,7 +100,7 @@ public class GameController {
     }
     //TODO: getPlayerNames, getPlayerScores
 
-    public void makePlayer(String playerName){
+    public void makePlayer(List<String> playerName){
         currentGame.makePlayer(playerName);
     }
     public String getValue(int cardID){

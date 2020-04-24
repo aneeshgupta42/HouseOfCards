@@ -3,15 +3,16 @@ package ooga.Model.Games;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
-import ooga.Model.Cards.HumanityCard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HumanityDriver extends GameDriver{
-    public HumanityDriver(GameController controller) {
+    public HumanityDriver(GameController controller, List<String>players) {
         super(controller);
+        makePlayer(players);
         makePiles();
     }
 
@@ -24,7 +25,6 @@ public class HumanityDriver extends GameDriver{
     protected void makePiles() {
         piles.putIfAbsent(0, new CardDeck(DeckType.HUMANITY_QUES));
         piles.putIfAbsent(1, new CardDeck(DeckType.HUMANITY_ANS));
-        makePlayer("dd");makePlayer("33");makePlayer("ee");
         piles.get(0).shuffleDeck();
         piles.get(1).shuffleDeck();
         for (int index = 2; index < playerList.size()+2; index++){
@@ -33,7 +33,7 @@ public class HumanityDriver extends GameDriver{
     }
 
     @Override
-    public Object sendCards() {
+    public Map<Integer, List<Integer>> sendCards() {
         Map<Integer, List<Integer>> ret = new HashMap<>();
         ret.put(0, piles.get(0).getIDList());
         for (int i = 2; i < piles.size(); i++){
@@ -73,10 +73,12 @@ public class HumanityDriver extends GameDriver{
     }
 
     public static void main(String[] args) {
-        HumanityDriver test = new HumanityDriver(new GameController());
+        List<String> names = new ArrayList<>();
+        names.add("a"); names.add("b"); names.add("c");
+        HumanityDriver test = new HumanityDriver(new GameController(), names);
         for (Integer i : test.piles.keySet()){
             System.out.println("Pile: " + i);
-            System.out.println(test.piles.get(i));
+            System.out.println(test.piles.get(i).getDeckSize());
         }
     }
 }

@@ -5,7 +5,7 @@ import ooga.Model.Players.Player;
 import java.util.List;
 
 public interface Game {
-    void makePlayer(String userName);
+    void makePlayer(List<String> userName);
 
     List<Player> getPlayerList();
 

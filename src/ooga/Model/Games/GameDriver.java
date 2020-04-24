@@ -50,9 +50,10 @@ public abstract class GameDriver implements Game {
     }
 
     @Override
-    public void makePlayer(String userName) {
-        playerList.add(new Player(userName));
-        //TODO: add this function here: makePiles();
+    public void makePlayer(List<String>names) {
+        for (String name : names){
+            playerList.add(new Player(name));
+        }
     }
 
     @Override
