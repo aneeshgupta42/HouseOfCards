@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
@@ -64,6 +65,27 @@ public class SolitaireScreen extends GameScreen {
         }
     }
 
+    private void handleKeyPressed(KeyCode code){
+        if(code==KeyCode.Q){
+            Map<Integer, List<Integer>>diffDecks = new HashMap<>();
+            Map<Integer, ImageView> tempIdImg = new HashMap<>();
+            gameScene.getChildren().removeAll(idImage.values());
+            for(int i = 0; i<8; i++){
+                ImageView backImage = new ImageView(imageGetter((String) gameData.get(BACKIMAGE)));
+                backImage.setFitWidth(Double.parseDouble((String)gameData.get(CARDWIDTH)));
+                backImage.setFitHeight(Double.parseDouble((String)gameData.get(CARDHEIGHT)));
+                gameScene.getChildren().add(backImage);tempIdImg.put(i, backImage);
+                List<Integer> tempList = new ArrayList<>(); tempList.add(i);
+                diffDecks.put(i,tempList);
+                CardSet cardSet = new CardSet(backImage, tempIdImg, diffDecks);
+                cardSet.winProtocol(i+1);
+            }
+        }
+        if(code == KeyCode.W){
+            userInterface.setWinScreen((String) gameData.get("gameName"), playerNames.get(0), 9999);
+        }
+    }
+
     private Image imageGetter(String path){
         return new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
     }
@@ -109,6 +131,7 @@ public class SolitaireScreen extends GameScreen {
 
     private void addCards() {
         gameScene = new Group();
+        gameScene.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         setUpButtons(gameScene);
         double i = 0, j = 0, l = 0;
         for (Integer key : differentDecks.keySet()) {

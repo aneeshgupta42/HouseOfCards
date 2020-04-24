@@ -35,17 +35,17 @@ public class WinScreen {
         Label Header = new Label(player + " WINS!!");
         Header.setFont(new Font("Garamond", 50));
         Header.setTextFill(Color.ALICEBLUE);
-        Header.setLayoutX(sceneWidth/2-100); Header.setLayoutY(150);
+        Header.setLayoutX(sceneWidth/2-250); Header.setLayoutY(150);
 
         Label Game = new Label("Game played: " + game);
         Game.setFont(new Font("Garamond", 50));
         Game.setTextFill(Color.BISQUE);
-        Game.setLayoutX(sceneWidth/2-100); Game.setLayoutY(300);
+        Game.setLayoutX(sceneWidth/2-250); Game.setLayoutY(300);
 
         Label Score = new Label("Score achieved: " + score);
         Score.setFont(new Font("Garamond", 50));
         Score.setTextFill(Color.FORESTGREEN);
-        Score.setLayoutX(sceneWidth/2-100); Score.setLayoutY(500);
+        Score.setLayoutX(sceneWidth/2-250); Score.setLayoutY(500);
         root.getChildren().addAll(Score, Game, Header);
         setUpButtons();
     }
