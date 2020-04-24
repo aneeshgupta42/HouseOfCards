@@ -176,6 +176,7 @@ public class MemoryScreen extends GameScreen {
 
     @Override
     public Scene getScene(UserInterface ui) {
+        setCommonButtons(ui);
         String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = imageGetter(gameBackground);
         ImagePattern backgroundPattern = new ImagePattern(background);
