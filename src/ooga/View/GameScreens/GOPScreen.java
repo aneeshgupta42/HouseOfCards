@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -87,6 +88,7 @@ public class GOPScreen extends GameScreen {
     }
 
     private void addCards(GameController setUpController) {
+        setStylingForLabel();
         gameScene = new Group();
         choosePlayer();
         setUpButtons(gameScene);
@@ -94,8 +96,8 @@ public class GOPScreen extends GameScreen {
         double j = 0;
         for (Integer key : indexMapped.keySet()) {
             List<PartyCards> playingCards = indexMapped.get(key);
-            setUponScreen(playingCards, 0, 0, i, j, 500, 200);
-            i+=150;
+            setUponScreen(playingCards, 0, 0, i, j, 200, 200);
+            i+=650;
         }
 
     }
@@ -103,7 +105,7 @@ public class GOPScreen extends GameScreen {
     private void choosePlayer() {
         int player = getRandomInt();
         System.out.println(player);
-        playerLabel.setText(playerNames.get(player));
+        playerLabel.setText("Player Chosen is "+ playerNames.get(player-1));
         playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         if(!gameScene.getChildren().contains(playerLabel)){
         gameScene.getChildren().add(playerLabel);}
@@ -132,7 +134,7 @@ public class GOPScreen extends GameScreen {
     }
 
     private int getRandomInt(){
-        return (int) ((Math.random() * ((playerNames.size()- 2) + 1)) + 1);
+        return (int) ((Math.random() * ((playerNames.size()- 1) + 1)) + 1);
     }
 
 
@@ -145,14 +147,6 @@ public class GOPScreen extends GameScreen {
                     card.toFront();
                     card.setFace();
                     card.setStyle(style);
-                    tappedCards.add(card);
-
-            }});
-                card.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                tappedCards.add(card);
-                chooseWinner();
                 List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
                     for (PartyCards cardObj : listOfCards) {
                         if(cardObj.getScene() == card)
@@ -160,9 +154,25 @@ public class GOPScreen extends GameScreen {
                         changeVbox(cardObj);
                         card.toFront();
                     }
-                    card.setCursor(Cursor.HAND);
-            }
-        });
+                    tappedCards.add(card);
+                    chooseWinner();
+
+            }});
+//                card.setOnMousePressed(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                tappedCards.add(card);
+//                chooseWinner();
+//                List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
+//                    for (PartyCards cardObj : listOfCards) {
+//                        if(cardObj.getScene() == card)
+//                        cardObj.changeFace(true);
+//                        changeVbox(cardObj);
+//                        card.toFront();
+//                    }
+//                    card.setCursor(Cursor.HAND);
+//            }
+//        });
     }
 
     private void changeVbox(PartyCards card){
@@ -175,18 +185,27 @@ public class GOPScreen extends GameScreen {
 
 
     }
+    private void setStylingForLabel() {
+        playerLabel.setLayoutX(450);
+        playerLabel.setLayoutY(250);
+        playerLabel.setTextFill(Color.WHITE);
+        playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
+    }
     private void setupButtons( double XPos, double YPos){
         int initialDistance = 0;
-        for (int i = 1; i <=1; i++) {
-            ButtonFactory gameButton = new ButtonFactory("Player " + i, XPos + initialDistance, YPos);
+        List<String> buttonWords = new ArrayList();
+        buttonWords.add("Done");
+        buttonWords.add("Not Done");
+        for (int i = 0; i <=1; i++) {
+            ButtonFactory gameButton = new ButtonFactory(buttonWords.get(i), XPos + initialDistance, YPos);
             gameButton.setOnAction(e -> {
                 List<Object> cardsChosen = new ArrayList<>();
                 for (VboxFactory cards : tappedCards) {
                     cardsChosen.add(cards.getIndex());
                 }
-                String[] buttonName = gameButton.getText().split(" ");
-                Integer playerIndex = Integer.parseInt(buttonName[1]);
-                cardsChosen.add(playerIndex);
+                String[] playerTurn = playerLabel.getText().split(" ");
+                cardsChosen.add(gameButton.getText());
+                cardsChosen.add(playerTurn[3]);
                 gameControl.updateProtocol(cardsChosen);
                 gameScene.getChildren().remove(gameButton);
                 for (VboxFactory card : tappedCards) {
@@ -199,7 +218,7 @@ public class GOPScreen extends GameScreen {
                 gameScene.getChildren().remove(buttonHolder);
                 choosePlayer();
             });
-            if (buttonHolder.getChildren().size() <= differentDecks.keySet().size() - 1) {
+            if (buttonHolder.getChildren().size() <= differentDecks.keySet().size() ) {
                 addToHbox(gameButton);
             }
 
@@ -210,7 +229,7 @@ public class GOPScreen extends GameScreen {
     }
 
     private void addToHbox(ButtonFactory gameButton) {
-        if(buttonHolder.getChildren().size()== differentDecks.keySet().size()-1){
+        if(buttonHolder.getChildren().size()== differentDecks.keySet().size()){
             buttonHolder.setLayoutX(100);
             buttonHolder.setLayoutY(500);
             if(!gameScene.getChildren().contains(buttonHolder)) {
