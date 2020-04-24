@@ -43,13 +43,8 @@ public class MemoryDriver extends GameDriver {
     @Override
     public List<Object> updateProtocol(List<Object> args) {
         List<Object> ret = new ArrayList<>();
-        System.out.println(args.size());
         Playable card1 = getCard((Integer) args.get(0));
         Playable card2 = getCard((Integer) args.get(1));
-        System.out.println(card1.getNumber());
-        System.out.println(card2.getNumber());
-        System.out.println(card1.getValue());
-        System.out.println(card2.getValue());
         if(card1.getNumber() == card2.getNumber() && card1.getValue().equals(card2.getValue())){
             ret.add(1);
             removeCardFromPiles((Integer) args.get(0)); removeCardFromPiles((Integer) args.get(1));

@@ -124,8 +124,6 @@ public class MemoryScreen extends GameScreen{
 
 
     private void setUpListeners(ImageView cardImage) {
-        boolean pairFormed = false;
-        int pile = getCardPile(differentDecks, cardImage);
         if(getCardID(idImage, cardImage)<0) return;
             cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
@@ -156,7 +154,7 @@ public class MemoryScreen extends GameScreen{
                 public void handle(MouseEvent mouseEvent){
                    if(currentPair.size()==2){
                        try {
-                           TimeUnit.SECONDS.sleep(1);
+                           TimeUnit.MILLISECONDS.sleep(500);
                        } catch (InterruptedException e) {
                            e.printStackTrace();
                        }
@@ -177,7 +175,6 @@ public class MemoryScreen extends GameScreen{
                     List<Object> ret = gameControl.updateProtocol(currentPair);
                     boolean success = (Integer) ret.get(0) == 1;
                     System.out.println(success);
-
                     if(success) {
                         gameScene.getChildren().removeAll(currentPairImg);
                     }
@@ -185,7 +182,6 @@ public class MemoryScreen extends GameScreen{
                         setCardFace((Integer) currentPair.get(0), false);
                         setCardFace((Integer) currentPair.get(1), false);
                     }
-
                     if(ret.size()==2){
 
                     }
