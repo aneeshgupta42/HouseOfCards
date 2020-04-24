@@ -1,7 +1,5 @@
 package ooga.Model.Games;
 
-import ooga.Model.Players.Player;
-
 import java.util.List;
 
 public interface Game {
@@ -19,7 +17,7 @@ public interface Game {
      */
     List<Object> updateProtocol(List<Object> args);
 
-    void updateScore(int score, int playerIndex);
+    void updateScore(int score, String playerName);
 
     void changeLevel(int level);
 

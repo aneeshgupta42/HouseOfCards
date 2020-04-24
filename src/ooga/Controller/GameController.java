@@ -97,7 +97,6 @@ public class GameController {
     public void setToFaceUp(int cardID){
         currentGame.setFaceUp(cardID);
     }
-    //TODO: getPlayerNames, getPlayerScores
 
     public List<String>getPlayerNames(){
         return currentGame.getPlayerNames();
