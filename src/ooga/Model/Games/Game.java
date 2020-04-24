@@ -17,7 +17,7 @@ public interface Game {
      */
     List<Object> updateProtocol(List<Object> args);
 
-    void updateScore(int score);
+    void updateScore(int score, String playerName);
 
     void changeLevel(int level);
 

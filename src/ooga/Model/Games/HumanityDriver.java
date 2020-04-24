@@ -3,6 +3,7 @@ package ooga.Model.Games;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
+import ooga.Model.Cards.Playable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,11 +45,21 @@ public class HumanityDriver extends GameDriver{
 
     @Override
     public List<Object> updateProtocol(List<Object> args) {
+        int playerWon = (int) args.get(args.size() - 1);
+        updateScore(5, playerList.get(playerWon).getName());
+        //Remove used cards from the piles structure
+        for (Object ID : args){
+            removeCardFromPiles((Integer) ID);
+        }
+        for (int i = 2; i < piles.size(); i++){
+            int cardsNeeded = 10 - piles.get(i).getDeckSize();
+            piles.get(i).addCard(piles.get(1).popCards(cardsNeeded));
+        }
         return null;
     }
 
     @Override
-    public void updateScore(int score) {
+    public void updateScore(int score, String playerName) {
 
     }
 

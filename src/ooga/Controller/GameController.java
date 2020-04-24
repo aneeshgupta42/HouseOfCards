@@ -61,11 +61,6 @@ public class GameController {
     }
 
 
-    //TODO: Front end needs to implement this
-    public void giveGameScreen (GameScreen game){
-        currentScreen = game;
-    }
-
     private Map<String, Object> readJSON(String dataRequestedFor, String gameType){
         String path = "data/gameFiles/" + gameType + ".json";
         Map<String, Object> ret = null;

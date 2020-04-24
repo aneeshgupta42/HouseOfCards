@@ -76,6 +76,15 @@ public abstract class GameDriver implements Game {
         return null;
     }
 
+    protected void removeCardFromPiles(int cardID){
+        for (Integer i : piles.keySet()){
+            if (piles.get(i).isCardPresent(cardID)){
+                piles.get(i).removeCard(cardID);
+                return;
+            }
+        }
+    }
+
     protected abstract void makePiles();
 
     @Override
