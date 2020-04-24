@@ -19,7 +19,7 @@ public class SplashScreen {
     private Paint background = Color.WHITESMOKE;
     private Scene startScene;
     private String logo = "cardDecks/poker/aces.png";
-    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "GameOfPhones", "Concentration", "Snap");
+    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "GOP", "Concentration", "Snap");
 
 
     public Rectangle generateLogo(){

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
@@ -23,20 +24,19 @@ import java.util.Map;
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
 public class GOPScreen extends GameScreen {
-    private List<ImageView> cards;
-    private ImageView dummyCard;
     private Group gameScene;
-    private Delta dragDelta = new Delta();
     private String backImagePath = "cardDecks/poker/red_back.png";
     private GameController gameControl;
     private Map<Integer, List<PartyCards>> indexMapped = new HashMap<>();
     //what we get
+    private Delta dragDelta = new Delta();
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
     //we'll make this (pile: List of Images)
     private Map<Integer, List<ImageView>> imageMap = new HashMap<>();
     private Map<String, Object> jsonData = new HashMap<>();
     private List<VboxFactory> tappedCards = new ArrayList<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
+    private HBox buttonHolder = new HBox(50);
     private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
 
     /***
@@ -77,10 +77,9 @@ public class GOPScreen extends GameScreen {
 
     //TODO: initializeGame before requestCards
     //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public GOPScreen(GameController setUpController) {
+    public GOPScreen(GameController setUpController, List<String> playerNames) {
         gameControl = setUpController;
         jsonData= gameControl.initializeGame(GameTypes.HUMANITY);
-
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
@@ -96,7 +95,7 @@ public class GOPScreen extends GameScreen {
         for (Integer key : indexMapped.keySet()) {
             List<PartyCards> playingCards = indexMapped.get(key);
 
-                setUponScreen(playingCards, 0.2, 0.1, i, j, 850, 450);
+                setUponScreen(playingCards, 0, 0, i, j, 500, 200);
 
         }
     }
@@ -110,8 +109,8 @@ public class GOPScreen extends GameScreen {
     private void setUponScreen(List<PartyCards> playingCards, double v, double v1, double i, double j, double XPos, double YPos) {
         for (PartyCards card : playingCards) {
             VboxFactory cardSet = card.getScene();
-            cardSet.setPrefWidth(60);
-            cardSet.setPrefHeight(90);
+            cardSet.setPrefWidth(80);
+            cardSet.setPrefHeight(110);
             cardSet.setLayoutX(XPos + i -cardSet.getLayoutBounds().getMinX());
             cardSet.setLayoutY(YPos + j- cardSet.getLayoutBounds().getMinY());
             setUpListeners(cardSet);
@@ -124,19 +123,35 @@ public class GOPScreen extends GameScreen {
     }
 
     private void setUpListeners(VboxFactory card) {
-        card.setOnMousePressed(new EventHandler<MouseEvent>() {
+        card.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                    card.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                    card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                    card.toFront();
+                    card.setFace();
+                    card.setStyle(style);
+                    tappedCards.add(card);
+
+            }});
+                card.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                tappedCards.add(card);
+                chooseWinner();
                 List<PartyCards> listOfCards = indexMapped.get(card.getIndex());
                     for (PartyCards cardObj : listOfCards) {
                         if(cardObj.getScene() == card)
                         cardObj.changeFace(true);
                         changeVbox(cardObj);
+                        card.toFront();
+
                     }
 
 
 
                 card.setCursor(Cursor.HAND);
+
 //                if(card.getIndex()!=0) {
 //                    card.setCursor(Cursor.MOVE);
 //                    tappedCards.add(card);
@@ -159,24 +174,48 @@ public class GOPScreen extends GameScreen {
 
     }
     private void setupButtons( double XPos, double YPos){
-        int distanceBetweenButtons=200;
-        int initialDistance=0;
-        for(int i=1;i<=differentDecks.keySet().size()-1;i++){
-            ButtonFactory gameButton = new ButtonFactory("Player "+i, XPos+initialDistance, YPos );
-            gameButton.setOnAction(e->{
-                // gameControl.chooseWinner(choose.getText(),tappedCards);
+        int initialDistance = 0;
+        for (int i = 1; i <= differentDecks.keySet().size() - 1; i++) {
+            ButtonFactory gameButton = new ButtonFactory("Player " + i, XPos + initialDistance, YPos);
+            gameButton.setOnAction(e -> {
+                List<Object> cardsChosen = new ArrayList<>();
+                for (VboxFactory cards : tappedCards) {
+                    cardsChosen.add(cards.getIndex());
+                }
+                String[] buttonName = gameButton.getText().split(" ");
+                Integer playerIndex = Integer.parseInt(buttonName[1]);
+                cardsChosen.add(playerIndex);
+                gameControl.updateProtocol(cardsChosen);
                 gameScene.getChildren().remove(gameButton);
-                for(VboxFactory card:tappedCards){
-                    if(gameScene.getChildren().remove(card)== false){
+                for (VboxFactory card : tappedCards) {
+                    System.out.println(tappedCards);
+                    if (gameScene.getChildren().remove(card) == false) {
                         endGame();
                     }
-                    gameScene.getChildren().remove(card);
+                    gameScene.getChildren().removeAll(tappedCards);
                 }
+                gameScene.getChildren().remove(buttonHolder);
             });
-            gameScene.getChildren().add(gameButton);
-            initialDistance+=distanceBetweenButtons;
+            if (buttonHolder.getChildren().size() <= differentDecks.keySet().size() - 1) {
+                addToHbox(gameButton);
+            }
+
 
         }
+
+
+    }
+
+    private void addToHbox(ButtonFactory gameButton) {
+        if(buttonHolder.getChildren().size()== differentDecks.keySet().size()-1){
+            buttonHolder.setLayoutX(100);
+            buttonHolder.setLayoutY(500);
+            if(!gameScene.getChildren().contains(buttonHolder)) {
+                gameScene.getChildren().add(buttonHolder);
+            }
+            return;
+        }
+        buttonHolder.getChildren().add(gameButton);
 
 
     }

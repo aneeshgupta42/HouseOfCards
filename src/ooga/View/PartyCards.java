@@ -20,7 +20,7 @@ public class PartyCards {
     private Label cardText;
     private Rectangle imageViewLike;
     private ImageView imageView;
-    private List<String> colors = List.of("rgba(0,0,0,0.8)", "rgba(100,100,50,0.8)", "rgba(200,200,150,0.8)", "rgba(250,200,250,0.8)","rgba(170,100,170,0.8)", "rgba(230,150,230,0.8)" );
+    private List<String> colors = List.of("rgba(0,0,0,1)", "rgba(100,100,50,1)", "rgba(200,200,150,1)", "rgba(250,200,250,1)","rgba(170,100,170,1)", "rgba(230,150,230,1)" );
     private String styling="-fx-border-color: black;-fx-padding: 2 2 2 2;-fx-background-color:  ";
     public PartyCards(Integer pileIndex, Image image){
         String colorBackground = chooseColor(pileIndex);
