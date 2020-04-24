@@ -79,6 +79,8 @@ public class SplashScreen {
         ButtonFactory newWorkSpace = new ButtonFactory("New Workspace", (double)1000, 10);
         sceneGroup.getChildren().add(newWorkSpace);
         newWorkSpace.setOnAction(e-> newWindowButton());
+        ButtonFactory HighScores = new ButtonFactory("View Highscores", (double) 200, 10);
+        sceneGroup.getChildren().add(HighScores);
 
     }
     private void newWindowButton(){

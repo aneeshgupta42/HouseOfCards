@@ -56,6 +56,7 @@ public class CAHScreen extends GameScreen {
     private static final String BACKGROUND_KEY="background_string";
     private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
+    private static UserInterface ui= new UserInterface();
     private int round =0;
     private List<String> names = new ArrayList<>();
     private HBox buttonHolder = new HBox(50);
@@ -101,6 +102,11 @@ public class CAHScreen extends GameScreen {
     private void checkRound(){
         if(round>differentDecks.keySet().size()-1) {
             round = 1;
+            System.out.println(names.size()-1);
+        }
+        if(indexMapped.get(names.size()-1).size()<=3){
+            System.out.println("hello");
+            endGame();
         }
     }
 
@@ -242,22 +248,6 @@ public class CAHScreen extends GameScreen {
     private void changeVbox(PartyCards card){
         card.clearCard();
     }
-//    private void setUpTappedCards(){
-//        for(VboxFactory card: tappedCards){
-//            card.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent event) {
-//                    changeCards(differentDecks.keySet().size()-1);
-//                    List<Object> cardsChosen = new ArrayList<>();
-//                    for(VboxFactory cards:tappedCards){
-//                        cardsChosen.add(cards.getIndex());
-//                        gameScene.getChildren().remove(cards);
-//                    }
-//                    gameControl.updateProtocol(cardsChosen);
-//                }
-//            });
-//        }
-//    }
 
     private void chooseWinner(){
         // TODO : backend stuff
@@ -313,7 +303,7 @@ public class CAHScreen extends GameScreen {
     }
 
     private void endGame(){
-        System.out.println(gameControl.getWinner());
+        endGame(ui, gameControl, "Cards Against Humanity");
     }
 
 
@@ -321,6 +311,7 @@ public class CAHScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACKGROUND_KEY)));
         ImagePattern backgroundPattern = new ImagePattern(background);
+        this.ui = ui;
         setCommonButtons(ui, gameControl, "Cards Against Humanity");
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
