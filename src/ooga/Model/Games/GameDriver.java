@@ -35,7 +35,7 @@ public abstract class GameDriver implements Game {
 
 
     @Override
-    public Object sendCards() {
+    public Map<Integer, List<Integer>> sendCards() {
         Map<Integer, List<Integer>> ret = new HashMap<>();
         for (Integer index : piles.keySet()){
             ret.put(index, piles.get(index).getIDList());

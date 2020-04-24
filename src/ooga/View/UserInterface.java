@@ -8,7 +8,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ooga.Controller.GameController;
 import ooga.View.GameScreens.CAHScreen;
+import ooga.View.GameScreens.GameScreen;
 import ooga.View.GameScreens.SolitaireScreen;
+
+import java.util.List;
 
 public class UserInterface extends Application implements Viewable {
     private double VIEW_WIDTH = 1200;
@@ -97,19 +100,24 @@ public class UserInterface extends Application implements Viewable {
         myStage.show();
     }
 
-    public void initializeGame(String gameName){
-        if(gameName=="Solitaire"){
-            SolitaireScreen screen = new SolitaireScreen(passingController);
-            Scene gameScene = screen.getScene(this);
-            myStage.setScene(gameScene);
-            myStage.show();
-        }
-        if(gameName=="Humanity"){
-            CAHScreen screen = new CAHScreen(passingController);
-            Scene gameScene = screen.getScene(this);
-            myStage.setScene(gameScene);
-            myStage.show();
-        }
+    public void initializeGame(String gameName, List<String> playerNames){
+        GameScreen gameScreen = passingController.getGameScreen(gameName, playerNames);
+        Scene gameScene = gameScreen.getScene(this);
+        myStage.setScene(gameScene);
+        myStage.show();
+
+//        if(gameName=="Solitaire"){
+//            SolitaireScreen screen = new SolitaireScreen(passingController, playerNames);
+//            Scene gameScene = screen.getScene(this);
+//            myStage.setScene(gameScene);
+//            myStage.show();
+//        }
+//        if(gameName=="Humanity"){
+//            CAHScreen screen = new CAHScreen(passingController, playerNames);
+//            Scene gameScene = screen.getScene(this);
+//            myStage.setScene(gameScene);
+//            myStage.show();
+//        }
     }
 
     public double getWidth(){

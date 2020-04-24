@@ -1,4 +1,7 @@
 {
+  "gameScreen": {
+    "className": "ooga.View.GameScreens.CAHScreen"
+  },
   "view": {
     "backImagePath_humanity" : "cardDecks/poker/red_back.png",
       "Xzero_index": "850",
