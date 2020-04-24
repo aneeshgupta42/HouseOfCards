@@ -77,7 +77,7 @@ public class GOPScreen extends GameScreen {
 
     //TODO: initializeGame before requestCards
     //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public GOPScreen(GameController setUpController, List<String> playerNames) {
+    public GOPScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData= gameControl.initializeGame(GameTypes.HUMANITY);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
