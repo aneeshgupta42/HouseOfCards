@@ -80,7 +80,7 @@ public class GOPScreen extends GameScreen {
     //TODO: Get a Map of (Integer, List<Integer>) instead?
     public GOPScreen(GameController setUpController) {
         gameControl = setUpController;
-        jsonData= gameControl.initializeGame(GameTypes.HUMANITY);
+        jsonData= gameControl.initializeGame(GameTypes.GOP);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
@@ -105,7 +105,8 @@ public class GOPScreen extends GameScreen {
     private void choosePlayer() {
         playerLabel.setText("Player "+ getRandomInt());
         playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        gameScene.getChildren().add(playerLabel);
+        if(!gameScene.getChildren().contains(playerLabel)){
+        gameScene.getChildren().add(playerLabel);}
     }
 
 

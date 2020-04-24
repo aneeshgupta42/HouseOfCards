@@ -105,13 +105,13 @@ public class CAHScreen extends GameScreen {
     }
 
 
-    public CAHScreen(GameController setUpController, List<String> playerNames) {
+    public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
        // System.out.println(playerNames);
        //gameControl.makePlayers(playerNames);
         differentDecks = setUpController.requestCards();
-        names= playerNames;
+        names= gameControl.getPlayerNames();
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }
