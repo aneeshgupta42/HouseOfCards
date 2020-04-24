@@ -15,6 +15,7 @@ public class SolitaireDriver extends GameDriver {
     // TODO: add a method to get the number of suits.
     public SolitaireDriver(GameController controller, List<String>playerNames) {
         super(controller);
+        makePlayers(playerNames);
         makeDecks();
     }
 
