@@ -138,40 +138,29 @@ public class MemoryScreen extends GameScreen {
 
     private void setUpListeners(ImageView cardImage) {
         if (getCardID(idImage, cardImage) < 0) return;
-        cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                int cardID = getCardID(idImage, cardImage);
-                if (!(currentPair.size() == 2)) {
-                    setCardFace(cardID, true);
-                    if (!currentPair.contains(cardID)) {
-                        currentPair.add(cardID);
-                        currentPairImg.add(cardImage);
-                    }
-                }
-                cardImage.setCursor(Cursor.HAND);
-            }
-        });
-        cardImage.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (currentPair.size() == 2) {
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(700);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    boolean success = checkUpdate(currentPair);
-                    initDiffDecks();
+        cardImage.setOnMousePressed(mouseEvent -> {
+            int cardID = getCardID(idImage, cardImage);
+            if (!(currentPair.size() == 2)) {
+                setCardFace(cardID, true);
+                if (!currentPair.contains(cardID)) {
+                    currentPair.add(cardID);
+                    currentPairImg.add(cardImage);
                 }
             }
+            cardImage.setCursor(Cursor.HAND);
         });
-        cardImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                cardImage.setCursor(Cursor.HAND);
+        cardImage.setOnMouseReleased(mouseEvent -> {
+            if (currentPair.size() == 2) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                boolean success = checkUpdate(currentPair);
+                initDiffDecks();
             }
         });
+        cardImage.setOnMouseEntered(mouseEvent -> cardImage.setCursor(Cursor.HAND));
     }
 
     private boolean checkUpdate(List<Object> currentPair) {
@@ -180,12 +169,12 @@ public class MemoryScreen extends GameScreen {
         if (success) {
             gameScene.getChildren().removeAll(currentPairImg);
             numCompletePairs++;
-        }else {
-            setCardFace((Integer) currentPair.get(0), success);
-            setCardFace((Integer) currentPair.get(1), success);
+        }else { //can't keep this out of else because if img is removed u can't flip
+            setCardFace((Integer) currentPair.get(0), false);
+            setCardFace((Integer) currentPair.get(1), false);
         }
         if (ret.size() == 2) {
-            userInterface.setWinScreen("Memory", playerNames.get(0), numCompletePairs);
+            userInterface.setWinScreen((String) gameData.get("gameName"), playerNames.get(0), numCompletePairs);
         }
         return success;
     }
