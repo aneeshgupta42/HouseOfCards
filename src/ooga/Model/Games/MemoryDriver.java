@@ -42,7 +42,16 @@ public class MemoryDriver extends GameDriver {
 
     @Override
     public List<Object> updateProtocol(List<Object> args) {
-        return null;
+        List<Object> ret = new ArrayList<>();
+        Playable card1 = getCard((Integer) args.get(0));
+        Playable card2 = getCard((Integer) args.get(1));
+        if(card1.getNumber() == card2.getNumber() && card1.getValue().equals(card2.getValue())){
+            ret.add(1);
+        }else{
+            ret.add(0);
+        }
+        removeCardFromPiles((Integer) args.get(0)); removeCardFromPiles((Integer) args.get(1));
+        return ret;
     }
 
     @Override
@@ -71,10 +80,13 @@ public class MemoryDriver extends GameDriver {
     }
 
     public static void main(String[] args) {
+        List<Object> update = new ArrayList<>();
+        update.add(1); update.add(20);
         MemoryDriver test = new MemoryDriver(new GameController(), new ArrayList<>());
+        test.updateProtocol(update);
         for (Integer i : test.piles.keySet()){
             System.out.println("Pile:"+ i);
-            System.out.println(test.piles.get(i));
+            System.out.println(test.piles.get(i).getDeckSize());
         }
     }
 }
