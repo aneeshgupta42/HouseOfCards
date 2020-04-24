@@ -66,12 +66,13 @@ public abstract class GameDriver implements Game {
     }
 
     @Override
-    public List<Integer> getPlayerScores() {
-        List<Integer>ret = new ArrayList<>();
+    public int getPlayerScore(String playerName) {
         for (Player p : playerList){
-            ret.add(p.getScore());
+            if (p.getName().equals(playerName)){
+                return p.getScore();
+            }
         }
-        return ret;
+        return 0;
     }
 
     @Override
