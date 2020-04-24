@@ -52,7 +52,19 @@ public class MemoryDriver extends GameDriver {
         }else{
             ret.add(0);
         }
+        if(testForGameExit()){
+            ret.add(1);
+        }
         return ret;
+    }
+
+    private boolean testForGameExit() {
+        for (Integer i : piles.keySet()){
+            if(piles.get(i).getDeckSize() > 0){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
