@@ -102,8 +102,8 @@ public class GameController {
         return currentGame.getPlayerNames();
     }
 
-    public List<Integer>getPlayerScores(){
-        return currentGame.getPlayerScores();
+    public int getPlayerScore(String playerName){
+        return currentGame.getPlayerScore(playerName);
     }
 
     public void makePlayers(List<String> playerName){
