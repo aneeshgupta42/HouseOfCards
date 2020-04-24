@@ -23,7 +23,7 @@ public class SplashScreen {
     private Scene startScene;
     private String logo = "viewAssets/loading.gif";
 //    private String logo = "cardDecks/poker/aces.png";
-    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "GOP", "Memory", "Concentration");
+    public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "TOD", "Memory", "Concentration");
 
 
     public Rectangle generateLogo(){

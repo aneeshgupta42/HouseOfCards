@@ -1,6 +1,10 @@
-{"gameScreen": {
-  "className": "ooga.View.GameScreens.GOPScreen"
-},
+{
+  "gameDriver": {
+    "className": "ooga.Model.Games.TODDriver"
+  },
+  "gameScreen": {
+    "className": "ooga.View.GameScreens.TODScreen"
+  },
   "view": {
     "backImagePath_humanity" : "cardDecks/poker/red_back.png",
     "Xzero_index": "500",

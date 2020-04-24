@@ -1,5 +1,7 @@
 {
-  "driverClass": "test",
+  "gameDriver": {
+    "className": "ooga.Model.Games.MemoryDriver"
+  },
   "gameScreen": {
     "className": "ooga.View.GameScreens.MemoryScreen"
   },
