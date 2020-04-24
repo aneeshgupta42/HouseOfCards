@@ -157,7 +157,6 @@ public class SolitaireScreen extends GameScreen {
                 public void handle(MouseEvent mouseEvent) {
                     initial_x = cardImage.getLayoutX();
                     initial_y = cardImage.getLayoutY();
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
                     dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
                     //TODO: I didn't know what this was, so commented out:
                     dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
@@ -265,11 +264,8 @@ public class SolitaireScreen extends GameScreen {
                     cardWorking.add(stackFrom);
                     int stackTo = getCardPile(differentDecks, targetCard);
                     cardWorking.add(stackTo);
-                    for (Integer id : differentDecks.get(stackFrom)) {
-                        if (idImage.get(id).equals(currentCard)) {
-                            cardWorking.add(differentDecks.get(stackFrom).indexOf(id)-1);
-                        }
-                    }
+                    int currIndex = differentDecks.get(stackFrom).indexOf(getCardID(idImage, currentCard))-1;
+                    cardWorking.add(currIndex);
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
                     boolean success = (Integer) ret.get(0) == 1;
                     if(success) {
@@ -280,7 +276,6 @@ public class SolitaireScreen extends GameScreen {
                             currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
                         }
                     }
-
                     if(ret.size()==2){
                         int KingPositionInDest = (Integer) ret.get(1);
                         completeSet(stackTo, KingPositionInDest);
@@ -289,7 +284,7 @@ public class SolitaireScreen extends GameScreen {
                         removeCompSet.add(KingPositionInDest);
                         gameControl.updateProtocol(removeCompSet);
                     }
-                    return ((Integer) ret.get(0) == 1);
+                    return success;
                 }
             }
         }
