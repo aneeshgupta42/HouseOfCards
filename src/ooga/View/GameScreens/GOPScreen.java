@@ -1,14 +1,17 @@
 package ooga.View.GameScreens;
-
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.View.ButtonFactory;
@@ -16,10 +19,7 @@ import ooga.View.PartyCards;
 import ooga.View.UserInterface;
 import ooga.View.VboxFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //TODO: changed to getImageView, front or back card depending on faceUp boolean
 //TODO: requestCards will return a map with key being the pile number, and value being a cardDeck. pile 0 has 50 cards
@@ -37,6 +37,7 @@ public class GOPScreen extends GameScreen {
     private List<VboxFactory> tappedCards = new ArrayList<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
     private HBox buttonHolder = new HBox(50);
+    private Label playerLabel = new Label();
     private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
 
     /***
@@ -87,6 +88,7 @@ public class GOPScreen extends GameScreen {
 
     private void addCards(GameController setUpController) {
         gameScene = new Group();
+        choosePlayer();
         setUpButtons(gameScene);
         //TODO: change this to receive a map instead
         double i = 0;
@@ -98,6 +100,12 @@ public class GOPScreen extends GameScreen {
                 setUponScreen(playingCards, 0, 0, i, j, 500, 200);
 
         }
+    }
+
+    private void choosePlayer() {
+        playerLabel.setText("Player "+ getRandomInt());
+        playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        gameScene.getChildren().add(playerLabel);
     }
 
 
@@ -121,6 +129,11 @@ public class GOPScreen extends GameScreen {
         }
 
     }
+
+    private int getRandomInt(){
+        return (int) ((Math.random() * ((differentDecks.keySet().size() - 2) + 1)) + 1);
+    }
+
 
     private void setUpListeners(VboxFactory card) {
         card.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -195,6 +208,7 @@ public class GOPScreen extends GameScreen {
                     gameScene.getChildren().removeAll(tappedCards);
                 }
                 gameScene.getChildren().remove(buttonHolder);
+                choosePlayer();
             });
             if (buttonHolder.getChildren().size() <= differentDecks.keySet().size() - 1) {
                 addToHbox(gameButton);
