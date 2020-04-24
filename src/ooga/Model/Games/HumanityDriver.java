@@ -5,6 +5,7 @@ import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Cards.Playable;
 
+import java.security.UnresolvedPermission;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class HumanityDriver extends GameDriver{
 
     @Override
     public List<Object> updateProtocol(List<Object> args) {
-        int playerWon = (int) args.get(args.size() - 1);
+        int playerWon = (int) args.remove(args.size() - 1);
         updateScore(5, playerList.get(playerWon).getName());
         //Remove used cards from the piles structure
         for (Object ID : args){
@@ -86,7 +87,11 @@ public class HumanityDriver extends GameDriver{
     public static void main(String[] args) {
         List<String> names = new ArrayList<>();
         names.add("a"); names.add("b"); names.add("c");
+        List<Object> update = new ArrayList<>();
         HumanityDriver test = new HumanityDriver(new GameController(), names);
+        update.add(test.piles.get(2).getCards().get(1).getID()); update.add(test.piles.get(3).getCards().get(1).getID());
+        update.add(test.piles.get(4).getCards().get(1).getID()); update.add(2);update.add(2);
+        test.updateProtocol(update);
         for (Integer i : test.piles.keySet()){
             System.out.println("Pile: " + i);
             System.out.println(test.piles.get(i).getDeckSize());

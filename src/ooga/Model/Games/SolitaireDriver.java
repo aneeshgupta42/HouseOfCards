@@ -103,6 +103,8 @@ public class SolitaireDriver extends GameDriver {
         return ret;
     }
 
+
+
     private int checkCompleteSet(int destPile) {
         if (piles.get(destPile).getDeckSize() == 0){return -1;}
         List<Playable> pile = piles.get(destPile).getCards();
@@ -179,13 +181,14 @@ public class SolitaireDriver extends GameDriver {
     }
 
 
+
     @Override
-    public void updateScore(int score) {
+    public void changeLevel(int level) {
 
     }
 
     @Override
-    public void changeLevel(int level) {
+    public void updateScore(int score, String playerName) {
 
     }
 
