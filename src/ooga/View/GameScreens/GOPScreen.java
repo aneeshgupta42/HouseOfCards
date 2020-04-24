@@ -38,7 +38,6 @@ public class GOPScreen extends GameScreen {
     private Map<Integer, ImageView> idImage = new HashMap<>();
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label();
-    private String style = "-fx-border-color: black;-fx-background-color: rgba(255, 255, 255, 0.8);-fx-padding: 2 2 2 2 ";
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -144,7 +143,6 @@ public class GOPScreen extends GameScreen {
                     card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
                     card.toFront();
                     card.setFace();
-                    card.setStyle(style);
                     tappedCards.add(card);
 
             }});
