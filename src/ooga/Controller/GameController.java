@@ -17,12 +17,23 @@ import java.util.*;
 public class GameController {
     private static final List<String> DEFAULT_GAMES = List.of(
             SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
-
     GameDriver currentGame;
     GameScreen currentScreen;
 
     public GameController(){
+    }
 
+    public GameScreen getGameScreen(String gameName, List<String> playerNames){
+        Map<String, Object> ret = readJSON("gameScreen", gameName.toLowerCase());
+        String gameScreenClass = (String) ret.get("className");
+        GameScreen gameScreen = null;
+        try {
+            Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
+            gameScreen =(GameScreen) constructor.newInstance((GameController) this, (List<String>) playerNames);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return gameScreen;
     }
 //Refactor this to read from data files.
     public Map<String, Object> initializeGame(GameTypes type){
@@ -59,7 +70,7 @@ public class GameController {
         String path = "data/gameFiles/" + gameType + ".json";
         Map<String, Object> ret = null;
         try {
-            ret = JSONReader.getData("view", path);
+            ret = JSONReader.getData(dataRequestedFor, path);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -74,7 +85,7 @@ public class GameController {
     } //return a list when win condition is met. Score is updated
 
 
-    public Object requestCards (){
+    public Map<Integer, List<Integer>> requestCards (){
         //for solitaire this is a Map<Integer, List<Integer>>
         return currentGame.sendCards();
     }
@@ -99,6 +110,7 @@ public class GameController {
 
     public static void main(String[] args) {
         GameController test = new GameController();
+//        test.getGameScreen("Solitaire");
         Map<String, Object> m = test.initializeGame(GameTypes.SOLITAIRE);
         for (String s : m.keySet()){
             System.out.println(s + ": ");
