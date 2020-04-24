@@ -9,12 +9,12 @@
     "cardHeight" : "90",
     "sceneWidth" : "1200",
     "sceneHeight" : "650",
-    "drawPileX" : "850",
-    "drawPileY" : " 500",
-    "cardPileX" : "20",
+    "cardPileX" : "50",
     "cardPileY" : "10",
+    "XOFFSET" : "80",
+    "YOFFSET" : "150",
     "gameBackground" : "viewAssets/yellow_felt.jpg",
-    "backImagePath" : "cardDecks/poker/red_back.png",
+    "backImagePath" : "cardDecks/poker/purple_back.png",
     "baseImagePath" : "cardDecks/poker/blue_border.jpg"
   },
 
