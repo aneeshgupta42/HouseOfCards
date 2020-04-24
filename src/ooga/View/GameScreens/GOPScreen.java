@@ -96,10 +96,10 @@ public class GOPScreen extends GameScreen {
         double l = 0;
         for (Integer key : indexMapped.keySet()) {
             List<PartyCards> playingCards = indexMapped.get(key);
-
-                setUponScreen(playingCards, 0, 0, i, j, 500, 200);
-
+            setUponScreen(playingCards, 0, 0, i, j, 500, 200);
+            j+=100;
         }
+
     }
 
     private void choosePlayer() {
