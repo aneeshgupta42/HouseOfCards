@@ -158,7 +158,6 @@ public class MemoryScreen extends GameScreen {
         }
     }
 
-
     private void setUpListeners(ImageView cardImage) {
         if (getCardID(idImage, cardImage) < 0) return;
         cardImage.setOnMousePressed(mouseEvent -> {
@@ -213,8 +212,9 @@ public class MemoryScreen extends GameScreen {
     }
 
     public void exitProtocol(){
-//        gameControl.updateHighScore();
-        userInterface.setWinScreen((String) gameData.get("gameName"), playerNames.get(0), numCompletePairs);
+        gameControl.updateHighScore();
+        List<Object> winner = gameControl.getWinner();
+        userInterface.setWinScreen((String) gameData.get("gameName"), (String) winner.get(1),(Integer)winner.get(0) );
     }
 
     @Override
