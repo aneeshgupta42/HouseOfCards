@@ -37,7 +37,9 @@ public class GOPScreen extends GameScreen {
     private List<VboxFactory> tappedCards = new ArrayList<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
     private HBox buttonHolder = new HBox(50);
+    private List<String> playerNames = new ArrayList<>();
     private Label playerLabel = new Label();
+    private String style = "-fx-border-color: black;-fx-background-color: rgba(155, 30, 15, 1);-fx-padding: 2 2 2 2 ";
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -75,12 +77,11 @@ public class GOPScreen extends GameScreen {
         }
     }
 
-    //TODO: initializeGame before requestCards
-    //TODO: Get a Map of (Integer, List<Integer>) instead?
     public GOPScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData= gameControl.initializeGame(GameTypes.GOP);
         differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
+        playerNames = setUpController.getPlayerNames();
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }
@@ -89,20 +90,20 @@ public class GOPScreen extends GameScreen {
         gameScene = new Group();
         choosePlayer();
         setUpButtons(gameScene);
-        //TODO: change this to receive a map instead
         double i = 0;
         double j = 0;
-        double l = 0;
         for (Integer key : indexMapped.keySet()) {
             List<PartyCards> playingCards = indexMapped.get(key);
             setUponScreen(playingCards, 0, 0, i, j, 500, 200);
-            j+=100;
+            i+=150;
         }
 
     }
 
     private void choosePlayer() {
-        playerLabel.setText("Player "+ getRandomInt());
+        int player = getRandomInt();
+        System.out.println(player);
+        playerLabel.setText(playerNames.get(player));
         playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         if(!gameScene.getChildren().contains(playerLabel)){
         gameScene.getChildren().add(playerLabel);}
@@ -131,7 +132,7 @@ public class GOPScreen extends GameScreen {
     }
 
     private int getRandomInt(){
-        return (int) ((Math.random() * ((differentDecks.keySet().size() - 2) + 1)) + 1);
+        return (int) ((Math.random() * ((playerNames.size()- 2) + 1)) + 1);
     }
 
 
@@ -143,6 +144,7 @@ public class GOPScreen extends GameScreen {
                     card.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
                     card.toFront();
                     card.setFace();
+                    card.setStyle(style);
                     tappedCards.add(card);
 
             }});
@@ -157,24 +159,12 @@ public class GOPScreen extends GameScreen {
                         cardObj.changeFace(true);
                         changeVbox(cardObj);
                         card.toFront();
-
                     }
-
-
-
-                card.setCursor(Cursor.HAND);
-
-//                if(card.getIndex()!=0) {
-//                    card.setCursor(Cursor.MOVE);
-//                    tappedCards.add(card);
-//                    if(card.getIndex()==differentDecks.keySet().size()-1){
-//                        chooseWinner();
-//                    }
-//                }
+                    card.setCursor(Cursor.HAND);
             }
         });
-
     }
+
     private void changeVbox(PartyCards card){
         card.clearCard();
     }
@@ -187,7 +177,7 @@ public class GOPScreen extends GameScreen {
     }
     private void setupButtons( double XPos, double YPos){
         int initialDistance = 0;
-        for (int i = 1; i <= differentDecks.keySet().size() - 1; i++) {
+        for (int i = 1; i <=1; i++) {
             ButtonFactory gameButton = new ButtonFactory("Player " + i, XPos + initialDistance, YPos);
             gameButton.setOnAction(e -> {
                 List<Object> cardsChosen = new ArrayList<>();
