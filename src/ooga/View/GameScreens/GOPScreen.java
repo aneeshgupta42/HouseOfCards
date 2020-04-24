@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -39,8 +40,9 @@ public class GOPScreen extends GameScreen {
     private Map<Integer, ImageView> idImage = new HashMap<>();
     private HBox buttonHolder = new HBox(50);
     private List<String> playerNames = new ArrayList<>();
+    private String logo = "viewAssets/truth.jpg";
     private Label playerLabel = new Label();
-    private String style = "-fx-border-color: black;-fx-background-color: rgba(155, 30, 15, 1);-fx-padding: 2 2 2 2 ";
+    private String style = "-fx-border-color: black;-fx-background-color: rgba(125, 30, 105, 1);-fx-padding: 2 2 2 2 ";
 
     /***
      * Get: Map of Integer (pile number) : List<IDs> in that pile
@@ -62,6 +64,14 @@ public class GOPScreen extends GameScreen {
         Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
         return new ImageView(cardImage);
     }
+    public Rectangle generateLogo(){
+        Rectangle hypno = new Rectangle(1200, 170);
+        Image hypnoImage = new Image(this.getClass().getClassLoader().getResourceAsStream(logo));
+        ImagePattern hypnoImagePattern = new ImagePattern(hypnoImage);
+        hypno.setFill(hypnoImagePattern);
+        return hypno;
+    }
+
 
 
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap){
@@ -85,11 +95,15 @@ public class GOPScreen extends GameScreen {
         playerNames = setUpController.getPlayerNames();
         initializeImageMap(differentDecks);
         addCards(gameControl);
+
     }
 
     private void addCards(GameController setUpController) {
         setStylingForLabel();
         gameScene = new Group();
+        Rectangle logo = generateLogo();
+        logo.setLayoutX(0); logo.setLayoutY(0);
+        gameScene.getChildren().addAll(logo);
         choosePlayer();
         setUpButtons(gameScene);
         double i = 0;
@@ -248,7 +262,7 @@ public class GOPScreen extends GameScreen {
 
 
     public Scene getScene(UserInterface ui) {
-        Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/green_felt.jpg"));
+        Image background = new Image(this.getClass().getClassLoader().getResourceAsStream("viewAssets/red.jpg"));
         ImagePattern backgroundPattern = new ImagePattern(background);
         setCommonButtons(ui);
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
