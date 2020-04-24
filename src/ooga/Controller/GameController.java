@@ -97,6 +97,8 @@ public class GameController {
     }
 
 
+    //TODO: getHighScores
+
     public void updateHighScore(){
         String path = "data/highScores/highScores.json";
         try {
