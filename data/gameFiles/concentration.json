@@ -1,0 +1,29 @@
+{
+  "gameDriver": {
+    "className": "ooga.Model.Games.MemoryDriver"
+  },
+  "gameScreen": {
+    "className": "ooga.View.GameScreens.MemoryScreen"
+  },
+  "view": {
+    "gameName": "Concentration",
+    "cardWidth" : "60",
+    "cardHeight" : "90",
+    "sceneWidth" : "1200",
+    "sceneHeight" : "650",
+    "cardPileX" : "50",
+    "cardPileY" : "10",
+    "XOFFSET" : "80",
+    "YOFFSET" : "150",
+    "gameBackground" : "viewAssets/yellow_felt.jpg",
+    "backImagePath" : "cardDecks/poker/blue_back.png"
+  },
+
+
+  "model": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": 10021
+  }
+}

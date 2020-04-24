@@ -7,11 +7,16 @@ import javafx.scene.Scene;
 
 import java.util.concurrent.TimeUnit;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.View.UserInterface;
@@ -22,6 +27,8 @@ public class MemoryScreen extends GameScreen {
     private Group gameScene;
     private Map<String, Object> gameData;
     private List<String> playerNames;
+    private int numPlayers;
+    int playerTurn;
     private UserInterface userInterface;
     private static final String CARDWIDTH = "cardWidth";
     private static final String CARDHEIGHT = "cardHeight";
@@ -34,6 +41,8 @@ public class MemoryScreen extends GameScreen {
     private GameController gameControl;
     private boolean cheatCodeActive = false;
     private int numCompletePairs = 0;
+    private static final String turnString = "Turn: ";
+    private Label playerLabel = new Label(turnString);
 
     private List<Object> currentPair = new ArrayList<>();
     private List<ImageView> currentPairImg = new ArrayList<>();
@@ -45,10 +54,25 @@ public class MemoryScreen extends GameScreen {
         gameControl = setUpController;
         gameData = gameControl.initializeGame(GameTypes.MEMORY);
         playerNames = gameControl.getPlayerNames();
-        System.out.println(playerNames);
+        numPlayers = playerNames.size();
+        if(numPlayers==2) {
+            gameData = gameControl.initializeGame(GameTypes.CONCENTRATION);
+        }
+        playerTurn = 1;
+        setPlayerTurn(playerTurn);
+        setStylingForLabel();
+        gameScene = new Group();
+        gameScene.getChildren().add(playerLabel);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
+    }
+
+    private void setStylingForLabel() {
+        playerLabel.setLayoutX(500);
+        playerLabel.setLayoutY(600);
+        playerLabel.setTextFill(Color.WHITESMOKE);
+        playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
     }
 
     private void initDiffDecks() {
@@ -89,7 +113,6 @@ public class MemoryScreen extends GameScreen {
     }
 
     private void addCards() {
-        gameScene = new Group();
         setUpButtons(gameScene);
         gameScene.setOnKeyPressed(e-> handleKeyPressed(e.getCode()));
         double i = 0;
@@ -135,59 +158,63 @@ public class MemoryScreen extends GameScreen {
         }
     }
 
-
     private void setUpListeners(ImageView cardImage) {
         if (getCardID(idImage, cardImage) < 0) return;
-        cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                int cardID = getCardID(idImage, cardImage);
-                if (!(currentPair.size() == 2)) {
-                    setCardFace(cardID, true);
-                    if (!currentPair.contains(cardID)) {
-                        currentPair.add(cardID);
-                        currentPairImg.add(cardImage);
-                    }
-                }
-                cardImage.setCursor(Cursor.HAND);
-            }
-        });
-        cardImage.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (currentPair.size() == 2) {
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(700);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    boolean success = checkUpdate(currentPair);
-                    initDiffDecks();
+        cardImage.setOnMousePressed(mouseEvent -> {
+            int cardID = getCardID(idImage, cardImage);
+            if (!(currentPair.size() == 2)) {
+                setCardFace(cardID, true);
+                if (!currentPair.contains(cardID)) {
+                    currentPair.add(cardID);
+                    currentPairImg.add(cardImage);
                 }
             }
+            cardImage.setCursor(Cursor.HAND);
         });
-        cardImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                cardImage.setCursor(Cursor.HAND);
+        cardImage.setOnMouseReleased(mouseEvent -> {
+            if (currentPair.size() == 2) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                boolean success = checkUpdate(currentPair);
+                initDiffDecks();
             }
         });
+        cardImage.setOnMouseEntered(mouseEvent -> cardImage.setCursor(Cursor.HAND));
+    }
+
+    private void setPlayerTurn(int playerNum){
+        String playName = playerNames.get(playerNum-1);
+        playerLabel.setText(turnString+playName);
     }
 
     private boolean checkUpdate(List<Object> currentPair) {
+        currentPair.add(playerNames.get(playerTurn-1));
         List<Object> ret = gameControl.updateProtocol(currentPair);
         boolean success = (Integer) ret.get(0) == 1;
         if (success) {
             gameScene.getChildren().removeAll(currentPairImg);
             numCompletePairs++;
-        }else {
-            setCardFace((Integer) currentPair.get(0), success);
-            setCardFace((Integer) currentPair.get(1), success);
+        }else { //can't keep this out of else because if img is removed u can't flip
+            setCardFace((Integer) currentPair.get(0), false);
+            setCardFace((Integer) currentPair.get(1), false);
         }
         if (ret.size() == 2) {
-            userInterface.setWinScreen("Memory", playerNames.get(0), numCompletePairs);
+            exitProtocol();
+        }
+        if(numPlayers==2){
+            playerTurn = 3-playerTurn;
+            setPlayerTurn(playerTurn);
         }
         return success;
+    }
+
+    public void exitProtocol(){
+        gameControl.updateHighScore();
+        List<Object> winner = gameControl.getWinner();
+        userInterface.setWinScreen((String) gameData.get("gameName"), (String) winner.get(1),(Integer)winner.get(0) );
     }
 
     @Override

@@ -20,10 +20,6 @@ public class UserInterface extends Application implements Viewable {
     private double VIEW_WIDTH = 1200;
     private double VIEW_HEIGHT = 650;
     private Stage myStage;
-    private static final int BUTTON_HEIGHT = 45;
-    private static final int BUTTON_WIDTH = 120;
-    private static final int BUTTON_FONT = 20;
-    private static final String loadingImagePath = "viewAssets/loading.gif";
     private static GameController passingController;
     private Scene splash;
 
@@ -31,11 +27,6 @@ public class UserInterface extends Application implements Viewable {
     public void start(Stage primaryStage) {
         passingController = new GameController();
         myStage = primaryStage;
-        Group gameScreen = new Group();
-        ButtonFactory resetButton = new ButtonFactory("Restart", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT,0,0);
-        ButtonFactory exitButton = new ButtonFactory("Exit", BUTTON_HEIGHT,BUTTON_WIDTH,BUTTON_FONT,0,40);
-        gameScreen.getChildren().addAll(resetButton,exitButton);
-        Scene gameScene = new Scene(gameScreen,VIEW_WIDTH,VIEW_HEIGHT);
         SplashScreen splashScreen = new SplashScreen(this);
         Scene disp = splashScreen.getStartScene();
         splash = disp;
@@ -105,6 +96,7 @@ public class UserInterface extends Application implements Viewable {
     }
 
     public void initializeGame(String gameName, List<String> playerNames){
+        myStage.setTitle("Game - "+ gameName);
         GameScreen gameScreen = passingController.getGameScreen(gameName, playerNames);
         Scene gameScene = gameScreen.getScene(this);
         myStage.setScene(gameScene);
