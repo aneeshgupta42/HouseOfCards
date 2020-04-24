@@ -60,6 +60,7 @@ public class CAHScreen extends GameScreen {
     private int round =0;
     private List<String> names = new ArrayList<>();
     private HBox buttonHolder = new HBox(50);
+    private int round_Number = 1;
     private Label playerLabel = new Label(" ");
 
     private ImageView getIDImage(int id){
@@ -102,9 +103,10 @@ public class CAHScreen extends GameScreen {
     private void checkRound(){
         if(round>differentDecks.keySet().size()-1) {
             round = 1;
-            System.out.println(names.size()-1);
+            System.out.println(indexMapped.get(names.size()-1).size());
+            round_Number++;
         }
-        if(indexMapped.get(names.size()-1).size()<=3){
+        if(round_Number==4){
             System.out.println("hello");
             endGame();
         }
@@ -114,8 +116,6 @@ public class CAHScreen extends GameScreen {
     public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
-       // System.out.println(playerNames);
-       //gameControl.makePlayers(playerNames);
         differentDecks = setUpController.requestCards();
         names= gameControl.getPlayerNames();
         initializeImageMap(differentDecks);
