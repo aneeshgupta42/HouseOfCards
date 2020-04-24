@@ -96,6 +96,7 @@ public class GameController {
         return currentGame.getPlayerScore(playerName);
     }
 
+
     public void updateHighScore(){
         String path = "data/highScores/highScores.json";
         try {
@@ -108,6 +109,22 @@ public class GameController {
     }
 
 
+
+
+    public List<Object> getWinner(){
+        List<Integer> scores = new ArrayList<>();
+        List<Object> sendInformation = new ArrayList<>();
+        Map<Integer, String> mappingPlayers = new HashMap<>();
+        for(String player:playerNames){
+            int score = getPlayerScore(player);
+            scores.add(score);
+            mappingPlayers.put(score,player);
+        }
+        Collections.sort(scores);
+        sendInformation.add(scores.get(0));
+        sendInformation.add(mappingPlayers.get(scores.get(0)));
+        return sendInformation;
+    }
 
     public void makePlayers(List<String> playerName){
         this.playerNames = playerName;

@@ -186,7 +186,6 @@ public class MemoryScreen extends GameScreen {
         }
         if (ret.size() == 2) {
             userInterface.setWinScreen("Memory", playerNames.get(0), numCompletePairs);
-            System.out.println("GAME WON!!!");
         }
         return success;
     }
@@ -194,10 +193,10 @@ public class MemoryScreen extends GameScreen {
     @Override
     public Scene getScene(UserInterface ui) {
         userInterface = ui;
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Memory Game");
         String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = imageGetter(gameBackground);
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Memory Game");
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
