@@ -186,7 +186,6 @@ public class MemoryScreen extends GameScreen {
         }
         if (ret.size() == 2) {
             userInterface.setWinScreen("Memory", playerNames.get(0), numCompletePairs);
-            System.out.println("GAME WON!!!");
         }
         return success;
     }
