@@ -5,12 +5,11 @@ import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
 import ooga.Model.Players.Player;
 
-import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GOPDriver extends GameDriver {
-    public GOPDriver(GameController controller, List<String>playerNames) {
+public class TODDriver extends GameDriver {
+    public TODDriver(GameController controller, List<String>playerNames) {
         super(controller);
         makePlayers(playerNames);
         makePiles();
@@ -67,7 +66,7 @@ public class GOPDriver extends GameDriver {
     }
 
     public static void main(String[] args) {
-        GOPDriver test = new GOPDriver(new GameController(), new ArrayList<>());
+        TODDriver test = new TODDriver(new GameController(), new ArrayList<>());
         for(Integer i : test.piles.keySet()){
             System.out.println("Pile: " + i);
             System.out.println(test.piles.get(i));

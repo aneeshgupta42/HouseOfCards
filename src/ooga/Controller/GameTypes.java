@@ -4,5 +4,5 @@ public enum GameTypes {
     SOLITAIRE,
     MEMORY,
     HUMANITY,
-    GOP
+    TOD
 }
