@@ -12,15 +12,13 @@ import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.View.UserInterface;
 import ooga.View.utils.CardSet;
-
 import java.util.*;
 import java.util.List;
-
 
 public class SolitaireScreen extends GameScreen {
     private Group gameScene;
     private Map<String, Object> gameData;
-    private final List<String> playerNames;
+    private List<String> playerNames;
     private static final String CARDWIDTH = "cardWidth";
     private static final String CARDHEIGHT = "cardHeight";
     private static final String SCENEWIDTH = "sceneWidth";
@@ -32,17 +30,6 @@ public class SolitaireScreen extends GameScreen {
     private static final String GAMEBACK = "gameBackground";
     private static final String BACKIMAGE = "backImagePath";
     private static final String BASEIMAGE = "baseImagePath";
-//    private double cardWidth = 60;
-//    private double cardHeight = 90;
-//    private double sceneWidth = 1200;
-//    private double sceneHeight = 650;
-//    private double drawPileX = 850;
-//    private double drawPileY = 500;
-//    private double cardPileX = 20;
-//    private double cardPileY = 10;
-//    private String gameBackground = "viewAssets/green_felt.jpg";
-//    private String backImagePath = "cardDecks/poker/red_back.png";
-//    private String baseImagePath = "cardDecks/poker/blue_border.jpg";
     private static final double YOFFSET = 20;
     private Delta dragDelta = new Delta();
     private GameController gameControl;
@@ -52,25 +39,11 @@ public class SolitaireScreen extends GameScreen {
     private Map<Integer, List<Integer>> differentDecks = new HashMap<>();
     private Map<Integer, ImageView> idImage = new HashMap<>();
 
-
-    /***
-     * Get: Map of Integer (pile number) : List<IDs> in that pile
-     * Want: Map of Integer (pile number): List<ImageViews>
-     * Want: Map of ID -> ImageView
-     *
-     * Change:
-     * How we put on cards, and how we check for intersection.
-     *
-     * Basic pipeline:
-     *
-     * Front (attempts to) moves card from Pile A to Pile B.
-     * This calls updateProtocol (which takes in indA, indB, ind.within.A)
-     *
-     * ***/
-    public SolitaireScreen(GameController setUpController, List<String> playNames) {
+    public SolitaireScreen(GameController setUpController) {
         gameControl = setUpController;
-        playerNames = playNames;
         gameData = gameControl.initializeGame(GameTypes.SOLITAIRE);
+        playerNames = gameControl.getPlayerNames();
+        System.out.println(playerNames);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
@@ -112,7 +85,6 @@ public class SolitaireScreen extends GameScreen {
 
     private void initializeImageMap(Map<Integer, List<Integer>> deckMap) {
         for (Integer pile : deckMap.keySet()) {
-            List<ImageView> imageList = new ArrayList<>();
             for (Integer id : deckMap.get(pile)) {
                 ImageView cardImage;
                 if(id<0){
@@ -124,9 +96,7 @@ public class SolitaireScreen extends GameScreen {
                     cardImage = getIDImage(id);
                 }
                 idImage.put(id, cardImage);
-                imageList.add(cardImage);
             }
-//            imageMap.put(pile, imageList);
         }
     }
 
@@ -134,12 +104,9 @@ public class SolitaireScreen extends GameScreen {
         gameScene = new Group();
         setUpButtons(gameScene);
         //TODO: change this to receive a map instead
-        double i = 0;
-        double j = 0;
-        double l = 0;
+        double i = 0, j = 0, l = 0;
         int index = 0;
         for (Integer key : differentDecks.keySet()) {
-            //playingCards is a list of IDs for that the pile "key"
             List<Integer> playingCards = differentDecks.get(key);
             if (key == 0) {
                 double drawPileX = Double.parseDouble((String)gameData.get(DRAWPILEX));
@@ -150,15 +117,12 @@ public class SolitaireScreen extends GameScreen {
                 double cardPileY = Double.parseDouble((String)gameData.get(CARDPILY));
                 setUponScreen(playingCards, YOFFSET, 0, l, j, cardPileX, cardPileY, index);
             }
-            i = i + 100;
-            l = l + 100;
-            index++;
-            j = 0;
+            i = i + 100; l = l + 100;
+            index++; j = 0;
         }
-
     }
 
-    class Delta {
+    private class Delta {
         double x, y;
     }
 
@@ -167,7 +131,6 @@ public class SolitaireScreen extends GameScreen {
         int lastId = playingCards.get(pileSize-1);
         for (Integer cardID : playingCards) {
             ImageView cardImage = idImage.get(cardID);
-            // TODO: use this way to keep bottom pule always back face up?
             setCardFace(cardID, cardID == lastId && (getCardPile(differentDecks, cardImage) !=0));
             cardImage.setFitWidth(Double.parseDouble((String)gameData.get(CARDWIDTH)));
             cardImage.setFitHeight(Double.parseDouble((String)gameData.get(CARDHEIGHT)));
@@ -176,7 +139,6 @@ public class SolitaireScreen extends GameScreen {
             setUpListeners(cardImage);
             List<ImageView> images = new ArrayList<>();
             images.add(cardImage);
-//            indexMapped.put(index, images);
             if(cardID>0) {
                 j = j + v;
                 i = i + v1;
@@ -195,7 +157,6 @@ public class SolitaireScreen extends GameScreen {
                 public void handle(MouseEvent mouseEvent) {
                     initial_x = cardImage.getLayoutX();
                     initial_y = cardImage.getLayoutY();
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
                     dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
                     //TODO: I didn't know what this was, so commented out:
                     dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
@@ -271,7 +232,6 @@ public class SolitaireScreen extends GameScreen {
             targetPile++;
         }
         initDiffDecks();
-//        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         for(Integer id: dealingIDs){
             int cardID = id;
             ImageView cardImage = idImage.get(cardID);
@@ -290,42 +250,32 @@ public class SolitaireScreen extends GameScreen {
     }
 
     private boolean checkUpdate(CardSet currentCardSet, Map<Integer, List<Integer>> differentDecks) {
-        //Diff pile numbers
-//        System.out.println(differentDecks.toString());
         ImageView currentCard = currentCardSet.getHeadCard();
         Integer sourceCardIndex = getCardPile(differentDecks, currentCard);
         for (Integer index : differentDecks.keySet()) {
             if(index==sourceCardIndex) continue;
             List<Integer> currentPile = differentDecks.get(index);
-            // checks for intersection
             ImageView targetCard = idImage.get(currentPile.get(currentPile.size() - 1));
             if (!currentCard.equals(targetCard)) {
                 int targetID = getCardID(idImage, targetCard);
-                // Change the logic for checking intersections
                 if ((currentCard.getBoundsInParent().intersects(targetCard.getBoundsInParent()))) {
                     List<Object> cardWorking = new ArrayList<>();
                     int stackFrom = getCardPile(differentDecks, currentCard);
                     cardWorking.add(stackFrom);
                     int stackTo = getCardPile(differentDecks, targetCard);
                     cardWorking.add(stackTo);
-                    for (Integer id : differentDecks.get(stackFrom)) {
-                        if (idImage.get(id).equals(currentCard)) {
-                            cardWorking.add(differentDecks.get(stackFrom).indexOf(id)-1);
-                        }
-                    }
-//                    System.out.println(cardWorking);
+                    int currIndex = differentDecks.get(stackFrom).indexOf(getCardID(idImage, currentCard))-1;
+                    cardWorking.add(currIndex);
                     List<Object> ret = gameControl.updateProtocol(cardWorking);
                     boolean success = (Integer) ret.get(0) == 1;
                     if(success) {
                         currentCardSet.setLayoutX(targetCard.getLayoutX() - currentCard.getLayoutBounds().getMinX());
                         if (targetID < 0) {
-//                            System.out.println("placing on empty pile");
                             currentCardSet.setLayoutY(targetCard.getLayoutY() - currentCard.getLayoutBounds().getMinY());
                         } else {
                             currentCardSet.setLayoutY(targetCard.getLayoutY() + YOFFSET - currentCard.getLayoutBounds().getMinY());
                         }
                     }
-
                     if(ret.size()==2){
                         int KingPositionInDest = (Integer) ret.get(1);
                         completeSet(stackTo, KingPositionInDest);
@@ -334,29 +284,16 @@ public class SolitaireScreen extends GameScreen {
                         removeCompSet.add(KingPositionInDest);
                         gameControl.updateProtocol(removeCompSet);
                     }
-                    return ((Integer) ret.get(0) == 1);
+                    return success;
                 }
             }
         }
         return false;
     }
 
-    /***
-     * Frontend moves. Calls update protocol.
-     * UpdateProt. validates moves, places new cards into destination pile.
-     * CompleteSet is formed. Backend does not remove CompleteSet from pile yet.
-     * Front calls request cards.
-     * Front does movement.
-     * Once movements is done, front tells back to now remove CompleteSet.
-     * front will do: gameControl.removeCompleteSet.
-     * then front calls request cards again.
-     * ***/
     private void completeSet(int stackTo, int KingDestIndex){
-//        System.out.println("detected complete set");
-//        System.out.println("getting updated piles from back");
         numCompleteSets++;
         initDiffDecks();
-//        differentDecks = (Map<Integer, List<Integer>>) gameControl.requestCards();
         List<Integer> destPile = differentDecks.get(stackTo);
         int kingID = destPile.get(KingDestIndex+1);
         ImageView kingImage = idImage.get(kingID);
@@ -376,16 +313,6 @@ public class SolitaireScreen extends GameScreen {
             }
         }
         System.out.println("pile not found");
-        return -1;
-    }
-
-    private Integer getCardID(Map<Integer, ImageView>map, ImageView card){
-        for (Integer check : map.keySet()) {
-            if (map.get(check).equals(card)) {
-                return check;
-            }
-        }
-        System.out.println("id not found");
         return -1;
     }
 

@@ -1,9 +1,7 @@
 package ooga.Controller;
 
-import ooga.Model.Games.GameDriver;
-import ooga.Model.Games.HumanityDriver;
-import ooga.Model.Games.SolitaireDriver;
-import ooga.Model.Games.UnoDriver;
+import ooga.Model.Cards.Playable;
+import ooga.Model.Games.*;
 import ooga.View.GameScreens.GameScreen;
 import org.json.simple.parser.ParseException;
 //import ooga.View.Game;
@@ -13,29 +11,33 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-
+//TODO: deal with makePlayer
 public class GameController {
     private static final List<String> DEFAULT_GAMES = List.of(
-            SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
+            SolitaireDriver.class.getName(), HumanityDriver.class.getName(),
+            MemoryDriver.class.getName(), GOPDriver.class.getName());
     GameDriver currentGame;
+    List<String>playerNames;
     GameScreen currentScreen;
 
     public GameController(){
+        playerNames = new ArrayList<>();
     }
 
     public GameScreen getGameScreen(String gameName, List<String> playerNames){
         Map<String, Object> ret = readJSON("gameScreen", gameName.toLowerCase());
         String gameScreenClass = (String) ret.get("className");
         GameScreen gameScreen = null;
+        this.playerNames = playerNames;
         try {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
-            gameScreen =(GameScreen) constructor.newInstance((GameController) this, (List<String>) playerNames);
+            gameScreen =(GameScreen) constructor.newInstance((GameController) this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return gameScreen;
     }
-//Refactor this to read from data files.
+//TODO: Refactor this to read from data files.
     public Map<String, Object> initializeGame(GameTypes type){
         int index;
         switch (type){
@@ -43,15 +45,17 @@ public class GameController {
                 index = 0; break;
             case HUMANITY:
                 index = 1; break;
-            case UNO:
+            case MEMORY:
                 index = 2; break;
+            case GOP:
+                index = 3; break;
             default:
                 index = 0; break;
         }
 
         try {
             Constructor<?> constructor = Class.forName(DEFAULT_GAMES.get(index)).getDeclaredConstructors()[0];
-            currentGame =(GameDriver) constructor.newInstance(this);
+            currentGame =(GameDriver) constructor.newInstance(this, playerNames);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -60,11 +64,6 @@ public class GameController {
         return ret;
     }
 
-
-    //TODO: Front end needs to implement this
-    public void giveGameScreen (GameScreen game){
-        currentScreen = game;
-    }
 
     private Map<String, Object> readJSON(String dataRequestedFor, String gameType){
         String path = "data/gameFiles/" + gameType + ".json";
@@ -98,9 +97,18 @@ public class GameController {
     public void setToFaceUp(int cardID){
         currentGame.setFaceUp(cardID);
     }
+    //TODO: getPlayerNames, getPlayerScores
 
-    public void makePlayer(String playerName){
-        currentGame.makePlayer(playerName);
+    public List<String>getPlayerNames(){
+        return currentGame.getPlayerNames();
+    }
+
+    public List<Integer>getPlayerScores(){
+        return currentGame.getPlayerScores();
+    }
+
+    public void makePlayers(List<String> playerName){
+        this.playerNames = playerName;
     }
     public String getValue(int cardID){
         return currentGame.getCardValue(cardID);

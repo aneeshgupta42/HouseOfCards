@@ -16,4 +16,29 @@ public class Player {
         this.name = name;
         playerHand = deck;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+
+    public void setDeck (CardDeck deck){
+        this.playerHand = deck;
+    }
+
+    public void addToScore(int score) {
+        this.score += score;
+    }
 }

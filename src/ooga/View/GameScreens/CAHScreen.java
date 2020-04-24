@@ -7,9 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -24,7 +22,6 @@ import ooga.View.PartyCards;
 import ooga.View.UserInterface;
 import ooga.View.VboxFactory;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,21 +59,6 @@ public class CAHScreen extends GameScreen {
     private int round =0;
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label(" ");
-
-    /***
-     * Get: Map of Integer (pile number) : List<IDs> in that pile
-     * Want: Map of Integer (pile number): List<ImageViews>
-     * Want: Map of ID -> ImageView
-     *
-     * Change:
-     * How we put on cards, and how we check for intersection.
-     *
-     * Basic pipeline:
-     *
-     * Front (attempts to) moves card from Pile A to Pile B.
-     * This calls updateProtocol (which takes in indA, indB, ind.within.A)
-     *
-     * ***/
 
     private ImageView getIDImage(int id){
         String imagePath = gameControl.getImagePath(id);
@@ -123,12 +105,12 @@ public class CAHScreen extends GameScreen {
 
     //TODO: initializeGame before requestCards
     //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public CAHScreen(GameController setUpController, List<String> playerNames) {
+    public CAHScreen(GameController setUpController) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
-        System.out.println(playerNames);
-       // gameControl.makePlayer(playerNames);
-        differentDecks = (Map<Integer, List<Integer>>) setUpController.requestCards();
+       // System.out.println(playerNames);
+       // gameControl.makePlayers(playerNames);
+        differentDecks = setUpController.requestCards();
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }

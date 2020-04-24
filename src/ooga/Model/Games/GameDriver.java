@@ -20,7 +20,7 @@ public abstract class GameDriver implements Game {
     protected CardDeck allGameCards;
     protected Map<Integer, CardDeck> piles;
     protected GameController controller;
-    private List<Player> playerList;
+    protected List<Player> playerList;
 
 
     public GameDriver(GameController controller){
@@ -50,14 +50,28 @@ public abstract class GameDriver implements Game {
     }
 
     @Override
-    public void makePlayer(String userName) {
-        playerList.add(new Player(userName));
-        //TODO: add this function here: makePiles();
+    public void makePlayers(List<String>names) {
+        for (String name : names){
+            playerList.add(new Player(name));
+        }
     }
 
     @Override
-    public List<Player> getPlayerList() {
-        return playerList;
+    public List<String> getPlayerNames(){
+        List<String>ret = new ArrayList<>();
+        for (Player p : playerList){
+            ret.add(p.getName());
+        }
+        return ret;
+    }
+
+    @Override
+    public List<Integer> getPlayerScores() {
+        List<Integer>ret = new ArrayList<>();
+        for (Player p : playerList){
+            ret.add(p.getScore());
+        }
+        return ret;
     }
 
     @Override
@@ -73,6 +87,15 @@ public abstract class GameDriver implements Game {
             }
         }
         return null;
+    }
+
+    protected void removeCardFromPiles(int cardID){
+        for (Integer i : piles.keySet()){
+            if (piles.get(i).isCardPresent(cardID)){
+                piles.get(i).removeCard(cardID);
+                return;
+            }
+        }
     }
 
     protected abstract void makePiles();

@@ -5,9 +5,11 @@ import ooga.Model.Players.Player;
 import java.util.List;
 
 public interface Game {
-    void makePlayer(String userName);
+    void makePlayers(List<String> userName);
 
-    List<Player> getPlayerList();
+    List<String> getPlayerNames();
+
+    List<Integer> getPlayerScores();
 
     boolean checkWin();
 
@@ -17,7 +19,7 @@ public interface Game {
      */
     List<Object> updateProtocol(List<Object> args);
 
-    void updateScore(int score);
+    void updateScore(int score, int playerIndex);
 
     void changeLevel(int level);
 
