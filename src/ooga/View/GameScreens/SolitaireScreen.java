@@ -319,6 +319,7 @@ public class SolitaireScreen extends GameScreen {
         setCommonButtons(ui);
         String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = imageGetter(gameBackground);
+        setCommonButtons(ui);
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }
