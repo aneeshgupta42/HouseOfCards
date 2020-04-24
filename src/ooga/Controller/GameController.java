@@ -1,10 +1,7 @@
 package ooga.Controller;
 
 import ooga.Model.Cards.Playable;
-import ooga.Model.Games.GameDriver;
-import ooga.Model.Games.HumanityDriver;
-import ooga.Model.Games.SolitaireDriver;
-import ooga.Model.Games.UnoDriver;
+import ooga.Model.Games.*;
 import ooga.View.GameScreens.GameScreen;
 import org.json.simple.parser.ParseException;
 //import ooga.View.Game;
@@ -17,7 +14,8 @@ import java.util.*;
 //TODO: deal with makePlayer
 public class GameController {
     private static final List<String> DEFAULT_GAMES = List.of(
-            SolitaireDriver.class.getName(), HumanityDriver.class.getName(), UnoDriver.class.getName());
+            SolitaireDriver.class.getName(), HumanityDriver.class.getName(),
+            MemoryDriver.class.getName(), GOPDriver.class.getName());
     GameDriver currentGame;
     List<String>playerNames;
     GameScreen currentScreen;
@@ -47,8 +45,10 @@ public class GameController {
                 index = 0; break;
             case HUMANITY:
                 index = 1; break;
-            case UNO:
+            case MEMORY:
                 index = 2; break;
+            case GOP:
+                index = 3; break;
             default:
                 index = 0; break;
         }
