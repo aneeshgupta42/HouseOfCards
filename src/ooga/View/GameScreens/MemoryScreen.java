@@ -173,18 +173,23 @@ public class MemoryScreen extends GameScreen {
             setCardFace((Integer) currentPair.get(1), false);
         }
         if (ret.size() == 2) {
-            userInterface.setWinScreen((String) gameData.get("gameName"), playerNames.get(0), numCompletePairs);
+            exitProtocol();
         }
         return success;
+    }
+
+    public void exitProtocol(){
+//        gameControl.updateHighScore();
+        userInterface.setWinScreen((String) gameData.get("gameName"), playerNames.get(0), numCompletePairs);
     }
 
     @Override
     public Scene getScene(UserInterface ui) {
         userInterface = ui;
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Memory Game");
         String gameBackground = (String) gameData.get(GAMEBACK);
         Image background = imageGetter(gameBackground);
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Memory Game");
         ImagePattern backgroundPattern = new ImagePattern(background);
         return new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
     }

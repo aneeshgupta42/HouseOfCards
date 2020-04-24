@@ -6,10 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
+import ooga.Controller.GameController;
 import ooga.View.ButtonFactory;
 import ooga.View.UserInput;
 import ooga.View.UserInterface;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,7 +40,12 @@ public abstract class GameScreen {
 
     public abstract Scene getScene(UserInterface ui);
 
-    public void setCommonButtons(UserInterface ui){
+    public void setCommonButtons(UserInterface ui, GameController gameController, String gameName){
         restartButton.setOnMouseClicked(e-> ui.setSplash());
+        exitButton.setOnMouseClicked(e->{
+            List<Object> winner = gameController.getWinner();
+            ui.setWinScreen(gameName, (String) winner.get(1),(Integer)winner.get(0) );
+
+        } );
     }
 }

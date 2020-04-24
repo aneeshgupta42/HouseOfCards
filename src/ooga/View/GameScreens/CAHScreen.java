@@ -99,8 +99,8 @@ public class CAHScreen extends GameScreen {
         }
     }
     private void checkRound(){
-        if(round>differentDecks.keySet().size()-1){
-            round=1;
+        if(round>differentDecks.keySet().size()-1) {
+            round = 1;
         }
     }
 
@@ -279,9 +279,10 @@ public class CAHScreen extends GameScreen {
                     cardsChosen.add(gameButton.getText());
                     gameControl.updateProtocol(cardsChosen);
                     gameScene.getChildren().remove(gameButton);
+
                     for (VboxFactory card : tappedCards) {
                         if (gameScene.getChildren().remove(card) == false) {
-                            endGame();
+
                         }
                         gameScene.getChildren().remove(card);
                     }
@@ -312,7 +313,7 @@ public class CAHScreen extends GameScreen {
     }
 
     private void endGame(){
-        // take the user to the end screen 
+        System.out.println(gameControl.getWinner());
     }
 
 
@@ -320,7 +321,7 @@ public class CAHScreen extends GameScreen {
     public Scene getScene(UserInterface ui) {
         Image background = new Image(this.getClass().getClassLoader().getResourceAsStream((String)jsonData.get(BACKGROUND_KEY)));
         ImagePattern backgroundPattern = new ImagePattern(background);
-        setCommonButtons(ui);
+        setCommonButtons(ui, gameControl, "Cards Against Humanity");
         Scene solitaireScene = new Scene(gameScene, ui.getWidth(), ui.getHeight(), backgroundPattern);
         return solitaireScene;
     }

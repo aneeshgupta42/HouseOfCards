@@ -13,11 +13,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 //TODO: deal with makePlayer
 public class GameController {
-    private static final List<String> DEFAULT_GAMES = List.of(
-            SolitaireDriver.class.getName(), HumanityDriver.class.getName(),
-            MemoryDriver.class.getName(), GOPDriver.class.getName());
+//    private static final List<String> DEFAULT_GAMES = List.of(
+//            SolitaireDriver.class.getName(), HumanityDriver.class.getName(),
+//            MemoryDriver.class.getName(), GOPDriver.class.getName());
     GameDriver currentGame;
     List<String>playerNames;
+    String gameName;
     GameScreen currentScreen;
 
     public GameController(){
@@ -25,7 +26,8 @@ public class GameController {
     }
 
     public GameScreen getGameScreen(String gameName, List<String> playerNames){
-        Map<String, Object> ret = readJSON("gameScreen", gameName.toLowerCase());
+        this.gameName = gameName.toLowerCase();
+        Map<String, Object> ret = readJSON("gameScreen", this.gameName);
         String gameScreenClass = (String) ret.get("className");
         GameScreen gameScreen = null;
         this.playerNames = playerNames;
@@ -37,24 +39,13 @@ public class GameController {
         }
         return gameScreen;
     }
-//TODO: Refactor this to read from data files.
+
     public Map<String, Object> initializeGame(GameTypes type){
-        int index;
-        switch (type){
-            case SOLITAIRE:
-                index = 0; break;
-            case HUMANITY:
-                index = 1; break;
-            case MEMORY:
-                index = 2; break;
-            case GOP:
-                index = 3; break;
-            default:
-                index = 0; break;
-        }
+       Map<String, Object> m = readJSON("gameDriver", this.gameName);
+       String driverClassName = (String) m.get("className");
 
         try {
-            Constructor<?> constructor = Class.forName(DEFAULT_GAMES.get(index)).getDeclaredConstructors()[0];
+            Constructor<?> constructor = Class.forName(driverClassName).getDeclaredConstructors()[0];
             currentGame =(GameDriver) constructor.newInstance(this, playerNames);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -65,8 +56,8 @@ public class GameController {
     }
 
 
-    private Map<String, Object> readJSON(String dataRequestedFor, String gameType){
-        String path = "data/gameFiles/" + gameType + ".json";
+    private Map<String, Object> readJSON(String dataRequestedFor, String gameName){
+        String path = "data/gameFiles/" + gameName + ".json";
         Map<String, Object> ret = null;
         try {
             ret = JSONReader.getData(dataRequestedFor, path);
@@ -106,6 +97,21 @@ public class GameController {
         return currentGame.getPlayerScore(playerName);
     }
 
+    public List<Object> getWinner(){
+        List<Integer> scores = new ArrayList<>();
+        List<Object> sendInformation = new ArrayList<>();
+        Map<Integer, String> mappingPlayers = new HashMap<>();
+        for(String player:playerNames){
+            int score = getPlayerScore(player);
+            scores.add(score);
+            mappingPlayers.put(score,player);
+        }
+        Collections.sort(scores);
+        sendInformation.add(scores.get(0));
+        sendInformation.add(mappingPlayers.get(scores.get(0)));
+        return sendInformation;
+    }
+
     public void makePlayers(List<String> playerName){
         this.playerNames = playerName;
     }
@@ -118,11 +124,11 @@ public class GameController {
     public static void main(String[] args) {
         GameController test = new GameController();
 //        test.getGameScreen("Solitaire");
-        Map<String, Object> m = test.initializeGame(GameTypes.SOLITAIRE);
-        for (String s : m.keySet()){
-            System.out.println(s + ": ");
-            System.out.println(m.get(s));
-        }
+//        Map<String, Object> m = test.initializeGame(GameTypes.SOLITAIRE);
+//        for (String s : m.keySet()){
+//            System.out.println(s + ": ");
+//            System.out.println(m.get(s));
+//        }
 
     }
 }

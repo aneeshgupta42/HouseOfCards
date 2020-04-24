@@ -2,6 +2,9 @@
   "gameScreen": {
     "className": "ooga.View.GameScreens.CAHScreen"
   },
+  "gameDriver": {
+    "className": "ooga.Model.Games.HumanityDriver"
+  },
   "view": {
     "backImagePath_humanity" : "cardDecks/poker/red_back.png",
       "Xzero_index": "850",
