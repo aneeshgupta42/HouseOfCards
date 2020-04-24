@@ -1,6 +1,5 @@
 package ooga.Controller;
 
-import ooga.Model.Cards.Playable;
 import ooga.Model.Games.*;
 import ooga.View.GameScreens.GameScreen;
 import org.json.simple.parser.ParseException;
@@ -60,7 +59,7 @@ public class GameController {
         String path = "data/gameFiles/" + gameName + ".json";
         Map<String, Object> ret = null;
         try {
-            ret = JSONReader.getData(dataRequestedFor, path);
+            ret = JSONUtil.getData(dataRequestedFor, path);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -97,6 +96,19 @@ public class GameController {
         return currentGame.getPlayerScore(playerName);
     }
 
+    public void updateHighScore(){
+        String path = "data/highScores/highScores.json";
+        try {
+            JSONUtil.modifyField("humanity", "123", path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public void makePlayers(List<String> playerName){
         this.playerNames = playerName;
     }
@@ -108,6 +120,7 @@ public class GameController {
 
     public static void main(String[] args) {
         GameController test = new GameController();
+        test.updateHighScore();
 //        test.getGameScreen("Solitaire");
 //        Map<String, Object> m = test.initializeGame(GameTypes.SOLITAIRE);
 //        for (String s : m.keySet()){
