@@ -103,11 +103,9 @@ public class CAHScreen extends GameScreen {
     private void checkRound(){
         if(round>differentDecks.keySet().size()-1) {
             round = 1;
-            System.out.println(indexMapped.get(names.size()-1).size());
             round_Number++;
         }
-        if(round_Number==4){
-            System.out.println("hello");
+        if(round_Number==10){
             endGame();
         }
     }
