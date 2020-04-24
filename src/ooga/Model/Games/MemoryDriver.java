@@ -47,10 +47,10 @@ public class MemoryDriver extends GameDriver {
         Playable card2 = getCard((Integer) args.get(1));
         if(card1.getNumber() == card2.getNumber() && card1.getValue().equals(card2.getValue())){
             ret.add(1);
+            removeCardFromPiles((Integer) args.get(0)); removeCardFromPiles((Integer) args.get(1));
         }else{
             ret.add(0);
         }
-        removeCardFromPiles((Integer) args.get(0)); removeCardFromPiles((Integer) args.get(1));
         return ret;
     }
 
