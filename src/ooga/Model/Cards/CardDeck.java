@@ -31,6 +31,8 @@ public class CardDeck implements Deck {
         gameCards.add(card);
     }
 
+    public void addCard(List<Playable>cards){gameCards.addAll(cards);}
+
     @Override
     public List<Playable> getCards(){
         return gameCards;
@@ -87,7 +89,12 @@ public class CardDeck implements Deck {
     }
 
     public void removeCard(int cardID){
-        gameCards.remove(getCardWithID(cardID));
+        if(isCardPresent(cardID)){
+            gameCards.remove(getCardWithID(cardID));
+        }
+        else{
+            return;
+        }
     }
 
     @Override
