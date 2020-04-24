@@ -190,8 +190,6 @@ public class CAHScreen extends GameScreen {
                         card.changeFace(true);
                         changeVbox(card);
                     }
-
-
                 }
                 card.setCursor(Cursor.HAND);
             }

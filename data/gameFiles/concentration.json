@@ -1,23 +1,22 @@
 {
   "gameDriver": {
-    "className": "ooga.Model.Games.Memory"
+    "className": "ooga.Model.Games.MemoryDriver"
   },
   "gameScreen": {
-    "className": "ooga.View.GameScreens.SolitaireScreen"
+    "className": "ooga.View.GameScreens.MemoryScreen"
   },
   "view": {
-    "gameName": "Solitaire",
+    "gameName": "Concentration",
     "cardWidth" : "60",
     "cardHeight" : "90",
     "sceneWidth" : "1200",
     "sceneHeight" : "650",
-    "drawPileX" : "850",
-    "drawPileY" : " 500",
-    "cardPileX" : "20",
+    "cardPileX" : "50",
     "cardPileY" : "10",
-    "gameBackground" : "viewAssets/green_felt.jpg",
-    "backImagePath" : "cardDecks/poker/red_back.png",
-    "baseImagePath" : "cardDecks/poker/blue_border.jpg"
+    "XOFFSET" : "80",
+    "YOFFSET" : "150",
+    "gameBackground" : "viewAssets/yellow_felt.jpg",
+    "backImagePath" : "cardDecks/poker/blue_back.png"
   },
 
 
