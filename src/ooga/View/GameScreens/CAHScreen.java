@@ -57,6 +57,7 @@ public class CAHScreen extends GameScreen {
     private static final String BUTTON_DISTANCE="Button_Distance";
     private static final String EMPTY =" ";
     private int round =0;
+    private List<String> names = new ArrayList<>();
     private HBox buttonHolder = new HBox(50);
     private Label playerLabel = new Label(" ");
 
@@ -93,7 +94,7 @@ public class CAHScreen extends GameScreen {
             if(!tappedCards.contains(card.getScene())) {
                 card.getScene().setVisible(!card.getScene().isVisible());
                 playerLabel.setVisible(card.getScene().isVisible());
-                playerLabel.setText((String) jsonData.get(BUTTON_TEXT_KEY) + round);
+                playerLabel.setText(names.get(round-1));
             }
         }
     }
@@ -103,14 +104,14 @@ public class CAHScreen extends GameScreen {
         }
     }
 
-    //TODO: initializeGame before requestCards
-    //TODO: Get a Map of (Integer, List<Integer>) instead?
-    public CAHScreen(GameController setUpController) {
+
+    public CAHScreen(GameController setUpController, List<String> playerNames) {
         gameControl = setUpController;
         jsonData = gameControl.initializeGame(GameTypes.HUMANITY);
        // System.out.println(playerNames);
-       // gameControl.makePlayers(playerNames);
+       //gameControl.makePlayers(playerNames);
         differentDecks = setUpController.requestCards();
+        names= playerNames;
         initializeImageMap(differentDecks);
         addCards(gameControl);
     }
@@ -268,16 +269,14 @@ public class CAHScreen extends GameScreen {
             double distanceBetweenButtons = Double.parseDouble((String) jsonData.get(BUTTON_DISTANCE));
             int initialDistance = 0;
             for (int i = 1; i <= differentDecks.keySet().size() - 1; i++) {
-                ButtonFactory gameButton = new ButtonFactory((String) jsonData.get(BUTTON_TEXT_KEY) + i, XPos + initialDistance, YPos);
+                ButtonFactory gameButton = new ButtonFactory(names.get(i-1), XPos + initialDistance, YPos);
                 gameButton.setOnAction(e -> {
                     changeCards(differentDecks.keySet().size() - 1);
                     List<Object> cardsChosen = new ArrayList<>();
                     for (VboxFactory cards : tappedCards) {
                         cardsChosen.add(cards.getIndex());
                     }
-                    String[] buttonName = gameButton.getText().split(EMPTY);
-                    Integer playerIndex = Integer.parseInt(buttonName[1]);
-                    cardsChosen.add(playerIndex);
+                    cardsChosen.add(gameButton.getText());
                     gameControl.updateProtocol(cardsChosen);
                     gameScene.getChildren().remove(gameButton);
                     for (VboxFactory card : tappedCards) {
