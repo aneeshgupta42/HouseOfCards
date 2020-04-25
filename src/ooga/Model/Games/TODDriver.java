@@ -29,7 +29,7 @@ public class TODDriver extends GameDriver {
     @Override
     public List<Object> updateProtocol(List<Object> args) {
         removeCardFromPiles((Integer) args.get(0));
-        System.out.println(args.get(1));
+//        System.out.println(args.get(1));
         if(((String)args.get(args.size()-2)).equals("Done")){
             updateScore(1, (String) args.get(args.size()-1));
         }

@@ -4,7 +4,6 @@ import ooga.Controller.GameController;
 import ooga.Model.Cards.CardDeck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -41,13 +40,51 @@ class MemoryDriverTest {
 
     @Test
     void checkWin() {
+        assertFalse(test.checkWin());
     }
 
     @Test
     void updateProtocol() {
+        ArrayList<Object> args = new ArrayList<>();
+        int originalScore = test.getPlayerScore("Harry");
+        int a = test.getPiles().get(0).getIDList().get(0);
+        int b = test.getPiles().get(1).getIDList().get(1);
+        args.add(a); args.add(b);args.add("Harry");
+        assertNotNull(test.getCard(a));
+        assertNotNull(test.getCard(b));
+        if((Integer) test.updateProtocol(args).get(0)==1){
+            assertEquals(test.getPlayerScore("harry"), originalScore + 1);
+        }
+        else{
+            assertEquals(test.getPlayerScore("harry"), originalScore);
+        }
+    }
+
+    @Test
+    void checkRemovalCard(){
+        ArrayList<Object> args = new ArrayList<>();
+        int a = test.getPiles().get(0).getIDList().get(0);
+        int b = test.getPiles().get(1).getIDList().get(1);
+        args.add(a); args.add(b);args.add("Harry");
+        assertNotNull(test.getCard(a));
+        assertNotNull(test.getCard(b));
+        if((Integer) test.updateProtocol(args).get(0)==1){
+            assertFalse(test.getPiles().get(0).getIDList().contains(a));
+            assertFalse(test.getPiles().get(1).getIDList().contains(b));
+        }
+        else{
+            assertTrue(test.getPiles().get(0).getIDList().contains(a));
+            assertTrue(test.getPiles().get(1).getIDList().contains(b));
+        }
     }
 
     @Test
     void updateScore() {
+        test.updateScore(11, "Tom");
+        test.updateScore(12, "Dick");
+        test.updateScore(13, "Harry");
+        assertEquals(test.getPlayerScore("Tom"), 11);
+        assertEquals(test.getPlayerScore("Dick"), 12);
+        assertEquals(test.getPlayerScore("Harry"), 13);
     }
 }

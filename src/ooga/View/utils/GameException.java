@@ -36,7 +36,7 @@ public class GameException extends RuntimeException {
         super(cause);
     }
 
-    public void showMessage (Alert.AlertType type, String message) {
+    private void showMessage (Alert.AlertType type, String message) {
         new Alert(type, message).showAndWait();
     }
 

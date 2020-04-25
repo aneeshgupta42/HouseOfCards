@@ -118,7 +118,7 @@ public class TODScreen extends GameScreen {
 
     private void choosePlayer() {
         int player = getRandomInt();
-        System.out.println(player);
+//        System.out.println(player);
         playerLabel.setText("Player Chosen is " + playerNames.get(player - 1) + " Score: " + gameControl.getPlayerScore(playerNames.get(player - 1)));
         playerLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         if (!gameScene.getChildren().contains(playerLabel)) {
