@@ -20,15 +20,23 @@ public class MemoryDriver extends GameDriver {
     protected void makePiles() {
         CardDeck completeSet = new CardDeck(DeckType.POKER);
         CardDeck deckWithSpecifiedSuits = new CardDeck(DeckType.POKER, new ArrayList<>());
+        int numOfColumns = (playerList.size() > 1)? 4 : 2;
         for (Playable card : completeSet.getCards()){
-            if (card.getValue().equals("S") || card.getValue().equals("D")){
-                deckWithSpecifiedSuits.addCard(card);
+            if (playerList.size() > 1){
+                if (card.getValue().equals("S") || card.getValue().equals("D")){
+                    deckWithSpecifiedSuits.addCard(card);
+                }
+            }else{
+                if (card.getValue().equals("S")){
+                    deckWithSpecifiedSuits.addCard(card);
+                }
             }
+
         }
         deckWithSpecifiedSuits.addCard(deckWithSpecifiedSuits.returnADeepCopy().getCards());
         deckWithSpecifiedSuits.shuffleDeck();
         //System.out.println(deckWithSpecifiedSuits);
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < numOfColumns; i++){
             piles.put(i, new CardDeck(DeckType.POKER, deckWithSpecifiedSuits.popCards(13)));
         }
         //System.out.println(deckWithSpecifiedSuits.getDeckSize());
