@@ -58,3 +58,8 @@ Interesting data files:
 - The project didn't seem hard at first but because of the virtual form and the time difference, we felt it was really hard to manage the whole project. Being able to meet in person is way more helpful than meeting virtually and working. 
 - Keeping in sync with class concepts required to do this project was also a bit tough, due to the absence of labs and lectures like before.
 
+### Disclaimer:
+
+This project uses open-source datafiles for Cards against Humanity and Truth and Dare acquired from GitHub and the internet under the MIT License. These will not be 
+used commercially. The designers of this project do not take responsibility for the contents of these data files, and have
+merely utilized their structure and syntax of these Card data files, and are not responsible for their contents.
