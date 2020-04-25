@@ -1,8 +1,10 @@
-package ooga.View;
+package ooga.View.tests;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import ooga.Controller.GameController;
+import ooga.View.SplashScreen;
+import ooga.View.UserInterface;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -18,7 +20,7 @@ class SplashScreenTest {
         Platform.startup(() -> {
             UserInterface myInterface = new UserInterface();
             myInterface.start(new Stage());
-            SplashScreen splash = new SplashScreen(myInterface);
+            ooga.View.SplashScreen splash = new SplashScreen(myInterface);
             assertTrue(splash.generateLogo() instanceof javafx.scene.shape.Rectangle);
             System.out.println("Generated logo");
         });

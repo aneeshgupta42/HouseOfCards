@@ -1,9 +1,10 @@
-package ooga.View;
+package ooga.View.tests;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ooga.Controller.GameController;
+import ooga.View.UserInterface;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

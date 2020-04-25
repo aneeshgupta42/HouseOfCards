@@ -1,9 +1,10 @@
-package ooga.View.GameScreens;
+package ooga.View.tests;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
+import ooga.View.GameScreens.TODScreen;
 import ooga.View.SplashScreen;
 import ooga.View.UserInterface;
 import org.junit.jupiter.api.Test;
