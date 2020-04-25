@@ -25,6 +25,7 @@ public class SplashScreen {
     private Scene startScene;
     private boolean darkMode = false;
     private String logo = "viewAssets/loading.gif";
+    private String style = "-fx-border-color: black;-fx-padding: 2 2 2 2 ";
 //    private String logo = "cardDecks/poker/aces.png";
     public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "TOD", "Memory", "Concentration");
 
@@ -111,6 +112,7 @@ public class SplashScreen {
         displayScores.setSpacing(20);
         makeHBox(highScores, displayScores);
         displayScores.setLayoutX(30);
+        displayScores.setLayoutY(100);
         sceneGroup.getChildren().add(displayScores);
     }
 
@@ -121,6 +123,7 @@ public class SplashScreen {
             Label game = new Label(key);
             Label nameLabel = new Label(namesAndScores.get(0));
             Label scoreLabel = new Label(namesAndScores.get(1));
+            displayDetails.setStyle(style);
             displayDetails.getChildren().addAll(game, nameLabel,scoreLabel);
             displayScores.getChildren().add(displayDetails);
           //  String
