@@ -20,6 +20,7 @@ import javafx.scene.text.FontWeight;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
 import ooga.View.UserInterface;
+import ooga.View.utils.GameException;
 
 import java.util.*;
 
@@ -176,7 +177,7 @@ public class MemoryScreen extends GameScreen {
                 try {
                     TimeUnit.MILLISECONDS.sleep(700);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    throw new GameException("Timeout Error");
                 }
                 boolean success = checkUpdate(currentPair);
                 initDiffDecks();

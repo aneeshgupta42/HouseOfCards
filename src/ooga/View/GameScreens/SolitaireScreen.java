@@ -334,9 +334,4 @@ public class SolitaireScreen extends GameScreen {
         double sceneHeight = Double.parseDouble((String)gameData.get(SCENEHEIGHT));
         return (x <= sceneWidth && y <= sceneHeight && x >= 0 && y >= 0);
     }
-
-    private void showMessage (Alert.AlertType type, String message) {
-        new Alert(type, message).showAndWait();
-    }
-
 }

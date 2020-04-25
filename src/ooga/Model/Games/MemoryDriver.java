@@ -8,6 +8,7 @@ import ooga.Model.Players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MemoryDriver extends GameDriver {
     public MemoryDriver(GameController controller, List<String>playerNames) {
@@ -35,12 +36,13 @@ public class MemoryDriver extends GameDriver {
         }
         deckWithSpecifiedSuits.addCard(deckWithSpecifiedSuits.returnADeepCopy().getCards());
         deckWithSpecifiedSuits.shuffleDeck();
-        //System.out.println(deckWithSpecifiedSuits);
         for(int i = 0; i < numOfColumns; i++){
             piles.put(i, new CardDeck(DeckType.POKER, deckWithSpecifiedSuits.popCards(13)));
         }
-        //System.out.println(deckWithSpecifiedSuits.getDeckSize());
+    }
 
+    public Map<Integer, CardDeck> getPiles() {
+        return piles;
     }
 
     @Override
