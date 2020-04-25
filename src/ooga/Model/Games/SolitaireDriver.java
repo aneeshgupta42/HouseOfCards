@@ -184,30 +184,8 @@ public class SolitaireDriver extends GameDriver {
         return ret;
     }
 
-
-
-    @Override
-    public void changeLevel(int level) {
-
-    }
-
     @Override
     public void updateScore(int score, String playerName) {
-
-    }
-
-    @Override
-    public void pauseGame() {
-
-    }
-
-    @Override
-    public void resumeGame() {
-
-    }
-
-    @Override
-    public void startGame() {
 
     }
 

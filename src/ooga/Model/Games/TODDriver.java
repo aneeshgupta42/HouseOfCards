@@ -45,26 +45,6 @@ public class TODDriver extends GameDriver {
         }
     }
 
-    @Override
-    public void changeLevel(int level) {
-
-    }
-
-    @Override
-    public void pauseGame() {
-
-    }
-
-    @Override
-    public void resumeGame() {
-
-    }
-
-    @Override
-    public void startGame() {
-
-    }
-
     public static void main(String[] args) {
         TODDriver test = new TODDriver(new GameController(), new ArrayList<>());
         for(Integer i : test.piles.keySet()){
