@@ -3,10 +3,8 @@ package ooga.Model.Cards;
 import ooga.Controller.DeckType;
 import ooga.View.utils.GameException;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -19,18 +17,13 @@ public class CardFactory {
          case POKER:
             initializePoker(deck, deckType);
             break;
-         case HUMANITY_ANS:
-         case HUMANITY_QUES:
-            initializeHumanity(deck, deckType);
-            break;
-         case TRUTH:
-         case DARE:
-            initializeHumanity(deck, deckType);
+         default:
+            initializePartyCard(deck, deckType);
 
       }
    }
 
-   private static void initializeHumanity(CardDeck deck, DeckType deckType) {
+   private static void initializePartyCard(CardDeck deck, DeckType deckType) {
       String nameOfDir = deckType.toString().toLowerCase().strip();
       String path = "cardDecks/" + nameOfDir + "/" + nameOfDir + ".txt";
       File file = new File("data/cardDecks/" + nameOfDir + "/" + nameOfDir + ".txt");
@@ -99,14 +92,12 @@ public class CardFactory {
    private static Playable makeCard(DeckType deckType, String imagePath, String[] attributes, int id) {
       Playable card;
       switch (deckType){
-         case HUMANITY_ANS:
-         case HUMANITY_QUES:
-         case TRUTH:
-         case DARE:
-            card = new HumanityCard(attributes[0], id);
-            break;
-         default: //for poker cards
+         case POKER:
             card = new PokerCard(imagePath, Integer.parseInt(attributes[0]), attributes[1], id);
+            break;
+         default:
+            card = new PartyCard(attributes[0], id);
+
 
       }
       return card;

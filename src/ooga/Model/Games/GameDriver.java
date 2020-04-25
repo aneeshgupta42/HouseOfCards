@@ -22,10 +22,12 @@ public abstract class GameDriver implements Game {
     protected GameController controller;
     protected List<Player> playerList;
 
-    public GameDriver(GameController controller){
+    public GameDriver(GameController controller, List<String>playerNames){
         this.controller = controller;
         playerList = new ArrayList<>();
         piles = new HashMap<>();
+        makePlayers(playerNames);
+        makePiles();
     }
 
     public String getCardValue(int cardID){

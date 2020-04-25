@@ -10,9 +10,7 @@ import java.util.List;
 
 public class TODDriver extends GameDriver {
     public TODDriver(GameController controller, List<String>playerNames) {
-        super(controller);
-        makePlayers(playerNames);
-        makePiles();
+        super(controller, playerNames);
     }
 
     @Override

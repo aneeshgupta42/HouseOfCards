@@ -13,13 +13,7 @@ import java.util.Map;
 
 public class HumanityDriver extends GameDriver{
     public HumanityDriver(GameController controller, List<String>players) {
-        super(controller);
-        makePlayers(players);
-//        System.out.println(playerList.size());
-//        for (Player p : playerList){
-//            System.out.println(p.getName());
-//        }
-        makePiles();
+        super(controller, players);
     }
 
     @Override
