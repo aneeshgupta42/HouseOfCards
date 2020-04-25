@@ -22,6 +22,26 @@ class MemoryDriverTest {
     }
 
     @Test
+    void checkNameList(){
+        assertEquals(test.getPlayerNames().size(), names.size());
+    }
+
+
+    @Test
+    void checkGetPlayerScore(){
+        for(String name:names){
+            assertEquals(test.getPlayerScore(name), 0);
+        }
+
+    }
+
+
+    @Test
+    void checkIsCardFaceUp(){
+        assertFalse(test.IsCardFaceUp(test.getPiles().get(0).getIDList().get(0)));
+    }
+
+    @Test
     void makePiles1() {
         test.makePiles();
         Map<Integer, CardDeck> testPiles = test.getPiles();
@@ -41,6 +61,27 @@ class MemoryDriverTest {
     @Test
     void checkWin() {
         assertFalse(test.checkWin());
+    }
+
+    @Test
+    void checkGetCard() {
+        for(Integer pile: test.getPiles().keySet()){
+            for(Integer id: test.getPiles().get(pile).getIDList()){
+                assertNotNull(test.getCard(id));
+            }
+        }
+    }
+
+    @Test
+    void checkRemoval() {
+        for(Integer pile: test.getPiles().keySet()){
+            for(Integer id: test.getPiles().get(pile).getIDList()){
+                test.removeCardFromPiles(id);
+            }
+        }
+        for(Integer pile: test.getPiles().keySet()){
+            assertEquals(test.getPiles().get(pile).getIDList().size(), 0);
+            }
     }
 
     @Test
