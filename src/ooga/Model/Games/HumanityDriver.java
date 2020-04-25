@@ -73,26 +73,6 @@ public class HumanityDriver extends GameDriver{
         }
     }
 
-    @Override
-    public void changeLevel(int level) {
-
-    }
-
-    @Override
-    public void pauseGame() {
-
-    }
-
-    @Override
-    public void resumeGame() {
-
-    }
-
-    @Override
-    public void startGame() {
-
-    }
-
     public static void main(String[] args) {
         List<String> names = new ArrayList<>();
         names.add("a"); names.add("b"); names.add("c");

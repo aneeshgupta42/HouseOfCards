@@ -17,17 +17,9 @@ public interface Game {
 
     void updateScore(int score, String playerName);
 
-    void changeLevel(int level);
-
     Object sendCards();
 
     String getCardImagePath(int ID);
-
-    void pauseGame();
-
-    void resumeGame();
-
-    void startGame();
 
     int getPlayerScore(String playerName);
 

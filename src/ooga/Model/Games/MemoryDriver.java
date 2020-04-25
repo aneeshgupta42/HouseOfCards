@@ -91,26 +91,6 @@ public class MemoryDriver extends GameDriver {
         }
     }
 
-    @Override
-    public void changeLevel(int level) {
-
-    }
-
-    @Override
-    public void pauseGame() {
-
-    }
-
-    @Override
-    public void resumeGame() {
-
-    }
-
-    @Override
-    public void startGame() {
-
-    }
-
     public static void main(String[] args) {
         List<Object> update = new ArrayList<>();
         update.add(1); update.add(20);
