@@ -177,7 +177,7 @@ public class MemoryScreen extends GameScreen {
                 try {
                     TimeUnit.MILLISECONDS.sleep(700);
                 } catch (InterruptedException e) {
-                    new GameException(e.getMessage());
+                    throw new GameException("Timeout Error");
                 }
                 boolean success = checkUpdate(currentPair);
                 initDiffDecks();

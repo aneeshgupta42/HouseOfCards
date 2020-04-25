@@ -37,7 +37,7 @@ public class GameController {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
             gameScreen = (GameScreen) constructor.newInstance((GameController) this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            new GameException(e.getMessage());
+            throw new GameException("Constructor Error");
         }
         return gameScreen;
     }

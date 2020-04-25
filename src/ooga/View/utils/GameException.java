@@ -2,8 +2,6 @@ package ooga.View.utils;
 
 import javafx.scene.control.Alert;
 
-import static javafx.application.Platform.exit;
-
 public class GameException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
@@ -20,6 +18,10 @@ public class GameException extends RuntimeException {
         new Alert(type, message).showAndWait();
     }
 
+    public GameException(String msg){
+        showMessage(Alert.AlertType.ERROR, msg);
+    }
+
     /**
      * Create an exception based on a caught exception with a different message.
      */
@@ -33,4 +35,9 @@ public class GameException extends RuntimeException {
     public GameException(Throwable cause) {
         super(cause);
     }
+
+    public void showMessage (Alert.AlertType type, String message) {
+        new Alert(type, message).showAndWait();
+    }
+
 }

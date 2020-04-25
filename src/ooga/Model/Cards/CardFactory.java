@@ -38,7 +38,7 @@ public class CardFactory {
       try {
          sc = new Scanner(file);
       } catch (FileNotFoundException e) {
-         new GameException(e.getMessage());
+         throw new GameException("File not Found");
       }
 
       while (sc.hasNextLine()){
@@ -120,9 +120,9 @@ public class CardFactory {
          ClassLoader loader = new URLClassLoader(urls);
          return ResourceBundle.getBundle(path, Locale.getDefault(), loader);
       } catch (Exception e){
-         new GameException(e.getMessage());
+//         return null;
+         throw new GameException("Didn't find card Images");
       }
-      return null;
    }
 
    public static void main(String[] args) {

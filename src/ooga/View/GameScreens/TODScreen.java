@@ -114,7 +114,6 @@ public class TODScreen extends GameScreen {
             setUponScreen(playingCards, 0, 0, i, j, 200, 200);
             i += 650;
         }
-
     }
 
     private void choosePlayer() {
