@@ -2,6 +2,7 @@ package ooga.Controller;
 
 import ooga.Model.Games.*;
 import ooga.View.GameScreens.GameScreen;
+import ooga.View.utils.GameException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 //import ooga.View.Game;
@@ -36,7 +37,7 @@ public class GameController {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
             gameScreen = (GameScreen) constructor.newInstance((GameController) this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new GameException("Constructor Error");
         }
         return gameScreen;
     }

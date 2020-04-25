@@ -2,6 +2,7 @@ package ooga.View.GameScreens;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import ooga.Controller.GameController;
 import ooga.View.ButtonFactory;
@@ -49,6 +50,11 @@ public abstract class GameScreen {
         gameController.updateHighScore();
         ui.setWinScreen(gameName, (String) winner.get(1), (Integer) winner.get(0));
     }
+
+    public void showMessage (Alert.AlertType type, String message) {
+        new Alert(type, message).showAndWait();
+    }
+
 
 //    public void userScreen(String gameName){
 //        UserInput c= new UserInput(gameName, this);

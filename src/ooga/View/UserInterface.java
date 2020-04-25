@@ -11,6 +11,7 @@ import ooga.Controller.GameController;
 import ooga.View.GameScreens.CAHScreen;
 import ooga.View.GameScreens.GameScreen;
 import ooga.View.GameScreens.SolitaireScreen;
+import ooga.View.utils.GameException;
 import ooga.View.utils.WinScreen;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class UserInterface extends Application implements Viewable {
     private double VIEW_WIDTH = 1200;
     private double VIEW_HEIGHT = 650;
     private Stage myStage;
-    private static GameController passingController;
+    private static GameController passingController = new GameController();
     private Scene splash;
 
     @Override
@@ -103,6 +104,9 @@ public class UserInterface extends Application implements Viewable {
         myStage.show();
     }
 
+    public String getTitle(){
+        return myStage.getTitle();
+    }
     public GameController getController(){
         return passingController;
     }

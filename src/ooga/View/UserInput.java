@@ -107,11 +107,8 @@ public class UserInput {
                 if(playerNames.size()==players.getChildren().size()) {
                     mainView.initializeGame(game, playerNames);
                 }
-        // go to the game scene
     }}});
-    // gameController.makePlayer(textEntered);s
 }
-
 
 
     private void returnButton(){
