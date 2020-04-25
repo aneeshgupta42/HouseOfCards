@@ -1,28 +1,23 @@
 package ooga.View;
 
-import javafx.scene.image.Image;
+import ooga.Controller.GameController;
+
+import java.util.List;
 
 public interface Viewable {
-    void moveCard (int id, int x, int y);
+    void userScreen(String gameName, boolean darkMode);
 
-    void updateScore(int score);
+    void initializeGame(String gameName, List<String> playerNames);
 
-    void displayCard (Image cardView);
+    String getTitle();
 
-    void makeDeck (Deck deck);
+    GameController getController();
 
-    void downloadGame(Game game);
+    void setWinScreen(String gameName, String playerName, int playerScore);
 
-    void gameMessage (String message);
+    double getWidth();
 
-    void getNewCard (Deck deck);
+    double getHeight();
 
-    void shuffleDeck (int deckId);
-
-    void generateGame (int gameChoice);
-
-    void endGame();
-
-    Deck getDeck(int x, int y);
-
+    void setSplash();
 }
