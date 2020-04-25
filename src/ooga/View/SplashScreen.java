@@ -23,6 +23,7 @@ import java.util.Map;
 public class SplashScreen {
     private Paint background = Color.WHITESMOKE;
     private Scene startScene;
+    private boolean darkMode = false;
     private String logo = "viewAssets/loading.gif";
 //    private String logo = "cardDecks/poker/aces.png";
     public static final List<String> GAME_FIELDS = List.of("Solitaire", "Humanity", "TOD", "Memory", "Concentration");
@@ -66,14 +67,14 @@ public class SplashScreen {
         rules.setLayoutX(width/2-100); rules.setLayoutY(300);
         rules.setFont(new Font("Garamond", 15));
         startRoot.getChildren().addAll(rules);
-
     }
+
     private void setupButtons(UserInterface mainView, Group sceneGroup, double XPos, double YPos){
         int distanceBetweenButtons=40;
         int initialDistance=0;
         for(String name:GAME_FIELDS){
             ButtonFactory gameButton = new ButtonFactory(name, XPos, YPos+initialDistance );
-            gameButton.setOnAction(e->mainView.userScreen(name));
+            gameButton.setOnAction(e->mainView.userScreen(name, darkMode));
             sceneGroup.getChildren().add(gameButton);
             initialDistance+=distanceBetweenButtons;
 
@@ -84,6 +85,23 @@ public class SplashScreen {
         ButtonFactory HighScores = new ButtonFactory("View Highscores", (double) 200, 10);
         sceneGroup.getChildren().add(HighScores);
         HighScores.setOnAction(e-> presentOnScreen(mainView, sceneGroup));
+
+        ButtonFactory darkMode = new ButtonFactory("DarkMode", (double)1000, 40);
+        sceneGroup.getChildren().add(darkMode);
+        darkMode.setOnAction(e-> darkModeButton());
+
+
+    }
+
+    private void darkModeButton(){
+        if(darkMode){
+            startScene.setFill(Color.WHITESMOKE);
+            darkMode = false;
+        }
+        else{
+            startScene.setFill(Color.DARKGRAY);
+            darkMode = true;
+        }
 
     }
     private void presentOnScreen(UserInterface mainView, Group sceneGroup){

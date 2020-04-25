@@ -13,7 +13,7 @@ class UserInputTest {
         GameController control = new GameController();
         UserInterface ui = new UserInterface();
         String gameName = "Solitaire";
-        UserInput userInput = new UserInput(gameName, ui);
+        UserInput userInput = new UserInput(gameName, ui, true);
         assertTrue(userInput.getUserScene() != null);
     }
 }
