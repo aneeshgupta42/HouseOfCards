@@ -59,13 +59,14 @@ public class SplashScreen {
         startRoot.getChildren().addAll(logo);
 
         Label rules = new Label("GAME RULES\n" +
-                "\t 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit\n" +
-                "\t 2. , sed do eiusmod tempor incididunt utl\n" +
-                "\t 3. labore et dolore magna aliqua. Ut enim ad minim veniam,\n" +
-                "\t 4.  quis nostrud exercitation ullamco laboris nisi ut al \n"+
+                "\t 1. Click on the button to choose the game you want to play. All the games except Memory and Solitaire are multiplayer\n" +
+                "\t 2. Press 'E' to load the first pile and 'N' for the next piles in Cards Against Humanity\n" +
+                "\t 3. The player changes after every 2 cards in the game Concentration\n" +
+                "\t 4. We have implemented Spyder Solitaire so we assume that you are familiar with the rules\n"+
+                "\t 5. THE QUESTIONS AND ANSWERS FOR CARDS AGAINST HUMANITY WERE FOUND ONLINE AND NOT MADE BY US!\n"+
                 "\t");
 
-        rules.setLayoutX(width/2-100); rules.setLayoutY(300);
+        rules.setLayoutX(width/2-350); rules.setLayoutY(220);
         rules.setFont(new Font("Garamond", 15));
         startRoot.getChildren().addAll(rules);
     }
