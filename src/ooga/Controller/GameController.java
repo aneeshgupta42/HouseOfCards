@@ -2,6 +2,7 @@ package ooga.Controller;
 
 import ooga.Model.Games.*;
 import ooga.View.GameScreens.GameScreen;
+import ooga.View.utils.GameException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 //import ooga.View.Game;
@@ -36,7 +37,7 @@ public class GameController {
             Constructor<?> constructor = Class.forName(gameScreenClass).getDeclaredConstructors()[0];
             gameScreen = (GameScreen) constructor.newInstance((GameController) this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
         return gameScreen;
     }
@@ -49,7 +50,7 @@ public class GameController {
             Constructor<?> constructor = Class.forName(driverClassName).getDeclaredConstructors()[0];
             currentGame = (GameDriver) constructor.newInstance(this, playerNames);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
         //use reflections to make an instance of the appropriate game class and assign to currentGame
         Map<String, Object> ret = readJSON("view", type.toString().toLowerCase().strip());
@@ -63,9 +64,9 @@ public class GameController {
         try {
             ret = JSONUtil.getData(dataRequestedFor, path);
         } catch (IOException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         } catch (ParseException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
         return ret;
     }
@@ -116,9 +117,9 @@ public class GameController {
                 oldScore = Integer.parseInt((String) m.get(s));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         } catch (ParseException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
         if (Integer.parseInt(score) < oldScore) {
             return;
@@ -126,9 +127,9 @@ public class GameController {
         try {
             JSONUtil.modifyHighScore(gameName, playerName, score, path);
         } catch (IOException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         } catch (ParseException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
     }
 
@@ -148,9 +149,9 @@ public class GameController {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         } catch (ParseException e) {
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
         return ret;
     }

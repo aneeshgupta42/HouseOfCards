@@ -1,6 +1,7 @@
 package ooga.Model.Cards;
 
 import ooga.Controller.DeckType;
+import ooga.View.utils.GameException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,7 +38,7 @@ public class CardFactory {
       try {
          sc = new Scanner(file);
       } catch (FileNotFoundException e) {
-         e.printStackTrace();
+         new GameException(e.getMessage());
       }
 
       while (sc.hasNextLine()){
@@ -119,7 +120,7 @@ public class CardFactory {
          ClassLoader loader = new URLClassLoader(urls);
          return ResourceBundle.getBundle(path, Locale.getDefault(), loader);
       } catch (Exception e){
-         e.printStackTrace();
+         new GameException(e.getMessage());
       }
       return null;
    }
