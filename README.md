@@ -56,3 +56,5 @@ Interesting data files:
 
 ### Impressions
 
+- The project didn't seem hard at first but because of the virtual form and the time difference, we felt it was really hard to manage the whole project. Being able to meet in person is way more helpful than meeting virtually and working. 
+
