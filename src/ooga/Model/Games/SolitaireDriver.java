@@ -103,7 +103,7 @@ public class SolitaireDriver extends GameDriver {
             return ret;
         }
         catch(IndexOutOfBoundsException e){
-            throw new GameException("Invalid bug");
+            throw new GameException("Solitaire Driver Bug");
         }
     }
 

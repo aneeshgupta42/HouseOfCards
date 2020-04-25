@@ -192,8 +192,8 @@ public class GameController {
         test.gameName = "humanity";
         Map<String, List<String>> temp = test.getHighScores();
         for (String s : temp.keySet()) {
-            System.out.println(s);
-            System.out.println(temp.get(s));
+//            System.out.println(s);
+//            System.out.println(temp.get(s));
         }
 //        test.getGameScreen("Solitaire");
 //        Map<String, Object> m = test.initializeGame(GameTypes.SOLITAIRE);
