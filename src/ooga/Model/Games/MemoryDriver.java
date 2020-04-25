@@ -12,9 +12,7 @@ import java.util.Map;
 
 public class MemoryDriver extends GameDriver {
     public MemoryDriver(GameController controller, List<String>playerNames) {
-        super(controller);
-        makePlayers(playerNames);
-        makePiles();
+        super(controller, playerNames);
     }
 
     @Override

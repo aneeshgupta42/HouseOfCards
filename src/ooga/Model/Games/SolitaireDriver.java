@@ -16,9 +16,7 @@ public class SolitaireDriver extends GameDriver {
     //many decks since solitaire contains decks everywhere
     // TODO: add a method to get the number of suits.
     public SolitaireDriver(GameController controller, List<String>playerNames) {
-        super(controller);
-        makePlayers(playerNames);
-        makeDecks();
+        super(controller, playerNames);
     }
 
     private void makeDecks() {
@@ -39,11 +37,11 @@ public class SolitaireDriver extends GameDriver {
             }
         }
         allGameCards.shuffleDeck();
-        makePiles();
     }
 
     @Override
     protected void makePiles() {
+        makeDecks();
         allGameCards.shuffleDeck();
         for (int i = 0; i < 11; i++) {
             if (i == 0) {
