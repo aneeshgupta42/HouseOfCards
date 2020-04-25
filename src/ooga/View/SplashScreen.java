@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import ooga.Main;
 
 import java.util.List;
+import java.util.Map;
 
 public class SplashScreen {
     private Paint background = Color.WHITESMOKE;
@@ -81,8 +83,32 @@ public class SplashScreen {
         newWorkSpace.setOnAction(e-> newWindowButton());
         ButtonFactory HighScores = new ButtonFactory("View Highscores", (double) 200, 10);
         sceneGroup.getChildren().add(HighScores);
+        HighScores.setOnAction(e-> presentOnScreen(mainView, sceneGroup));
 
     }
+    private void presentOnScreen(UserInterface mainView, Group sceneGroup){
+        Map<String, List<String>> highScores=  mainView.getController().getHighScores();
+        System.out.println(highScores);
+        VboxFactory displayScores = new VboxFactory(0);
+        displayScores.setSpacing(20);
+        makeHBox(highScores, displayScores);
+        displayScores.setLayoutX(30);
+        sceneGroup.getChildren().add(displayScores);
+    }
+
+    private void makeHBox(Map<String, List<String>> highScores, VboxFactory displayScores) {
+        for (String key: highScores.keySet()){
+            List<String> namesAndScores = highScores.get(key);
+            HBox displayDetails = new HBox(10);
+            Label game = new Label(key);
+            Label nameLabel = new Label(namesAndScores.get(0));
+            Label scoreLabel = new Label(namesAndScores.get(1));
+            displayDetails.getChildren().addAll(game, nameLabel,scoreLabel);
+            displayScores.getChildren().add(displayDetails);
+          //  String
+        }
+    }
+
     private void newWindowButton(){
         Stage newScreen = new Stage();
        UserInterface newSimulation = new UserInterface();

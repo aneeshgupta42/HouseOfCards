@@ -46,6 +46,7 @@ public abstract class GameScreen {
 
     public void endGame(UserInterface ui, GameController gameController, String gameName) {
         List<Object> winner = gameController.getWinner();
+        gameController.updateHighScore();
         ui.setWinScreen(gameName, (String) winner.get(1), (Integer) winner.get(0));
     }
 
