@@ -35,6 +35,7 @@ public abstract class GameScreen {
 
     public abstract Scene getScene(UserInterface ui);
 
+
     public void setCommonButtons(UserInterface ui, GameController gameController, String gameName) {
         restartButton.setOnMouseClicked(e -> ui.setSplash());
         exitButton.setOnMouseClicked(e -> {

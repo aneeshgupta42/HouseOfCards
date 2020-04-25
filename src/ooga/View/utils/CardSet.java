@@ -1,6 +1,4 @@
 package ooga.View.utils;
-
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
@@ -56,18 +54,6 @@ public class CardSet {
             card.setLayoutY(finalY + card.getLayoutY()-headInitY);
         }
     }
-
-    public void setEmpty(){
-
-    }
-    public double getLayoutX(){
-        return 0;
-    }
-
-    public double getLayoutY(){
-        return 0;
-    }
-
 
     private Integer getKey(Map<Integer, ImageView> map, ImageView v) {
         for (Integer check : map.keySet()) {

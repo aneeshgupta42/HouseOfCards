@@ -1,6 +1,5 @@
 package ooga.View.GameScreens;
 
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -8,7 +7,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import ooga.Controller.GameController;
 import ooga.Controller.GameTypes;
@@ -51,7 +49,6 @@ public class SolitaireScreen extends GameScreen {
         gameControl = setUpController;
         gameData = gameControl.initializeGame(GameTypes.SOLITAIRE);
         playerNames = gameControl.getPlayerNames();
-        System.out.println(playerNames);
         initDiffDecks();
         initializeImageMap(differentDecks);
         addCards();
@@ -150,7 +147,7 @@ public class SolitaireScreen extends GameScreen {
         }
     }
 
-    private class Delta {
+    private static class Delta {
         double x, y;
     }
 
@@ -178,68 +175,49 @@ public class SolitaireScreen extends GameScreen {
         int pile = getCardPile(differentDecks, cardImage);
         if(getCardID(idImage, cardImage)<0) return;
         if (pile != 0) {
-            cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    initial_x = cardImage.getLayoutX();
-                    initial_y = cardImage.getLayoutY();
-                    dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
-                    //TODO: I didn't know what this was, so commented out:
-                    dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
-                    cardImage.setCursor(Cursor.MOVE);
-                }
+            cardImage.setOnMousePressed(mouseEvent -> {
+                initial_x = cardImage.getLayoutX();
+                initial_y = cardImage.getLayoutY();
+                dragDelta.x = cardImage.getLayoutX() - mouseEvent.getSceneX();
+                //TODO: I didn't know what this was, so commented out:
+                dragDelta.y = cardImage.getLayoutY() - mouseEvent.getSceneY();
+                cardImage.setCursor(Cursor.MOVE);
             });
-            cardImage.setOnMouseReleased(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
-                    if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
-                        cardImage.setCursor(Cursor.HAND);
-                        int pileFrom = getCardPile(differentDecks, cardImage);
-                        boolean success = checkUpdate(cardSet, differentDecks);
-                        initDiffDecks();
-                        if (!success) {
-                            cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
-                            cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
-                        } else {
-                            List<Integer> sourcePile = differentDecks.get(pileFrom);
-                            setCardFace(sourcePile.get(sourcePile.size() - 1), true);
-                        }
-                    } else {
-                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
-                        cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
-                    }
-                }
-            });
-            cardImage.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
-                    if (checkBounds(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
-                        cardSet.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                        cardSet.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                        cardSet.toFront();
-                    } else {
-                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
-                        cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
-                        mouseEvent.setDragDetect(false);
-                    }
-                }
-            });
-            cardImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
+            cardImage.setOnMouseReleased(mouseEvent -> {
+                CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
+                if (checkBounds(mouseEvent.getX(), mouseEvent.getY())) {
                     cardImage.setCursor(Cursor.HAND);
+                    int pileFrom = getCardPile(differentDecks, cardImage);
+                    boolean success = checkUpdate(cardSet, differentDecks);
+                    initDiffDecks();
+                    if (!success) {
+                        cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
+                        cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
+                    } else {
+                        List<Integer> sourcePile = differentDecks.get(pileFrom);
+                        setCardFace(sourcePile.get(sourcePile.size() - 1), true);
+                    }
+                } else {
+                    cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
+                    cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
                 }
             });
+            cardImage.setOnMouseDragged(mouseEvent -> {
+                CardSet cardSet = new CardSet(cardImage, idImage, differentDecks);
+                if (checkBounds(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
+                    cardSet.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                    cardSet.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+                    cardSet.toFront();
+                } else {
+                    cardSet.setLayoutX(initial_x - cardImage.getLayoutBounds().getMinX());
+                    cardSet.setLayoutY(initial_y - cardImage.getLayoutBounds().getMinY());
+                    mouseEvent.setDragDetect(false);
+                }
+            });
+            cardImage.setOnMouseEntered(mouseEvent -> cardImage.setCursor(Cursor.HAND));
         }
         else{
-            cardImage.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    dealCards();
-                }
-            });
+            cardImage.setOnMousePressed(mouseEvent -> dealCards());
         }
     }
 
