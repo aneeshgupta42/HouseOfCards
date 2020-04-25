@@ -103,6 +103,10 @@ public class UserInterface extends Application implements Viewable {
         myStage.show();
     }
 
+    public GameController getController(){
+        return passingController;
+    }
+
     public void setWinScreen(String gameName, String playerName, int playerScore){
         WinScreen winScreen = new WinScreen(this, gameName, playerName, playerScore, VIEW_WIDTH, VIEW_HEIGHT);
         myStage.setScene(winScreen.getScene());
