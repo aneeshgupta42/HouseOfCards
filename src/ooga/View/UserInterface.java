@@ -89,8 +89,8 @@ public class UserInterface extends Application implements Viewable {
         return null;
     }
 
-    public void userScreen(String gameName){
-        UserInput c= new UserInput(gameName, this);
+    public void userScreen(String gameName, boolean darkMode){
+        UserInput c= new UserInput(gameName, this, darkMode);
         myStage.setScene(c.getUserScene());
         myStage.show();
     }
