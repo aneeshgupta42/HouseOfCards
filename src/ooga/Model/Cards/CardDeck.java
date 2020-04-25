@@ -34,13 +34,15 @@ public class CardDeck implements Deck {
         gameCards.add(card);
     }
 
-    public void addCard(List<Playable>cards){gameCards.addAll(cards);}
+    @Override
+    public void addCard(List<Playable> cards){gameCards.addAll(cards);}
 
     @Override
     public List<Playable> getCards(){
         return gameCards;
     }
 
+    @Override
     public Playable getCardWithID(int cardID){
         for (Playable card : gameCards){
             if (card.getID() == cardID){
@@ -58,7 +60,8 @@ public class CardDeck implements Deck {
         return ret;
     }
 
-    public DeckType getDeckType (){
+    @Override
+    public DeckType getDeckType(){
         return deckType;
     }
 
@@ -81,6 +84,7 @@ public class CardDeck implements Deck {
         return ret;
     }
 
+    @Override
     public void copyCardToNewDeck(int cardID, CardDeck dest){
         try{
             Playable card = getCardWithID(cardID);
@@ -91,6 +95,7 @@ public class CardDeck implements Deck {
         }
     }
 
+    @Override
     public void removeCard(int cardID){
         if(isCardPresent(cardID)){
             gameCards.remove(getCardWithID(cardID));
@@ -120,6 +125,7 @@ public class CardDeck implements Deck {
         return ret;
     }
 
+    @Override
     public boolean isCardPresent(int cardID) {
         for (Playable card : gameCards){
             if (card.getID() == cardID){
