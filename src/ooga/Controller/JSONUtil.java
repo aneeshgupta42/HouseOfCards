@@ -1,6 +1,7 @@
 package ooga.Controller;
 
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,14 +17,19 @@ public class JSONUtil {
     public static Map<String, Object> getData(String dataRequestedFor, String path) throws IOException, ParseException {
         Object obj = new JSONParser().parse(new FileReader(path));
         JSONObject jo = (JSONObject) obj;
+        if (dataRequestedFor.equals("")){
+            return jo;
+        }
         Map m = (Map)jo.get(dataRequestedFor);
         return m;
     }
 
-    public static void modifyField(String dataToBeModified, String newData, String path) throws IOException, ParseException {
+    public static void modifyHighScore(String gameName, String playerName, String newScore, String path) throws IOException, ParseException {
         Object obj = new JSONParser().parse(new FileReader(path));
         JSONObject root = (JSONObject) obj;
-        root.put(dataToBeModified, newData);
+        Map m = new LinkedHashMap(1);
+        m.put(playerName, newScore);
+        root.put(gameName, m);
 //        for (Object s : root.keySet()){
 //            System.out.println(s.toString());
 //            System.out.println(root.get(s).toString());
