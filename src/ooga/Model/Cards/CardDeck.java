@@ -1,10 +1,12 @@
 package ooga.Model.Cards;
 
+import javafx.scene.PointLight;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import ooga.Controller.CardColors;
 import ooga.Controller.DeckType;
 import ooga.Controller.GameTypes;
+import ooga.View.utils.GameException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +22,7 @@ public class CardDeck implements Deck {
         this.gameCards = new ArrayList<>();
         CardFactory.initializeDeck(this, deckType);
     }
+
 
     public CardDeck(DeckType deckType, List<Playable>gameCards){
         this.deckType = deckType;
@@ -84,7 +87,7 @@ public class CardDeck implements Deck {
             dest.addCard(card);
         }
         catch (Exception e){
-            e.printStackTrace();
+            new GameException(e.getMessage());
         }
     }
 
@@ -106,6 +109,7 @@ public class CardDeck implements Deck {
         }
         return ret;
     }
+
 
     @Override
     public String toString(){
