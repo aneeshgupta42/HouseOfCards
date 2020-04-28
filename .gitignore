@@ -7,6 +7,8 @@
 out/
 local.properties
 
+*.mp4
+
 # Generic Android ignores #
 ###########################
 bin/
