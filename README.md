@@ -62,4 +62,6 @@ Interesting data files:
 
 This project uses open-source datafiles for Cards against Humanity and Truth and Dare acquired from GitHub and the internet under the MIT License. These will not be 
 used commercially. The designers of this project do not take responsibility for the contents of these data files, and have
-merely utilized their structure and syntax of these Card data files, and are not responsible for their contents.
+merely utilized their structure and syntax of these Card data files, and are not responsible for their contents, which have explicit age ratings associated with them.
+
+Note: The `API_CHANGES` and `DESIGN` documents can be found in the `docs/` directory.
